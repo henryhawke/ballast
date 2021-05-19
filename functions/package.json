@@ -1,0 +1,42 @@
+{
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "14"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "babel-runtime": "^6.26.0",
+    "better-firebase-functions": "^3.4.1",
+    "busboy": "^0.3.1",
+    "camelcase": "^6.2.0",
+    "child-process-promise": "^2.2.1",
+    "fast-crc32c": "^2.0.0",
+    "firebase-admin": "^9.4.2",
+    "firebase-function-tools": "^2.0.1",
+    "firebase-functions": "^3.13.1",
+    "formulajs": "^1.0.8",
+    "glob": "^7.1.6",
+    "mkdirp-promise": "^5.0.1",
+    "moment": "^2.29.1",
+    "node-xlsx": "^0.15.0",
+    "nodemailer": "^6.4.17",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6",
+    "uuid": "^8.3.2",
+    "xlsx": "^0.16.9",
+    "xlsx-calc": "^0.6.7"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^0.2.3"
+  },
+  "private": true
+}

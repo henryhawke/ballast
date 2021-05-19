@@ -1,0 +1,20 @@
+{
+  "intro": "Ballast Tool - Wind Force Overturn Calculation",
+  "title": "BALLAST TOOL",
+  "start": "GET STARTED",
+  "instal": "Installation",
+  "run": "Start",
+  "more": "Learn More",
+  "usage": "Usage",
+  "set": "Set your configuration to the App component:",
+  "what": "What is this?",
+  "this": "This tool calculates necessary load of ballasts necessary to prevent overturn in horizontal wind force.",
+  "demo": "",
+  "signin": "Start",
+  "new_users": "New users",
+  "companies": "Companies",
+  "try_it_out": "Try it out",
+  "about": "About",
+  "team": "Team",
+  "about_text": "This application allows users to calculate, collaborate, and archive necessary load of ballasts necessary to prevent overturn in horizontal wind force."
+}

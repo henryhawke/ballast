@@ -1,0 +1,14 @@
+{
+  "signin": "Register",
+  "intro": "Easy to use application for predicting tent wind overturn",
+  "title": "IFAI Ballast Tool",
+  "start": "GET STARTED",
+  "instal": "Installation",
+  "run": "Just run this script to start:",
+  "more": "Learn More",
+  "usage": "Usage",
+  "set": "Set your configuration to the App component:",
+  "what": "What is this?",
+  "this": "This is the IFAI Ballast Tool for calculating and saving tent wind overturn data.",
+  "demo": ""
+}
