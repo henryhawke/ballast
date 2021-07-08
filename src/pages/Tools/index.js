@@ -7,7 +7,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
-import { useHistory } from "react-router-dom";
+import { useHistory, Prompt } from "react-router-dom";
 import Calculations from "../../algorithms/Calculations";
 import { format } from "date-fns";
 import { useAuth } from "base-shell/lib/providers/Auth/";
@@ -26,15 +26,21 @@ import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import MuiDialogContent from "@material-ui/core/DialogContent";
-import { noScrollbarsClassName } from "react-remove-scroll-bar";
+// import { noScrollbarsClassName } from "react-remove-scroll-bar";
 import MuiDialogActions from "@material-ui/core/DialogActions";
 import Slide from "@material-ui/core/Slide";
-import { DataGrid } from "@material-ui/data-grid";
+import {
+  DataGrid,
+  GridToolbarContainer,
+  GridToolbarExport,
+} from "@material-ui/data-grid";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import { v4 as uuidv4 } from "uuid";
 import Grid from "@material-ui/core/Grid";
 import SpeedIcon from "@material-ui/icons/Speed";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 // import IconButton from '@material-ui/core/IconButton'
 import FilledInput from "@material-ui/core/FilledInput";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
@@ -150,6 +156,18 @@ const HtmlTooltip = withStyles((theme) => ({
   },
 }))(Tooltip);
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant='filled' {...props} />;
+}
+
+function CustomToolbar() {
+  return (
+    <GridToolbarContainer>
+      <GridToolbarExport />
+    </GridToolbarContainer>
+  );
+}
+
 const Tools = ({ intl }) => {
   const classes = useStyles();
   const history = useHistory();
@@ -166,6 +184,21 @@ const Tools = ({ intl }) => {
   const [open, setOpen] = useState(false);
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const [currentMessage, setCurrentMessage] = useState("Success");
+  const [openSnack, setOpenSnack] = React.useState(false);
+
+  const handleClickSnack = () => {
+    setOpenSnack(true);
+  };
+
+  const handleCloseSnack = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSnack(false);
   };
 
   // Allows for Draggable Components
@@ -218,11 +251,13 @@ const Tools = ({ intl }) => {
   const [getDialogVal, setDialogVal] = React.useState(1);
 
   function handleCustomDialog(valueID) {
-    setDialogVal(valueID);
-    console.log(getDialogVal);
-    const post = findArrayElementByTitle(posts, getDialogVal);
+    console.log(valueID);
+    const post = findArrayElementByTitle(posts, valueID);
     console.log(post);
-    setResults({ title: post.content, content: post.content });
+    setTimeout(
+      () => setResults({ title: post.content, content: post.content }),
+      1000
+    );
     setFormOpen(true);
   }
 
@@ -238,6 +273,10 @@ const Tools = ({ intl }) => {
     Title appears in the custom input dialog
     content is the variable name to manipulate the stored value of the variable stored in values by name
   */
+  const [results, setResults] = useState({
+    title: "",
+    content: "",
+  });
   const posts = [
     {
       id: 1,
@@ -306,7 +345,7 @@ const Tools = ({ intl }) => {
 
   // This controls whether a PDF is generated on the Server for the user to print.
   const [switchState, setSwitchState] = React.useState({
-    checkedA: true,
+    checkedA: false,
     checkedB: true,
   });
   const handleSwitchChange = (event) => {
@@ -370,6 +409,19 @@ const Tools = ({ intl }) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
+  const [radioUnitValue, setRadioUnitValue] = React.useState(
+    "Imperial System (ft)"
+  );
+
+  const handleUnitChange = (event) => {
+    if (event.target.value === "Imperial System (ft)") {
+      setValues({ ...values, unit: 0 });
+    } else {
+      setValues({ ...values, unit: 1 });
+    }
+    setRadioUnitValue(event.target.value);
+  };
+
   /* RENDER DATA TABLE */
   const [calculationDataOpen, setCalculationDataOpen] = useState(false);
   const showResults = (result) => {
@@ -379,7 +431,7 @@ const Tools = ({ intl }) => {
     loadingClose();
     setCalculationDataOpen(true);
     ReactDOM.render(
-      <Container className={(classes.cardGrid, noScrollbarsClassName)}>
+      <Container className={classes.cardGrid}>
         <div style={{ height: 220 }}>
           <DataGrid
             columns={[
@@ -388,50 +440,43 @@ const Tools = ({ intl }) => {
                 field: "Enclosure",
                 headerName: "Enclosure",
                 type: "string",
-
-                resizable: true,
+                width: 200,
               },
               {
                 field: "ballastWeight",
                 headerName: "Ballast weight per leg/upright (lbs)",
                 type: "number",
-
-                resizable: true,
+                width: 120,
               },
               {
                 field: "overturnMomentLength",
                 headerName: "Overturn moment about length (lbs.ft)",
                 type: "number",
-
-                resizable: true,
+                width: 120,
               },
               {
                 field: "overturnMomentWidth",
                 headerName: "Overturn moment about width (lbs.ft)",
                 type: "number",
-
-                resizable: true,
+                width: 120,
               },
               {
                 field: "FX",
                 headerName: "Horizontal Force in Length (lbs)",
                 type: "number",
-
-                resizable: true,
+                width: 120,
               },
               {
                 field: "FY",
                 headerName: "Horizontal Force in Width (lbs)",
                 type: "number",
-
-                resizable: true,
+                width: 120,
               },
               {
                 field: "FZ",
                 headerName: "Vertical Uplift Force (lbs)",
                 type: "number",
-
-                resizable: true,
+                width: 120,
               },
             ]}
             rows={[
@@ -466,6 +511,9 @@ const Tools = ({ intl }) => {
                 ballastWeight: vals.encBallastWeight,
               },
             ]}
+            components={{
+              Toolbar: CustomToolbar,
+            }}
             autoHeight={true}
             hideFooter={true}
             headerHeight={100}
@@ -498,43 +546,19 @@ const Tools = ({ intl }) => {
 
   const [value, setValue] = React.useState(10);
 
-  const handleSliderChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  const handleInputChange = (event) => {
-    setValue(event.target.value === "" ? "" : Number(event.target.value));
-  };
-
-  const handleBlur = () => {
-    if (value < 0) {
-      setValue(0);
-    } else if (value > 100) {
-      setValue(100);
-    }
-  };
-
   // const { register, handleSubmit, errors } = useForm()
   // const onSubmit = (data) => console.log(data)
   // console.log(errors)
-  const [results, setResults] = useState({
-    title: "",
-    content: "",
-  });
 
-  function handleRadioChange() {
-    console.log(getDialogVal);
-    const post = findArrayElementByTitle(posts, getDialogVal);
-    console.log(post);
-    setResults({ title: post.title, content: post.content });
-    setFormOpen(true);
-  }
+  const handleRadioChanged = (event) => {
+    setValues(event.target.value);
+  };
+
   const emails = ["Imperial System (ft)", "Metric System (m)"];
   const [optionsOpen, setOptionsOpen] = React.useState(false);
 
   // 0 for imperial (feet), 1 for metric (meters)
   const [units, setUnits] = React.useState({
-    unit: 0,
     size: ["ft", "m"],
     speed: ["mph", "km/h"],
     weight: ["lbs", "kg"],
@@ -649,14 +673,22 @@ const Tools = ({ intl }) => {
     },
   ];
   const { auth } = useAuth();
+
   // console.log(auth);
   // console.log(isGranted(auth, "member"));
   return isGranted(auth, "member") ? (
     <Page
       pageTitle={intl.formatMessage({
         id: "tools",
-        defaultMessage: "IFAI Ballast Tool",
+        defaultMessage: "IFAI Ballast Tool - Load Calculation",
       })}>
+      <Prompt message={() => "Are you sure you want to leave this page?"} />
+
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity='success'>
+          {currentMessage}
+        </Alert>
+      </Snackbar>
       <div className={classes.root}>
         <Backdrop
           className={classes.backdrop}
@@ -666,11 +698,7 @@ const Tools = ({ intl }) => {
         </Backdrop>
 
         {/* DIALOG FOR CUSTOM INPUT OF FORM VARIABLES */}
-        <Dialog
-          onClose={handleFormClose}
-          open={openForm}
-          PaperComponent={PaperComponent}
-          aria-labelledby='draggable-dialog-title'>
+        <Dialog onClose={handleFormClose} open={openForm}>
           <FormDialogTitle
             id='customized-dialog-title'
             onClose={handleFormClose}>
@@ -806,7 +834,7 @@ const Tools = ({ intl }) => {
                 /> */}
               </div>
               {/* <Typography variant='h4' gutterBottom>
-                Overturn moment = {results.overturnMoment} {units.weight[units.unit]}.{units.size[units.unit]}
+                Overturn moment = {results.overturnMoment} {units.weight[values.unit]}.{units.size[values.unit]}
               </Typography>
               <Typography variant='h4' gutterBottom>
                 Vertical uplift force per guy = {results.verticalUpliftForce}{" "}
@@ -834,7 +862,7 @@ const Tools = ({ intl }) => {
 
         <div className={classes.root}>
           {/* Form */}
-          <Grid item xs={12} sm={6}>
+          <Grid item sm={12} md={6}>
             {/* FORM */}
             <Container className={classes.cardGrid}>
               <form className={classes.root}>
@@ -845,26 +873,26 @@ const Tools = ({ intl }) => {
                   alignItems='center'
                   spacing={3}>
                   {/* UNITS */}
-                  <Grid item xs={6}>
+                  <Grid item xs={12}>
                     <FormControl
                       component='fieldset'
                       // error={error}
                       className={classes.formControl}>
                       <FormLabel component='legend'>Units</FormLabel>
                       <RadioGroup
-                        aria-label='quiz'
-                        name='quiz'
-                        value={value}
-                        defaultValue='0'
-                        onChange={handleRadioChange}>
+                        aria-label='units'
+                        name='units'
+                        value={radioUnitValue}
+                        defaultValue={radioUnitValue}
+                        onChange={handleUnitChange}>
                         <FormControlLabel
-                          value='0'
-                          selected=''
+                          value='Imperial System (ft)'
+                          selected
                           control={<Radio />}
                           label='Imperial System (ft)'
                         />
                         <FormControlLabel
-                          value='1'
+                          value='Metric System (m)'
                           control={<Radio />}
                           label='Metric System (m)'
                         />
@@ -873,71 +901,8 @@ const Tools = ({ intl }) => {
                   </Grid>
 
                   {/* DOWNLOAD PRINTABLE */}
-                  <Grid item xs={6}>
-                    <FormControl
-                      component='fieldset'
-                      // error={error}
-                      className={classes.formControl}>
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            checked={switchState.checkedA}
-                            onChange={handleChange}
-                            name='checkedA'
-                          />
-                        }
-                        label='Generate Calculations PDF'
-                      />
-                      {/* <FormControlLabel
-                        control={
-                          <Switch
-                            checked={switchState.checkedB}
-                            onChange={handleChange}
-                            name='checkedB'
-                            color='primary'
-                          />
-                        }
-                        label='Primary'
-                      /> */}
-                      {/* <FormControlLabel
-                        control={<Switch />}
-                        label='Uncontrolled'
-                      />
-                      <FormControlLabel
-                        disabled
-                        control={<Switch />}
-                        label='Disabled'
-                      />
-                      <FormControlLabel
-                        disabled
-                        control={<Switch checked />}
-                        label='Disabled'
-                      /> */}
-                    </FormControl>
-                  </Grid>
+
                   {/* Title */}
-                  <Grid item xs={12}>
-                    {/* Title */}
-                    <FormControl
-                      className={clsx(classes.textField)}
-                      variant='outlined'>
-                      <InputLabel htmlFor='outlined-age-native-simple'>
-                        Calculation Title
-                      </InputLabel>
-                      <OutlinedInput
-                        id='outlined-adornment-weight'
-                        value={values.title}
-                        label='Calculation Title'
-                        placeholder='Calculation Title'
-                        onChange={handleChange("title")}
-                        aria-describedby='outlined-weight-helper-text'
-                        inputProps={{
-                          name: "title",
-                          "aria-label": "weight",
-                        }}
-                      />
-                    </FormControl>
-                  </Grid>
 
                   {/* NOTES */}
                   {/* <Grid item sm={12} md={6}>
@@ -960,7 +925,28 @@ const Tools = ({ intl }) => {
                       </FormControl>
                     </Grid> */}
                 </Grid>
-
+                <Grid item xs={6}>
+                  {/* Title */}
+                  <FormControl
+                    className={clsx(classes.textField)}
+                    variant='outlined'>
+                    <InputLabel htmlFor='outlined-age-native-simple'>
+                      Calculation Title
+                    </InputLabel>
+                    <OutlinedInput
+                      id='outlined-adornment-weight'
+                      value={values.title}
+                      label='Calculation Title'
+                      placeholder='Calculation Title'
+                      onChange={handleChange("title")}
+                      aria-describedby='outlined-weight-helper-text'
+                      inputProps={{
+                        name: "title",
+                        "aria-label": "weight",
+                      }}
+                    />
+                  </FormControl>
+                </Grid>
                 {/* Company Name */}
                 <Grid item xs={6}>
                   {/* Company Name */}
@@ -1072,7 +1058,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Wind Speed ({units.speed[units.unit]})
+                        Wind Speed ({units.speed[values.unit]})
                       </InputLabel>
                       <Select
                         native
@@ -1086,7 +1072,7 @@ const Tools = ({ intl }) => {
                           </InputAdornment>
                         }
                         defaultValue={20}
-                        label='Wind Speed ({units.speed[units.unit]})'
+                        label='Wind Speed ({units.speed[values.unit]})'
                         value={value.windSpeed}
                         onChange={handleSelectChange}
                         inputProps={{
@@ -1190,7 +1176,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Tent Width ({units.size[units.unit]})
+                        Tent Width ({units.size[values.unit]})
                       </InputLabel>
                       <Select
                         native
@@ -1242,7 +1228,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Tent Length ({units.size[units.unit]})
+                        Tent Length ({units.size[values.unit]})
                       </InputLabel>
                       <Select
                         native
@@ -1296,7 +1282,7 @@ const Tools = ({ intl }) => {
                       variant='outlined'>
                       {/* Eave Height */}
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Eave Height ({units.size[units.unit]})
+                        Eave Height ({units.size[values.unit]})
                       </InputLabel>
                       <Select
                         native
@@ -1395,7 +1381,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Ridge Length ({units.size[units.unit]})
+                        Ridge Length ({units.size[values.unit]})
                       </InputLabel>
                       <Select
                         native
@@ -1454,7 +1440,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Roof Height ({units.size[units.unit]})
+                        Roof Height ({units.size[values.unit]})
                       </InputLabel>
                       <Select
                         native
@@ -1595,6 +1581,7 @@ const Tools = ({ intl }) => {
                           name: "postsPerWidth",
                           id: "outlined-age-native-simple",
                         }}>
+                        <option value={0}>0</option>
                         <option value={1}>1</option>
                         <option value={2}>2</option>
                         <option value={3}>3</option>
@@ -1643,15 +1630,15 @@ const Tools = ({ intl }) => {
                         label='# ballasts per corner post'
                         value={value.ballastsPerCornerPost}
                         onChange={handleSelectChange}
-                        endAdornment={
-                          <InputAdornment position='end'>
-                            <EditRoundedIcon
-                              onClick={() => {
-                                handleCustomDialog(11);
-                              }}
-                            />
-                          </InputAdornment>
-                        }
+                        // endAdornment={
+                        //   <InputAdornment position='end'>
+                        //     <EditRoundedIcon
+                        //       onClick={() => {
+                        //         handleCustomDialog(11);
+                        //       }}
+                        //     />
+                        //   </InputAdornment>
+                        // }
                         inputProps={{
                           name: "ballastsPerCornerPost",
                           id: "outlined-age-native-simple",
@@ -1663,6 +1650,25 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
+
+                {/* <Grid item xs={6}>
+                  <FormControl
+                    component='fieldset'
+                    // error={error}
+                    className={classes.formControl}>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={switchState.checkedA}
+                          onChange={handleChange}
+                          name='checkedA'
+                        />
+                      }
+                      label='Raw Data'
+                    />
+
+                  </FormControl>
+                </Grid> */}
 
                 <Grid item xs={6}>
                   <ButtonGroup
@@ -1748,7 +1754,6 @@ const Tools = ({ intl }) => {
           <Grid
             item
             xs={12}
-            md={6}
             style={{
               display: { calculationDataOpen } ? "inherit" : "none",
             }}

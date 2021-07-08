@@ -44,10 +44,10 @@ export default (theme) => ({
       margin: theme.spacing(1),
       width: "100%",
     },
-    "& .MuiContainer-maxWidthLg": {
-      maxWidth: "900px",
-    },
-    "& .MuiDataGrid-colCellTitle": {
+    // "& .MuiContainer-maxWidthLg": {
+    //   maxWidth: "900px",
+    // },
+    "& .MuiDataGrid-columnHeaderTitle": {
       overflow: "hidden",
       lineHeight: "1",
       whiteSpace: "initial",
@@ -72,6 +72,7 @@ export default (theme) => ({
   },
   textField: {
     width: "95%",
+
     marginLeft: "2.5%",
     marginBottom: "2.5%",
   },
@@ -156,7 +157,7 @@ export default (theme) => ({
     minWidth: "130%",
   },
   formControl: {
-    minWidth: "95%",
+    width: "95%",
     marginTop: "2.5%",
     marginLeft: "2.5%",
     marginBottom: "5px",

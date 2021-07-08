@@ -15,7 +15,9 @@ import People from "@material-ui/icons/People";
 import React from "react";
 // import Home from "@material-ui/icons/Home";
 import Security from "@material-ui/icons/Security";
+import BarChartIcon from "@material-ui/icons/BarChart";
 import SettingsIcon from "@material-ui/icons/Settings";
+import AssessmentIcon from "@material-ui/icons/Assessment";
 import SettingsApplicationsIcon from "@material-ui/icons/SettingsApplications";
 // import Slideshow from "@material-ui/icons/Slideshow";
 import BuildRoundedIcon from "@material-ui/icons/BuildRounded";
@@ -122,9 +124,18 @@ const getMenuItems = (props) => {
       visible: isGranted(auth, "member"),
       primaryText: intl.formatMessage({
         id: "tools",
-        defaultMessage: "Load Calculation",
+        defaultMessage: "Standard Calculation",
       }),
-      leftIcon: <SettingsIcon />,
+      leftIcon: <BarChartIcon />,
+    },
+    {
+      value: "/advanced",
+      visible: isGranted(auth, "member"),
+      primaryText: intl.formatMessage({
+        id: "advanced",
+        defaultMessage: "Advanced Calculation",
+      }),
+      leftIcon: <AssessmentIcon />,
     },
     {
       value: "/tasks",
