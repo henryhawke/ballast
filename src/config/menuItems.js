@@ -165,12 +165,12 @@ const getMenuItems = (props) => {
       }),
       leftIcon: <Business />,
     },
-    {
-      value: "/chats",
-      visible: isGranted(auth, "member"),
-      primaryText: intl.formatMessage({ id: "chats", defaultMessage: "Chats" }),
-      leftIcon: <Chat />,
-    },
+    // {
+    //   value: "/chats",
+    //   visible: isGranted(auth, "member"),
+    //   primaryText: intl.formatMessage({ id: "chats", defaultMessage: "Chats" }),
+    //   leftIcon: <Chat />,
+    // },
     // {
     //   value: "/admin",
     //   visible: isAdmin,

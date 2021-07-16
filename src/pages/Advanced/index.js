@@ -403,6 +403,7 @@ const Tools = ({ intl }) => {
     time: 0,
     share: {},
     notes: "",
+    ballastType: 1,
     b2mu3: 0,
     b2wplate: 0,
     b2open: 0,
@@ -614,6 +615,97 @@ const Tools = ({ intl }) => {
         console.log("is hip");
       } else {
         setBtnDisabled(true);
+      }
+    }
+    setValues({
+      ...values,
+      [name]: event.target.value,
+    });
+  };
+
+  const [ballastType, setBallastType] = React.useState({
+    fixedToPlate: true,
+    fixedToPole: false,
+    a: false,
+    b: false,
+    c: false,
+    d: false,
+  });
+
+  const handleBallastSelectChange = (event) => {
+    const name = event.target.name;
+
+    console.log(name);
+    if (name === "ballastType") {
+      console.log("is ballastType changed");
+      console.log(event.target.value);
+      console.log(ballastType);
+      if (event.target.value === "1") {
+        setBallastType({
+          ...ballastType,
+          fixedToPlate: true,
+          fixedToPole: false,
+          a: false,
+          b: false,
+          c: false,
+          d: false,
+        });
+        console.log("Fixed-To-Plate");
+      } else if (event.target.value === "2") {
+        console.log("Fixed-To-Pole");
+        setBallastType({
+          ...ballastType,
+          fixedToPlate: false,
+          fixedToPole: true,
+          a: false,
+          b: false,
+          c: false,
+          d: false,
+        });
+      } else if (event.target.value === "3") {
+        console.log("A");
+        setBallastType({
+          ...ballastType,
+          fixedToPlate: false,
+          fixedToPole: false,
+          a: true,
+          b: false,
+          c: false,
+          d: false,
+        });
+      } else if (event.target.value === "4") {
+        console.log("B");
+        setBallastType({
+          ...ballastType,
+          fixedToPlate: false,
+          fixedToPole: false,
+          a: false,
+          b: true,
+          c: false,
+          d: false,
+        });
+      } else if (event.target.value === "5") {
+        console.log("C");
+        setBallastType({
+          ...ballastType,
+          fixedToPlate: false,
+          fixedToPole: false,
+          a: false,
+          b: false,
+          c: true,
+          d: false,
+        });
+      } else if (event.target.value === "6") {
+        console.log("D");
+        setBallastType({
+          ...ballastType,
+          fixedToPlate: false,
+          fixedToPole: false,
+          a: false,
+          b: false,
+          c: false,
+          d: true,
+        });
       }
     }
     setValues({
@@ -1003,7 +1095,6 @@ const Tools = ({ intl }) => {
                     />
                   </FormControl>
                 </Grid>
-
                 {/* Project */}
                 <Grid item xs={6}>
                   {/* Project */}
@@ -1050,7 +1141,6 @@ const Tools = ({ intl }) => {
                     />
                   </FormControl>
                 </Grid>
-
                 {/* Project Date */}
                 <Grid item xs={6}>
                   {/* Project Date */}
@@ -1071,7 +1161,6 @@ const Tools = ({ intl }) => {
                     />
                   </FormControl>
                 </Grid>
-
                 {/* Wind Speed - 1*/}
                 <Grid item xs={6}>
                   <HtmlTooltip
@@ -1187,7 +1276,6 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-
                 {/* Tent Width - 3*/}
                 <Grid item xs={6}>
                   {/* Tent Width */}
@@ -1240,7 +1328,6 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-
                 {/* Tent Length - 4*/}
                 <Grid item xs={6}>
                   <HtmlTooltip
@@ -1293,7 +1380,6 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-
                 {/* Eave Height - 5*/}
                 <Grid item xs={6}>
                   <HtmlTooltip
@@ -1344,7 +1430,6 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-
                 {/* Roof Type - 6*/}
                 <Grid item xs={6}>
                   {/* Roof Type */}
@@ -1394,7 +1479,6 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-
                 {/* Ridge Length - 7*/}
                 <Grid item xs={6}>
                   <HtmlTooltip
@@ -1452,7 +1536,6 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-
                 {/* Roof Height - 8*/}
                 <Grid item xs={6}>
                   <HtmlTooltip
@@ -1510,7 +1593,6 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-
                 {/* Posts In Length - 9*/}
                 <Grid item xs={6}>
                   {/* Posts Per Length */}
@@ -1572,7 +1654,6 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-
                 {/* Posts in Width - 10*/}
                 <Grid item xs={6}>
                   <HtmlTooltip
@@ -1634,7 +1715,6 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-
                 {/* Ballasts Per Corner - 11*/}
                 <Grid item xs={6}>
                   {/* ballastsPerCornerPost */}
@@ -1683,7 +1763,6 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-
                 {/* <Grid item xs={6}>
                   <FormControl
                     component='fieldset'
@@ -1703,6 +1782,1710 @@ const Tools = ({ intl }) => {
                   </FormControl>
                 </Grid> */}
 
+                {/* Roof Type - 6*/}
+                <Grid item xs={6}>
+                  {/* Roof Type */}
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Six options: Fixed-to-plate, Fixed-to-pole, A, B, C, D
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      variant='outlined'
+                      className={classes.formControl}>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Ballast Type
+                      </InputLabel>
+                      <Select
+                        native
+                        label='Ballast Type'
+                        defaultValue={1}
+                        value={value.ballastType}
+                        onChange={handleBallastSelectChange}
+                        // endAdornment={
+                        //   <InputAdornment position='end'>
+                        //     <EditRoundedIcon
+                        //       onClick={() => {
+                        //         handleCustomDialog(6);
+                        //         handleFormOpen();
+                        //       }}
+                        //     />
+                        //   </InputAdornment>
+                        // }
+                        inputProps={{
+                          name: "ballastType",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={1}>Fixed-To-Plate</option>
+                        <option value={2}>Fixed-To-Pole</option>
+                        <option value={3}>A</option>
+                        <option value={4}>B</option>
+                        <option value={5}>C</option>
+                        <option value={6}>D</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+
+                {/* 
+                B2 
+                SELECTION 
+                */}
+                {/* b2mu3: 0,Friction coefficient between plate and ground (if any) 
+                                  style={{
+                    display: ballastType.fixedToPlate ? "inherit" : "none",
+                  }}
+                */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.fixedToPlate ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Friction coefficient between plate and ground (if any)
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Friction coefficient between plate and ground
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        hidden={ballastType.fixedToPlate}
+                        defaultValue={20}
+                        label='Friction coefficient between plate and ground (if any)'
+                        value={value.b2mu3}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "b2mu3",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={50}>50</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* b2wplate: 0,Weight of plate (if any) */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.fixedToPlate ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>Weight of plate</Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Weight of plate ({units.speed[values.unit]})
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.fixedToPlate}
+                        label='Weight of plate ({units.speed[values.unit]})'
+                        value={value.b2wplate}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "b2wplate",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* 
+                C2 SELECTION
+                 */}
+                {/* c2mu1: 0,Friction coefficient between ballast and ground (if applicable) */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.fixedToPole ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Friction coefficient between ballast and ground (if
+                          applicable)
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Friction coefficient between ballast and ground (if
+                        applicable)
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.fixedToPole}
+                        label='Friction coefficient between ballast and ground (if applicable)'
+                        value={value.c2mu1}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "c2mu1",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* A SELECTION */}
+                {/* ad1: 0, Distance between center of ballast and upright (ft)  */}
+                <Grid item xs={6}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Distance between center of ballast and upright
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Distance between center of ballast and upright (
+                        {units.size[values.unit]})
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.a}
+                        label='Distance between center of ballast and upright ({units.size[values.unit]})'
+                        value={value.ad1}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "ad1",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* ad2:0, Distance between far end of plate and upright (ft)  */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.a ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Distance between far end of plate and upright
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Distance between far end of plate and upright (
+                        {units.size[values.unit]})
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.a}
+                        label='Distance between far end of plate and upright ({units.size[values.unit]})'
+                        value={value.ad2}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "ad2",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* amu3: 0,Friction coefficient between plate and ground (if any) */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.a ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Friction coefficient between plate and ground (if any)
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Friction coefficient between plate and ground (if any)
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.a}
+                        label=' Friction coefficient between plate and ground (if any)'
+                        value={value.amu3}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "amu3",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* awplate: 0, Weight of plate (if any)*/}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.a ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Weight of plate (if any)
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Weight of plate ({units.weight[values.unit]})
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.a}
+                        label='Weight of plate ({units.weight[values.unit]})'
+                        value={value.awplate}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "awplate",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* 
+                B SELECTION
+                 */}
+                {/* bd1: 0, Distance between center of ballast and upright (ft)  */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.b ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Distance between center of ballast and upright
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Distance between center of ballast and upright (
+                        {units.size[values.unit]})
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.b}
+                        label='Distance between center of ballast and upright ({units.size[values.unit]})'
+                        value={value.bd1}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "bd1",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* bd2:0,Distance between far end of plate and upright (ft) */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.b ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Distance between far end of plate and upright
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Distance between far end of plate and upright(
+                        {units.size[values.unit]})
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.b}
+                        label='Distance between far end of plate and upright ({units.size[values.unit]})'
+                        value={value.bd2}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "bd2",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* bd3: 0,Ballast effective width (ft) */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.b ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Ballast effective width
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Ballast effective width({units.size[values.unit]})
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.b}
+                        label='Ballast effective width ({units.size[values.unit]})'
+                        value={value.bd3}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "bd3",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* bd4: 0,Horizontal distance between ballast center and guy attachment point (ft)  */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.b ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Horizontal distance between ballast center and guy
+                          attachment point
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Horizontal distance between ballast center and guy
+                        attachment point ({units.size[values.unit]})
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.b}
+                        label='Horizontal distance between ballast center and guy attachment point ({units.size[values.unit]})'
+                        value={value.bd4}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "bd4",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* bh4: 0, Vertical distance between plate and guy attachment point (ft) */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.b ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Vertical distance between plate and guy attachment
+                          point
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Vertical distance between plate and guy attachment point
+                        ({units.size[values.unit]})
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.b}
+                        label='Vertical distance between plate and guy attachment point ({units.size[values.unit]})'
+                        value={value.bh4}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "bh4",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* bmu2: 0,Friction coefficient between ballast and plate (if any) */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.b ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Friction coefficient between ballast and plate (if
+                          any)
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Friction coefficient between ballast and plate (if any)
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.b}
+                        label='Friction coefficient between ballast and plate (if any)'
+                        value={value.bmu2}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "bmu2",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* bmu3: 0,Friction coefficient between plate and ground (if any) */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.b ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Friction coefficient between plate and ground (if any)
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Friction coefficient between plate and ground (if any)
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.b}
+                        label='Friction coefficient between plate and ground (if any)'
+                        value={value.bmu3}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "bmu3",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* bwplate: 0,Weight of plate (if any) */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.b ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Weight of plate (if any)
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Weight of plate (if any) ({units.weight[values.unit]})
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.b}
+                        label='Weight of plate (if any) ({units.weight[values.unit]})'
+                        value={value.bwplate}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "bwplate",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* 
+                C SELECTION
+                 */}
+                {/* cd1: 0,Distance between center of ballast and upright (ft) */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.c ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Distance between center of ballast and upright
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Distance between center of ballast and upright (
+                        {units.size[values.unit]})
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.c}
+                        label='Distance between center of ballast and upright ({units.size[values.unit]})'
+                        value={value.cd1}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "cd1",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* cd3:0,Ballast effective width (ft) */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.c ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Ballast effective width
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Ballast effective width ({units.size[values.unit]})
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.c}
+                        label='Ballast effective width ({units.size[values.unit]})'
+                        value={value.cd3}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "cd3",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* cd4: 0,Horizontal distance between ballast center and guy attachment point (ft) */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.c ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Horizontal distance between ballast center and guy
+                          attachment point
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Horizontal distance between ballast center and guy
+                        attachment point ({units.size[values.unit]})
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.c}
+                        label='Horizontal distance between ballast center and guy attachment point ({units.size[values.unit]})'
+                        value={value.cd4}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "cd4",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* ch4: 0,Vertical distance between plate and guy attachment point
+                (ft) */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.c ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Vertical distance between plate and guy attachment
+                          point
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Vertical distance between plate and guy attachment point
+                        ({units.size[values.unit]})
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.c}
+                        label='Vertical distance between plate and guy attachment point ({units.size[values.unit]})'
+                        value={value.ch4}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "ch4",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* cmu1: 0,Friction coefficient between ballast and ground (if
+                applicable) */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.c ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Friction coefficient between ballast and ground (if
+                          applicable)
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Friction coefficient between ballast and ground (if
+                        applicable) ({units.size[values.unit]})
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.c}
+                        label='Friction coefficient between ballast and ground (if applicable)'
+                        value={value.cmu1}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "cmu1",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* 
+                D SELECTION
+                 */}
+                {/* dd2: 0,Distance between far end of plate and upright (ft) */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.d ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Distance between far end of plate and upright
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Distance between far end of plate and upright (
+                        {units.size[values.unit]})
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.d}
+                        label='Distance between far end of plate and upright ({units.size[values.unit]})'
+                        value={value.dd2}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "dd2",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* dd4: 0,Horizontal distance between ballast center and guy
+                attachment point (ft)  */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.d ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Horizontal distance between ballast center and guy
+                          attachment point
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Horizontal distance between ballast center and guy
+                        attachment point ({units.size[values.unit]})
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.d}
+                        label='Horizontal distance between ballast center and guy attachment point ({units.size[values.unit]})'
+                        value={value.dd4}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "dd4",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* dd5: 0,Horizontal distance between guy attachment point and upright (ft)  */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.d ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Horizontal distance between guy attachment point and
+                          upright
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Horizontal distance between guy attachment point and
+                        upright ({units.size[values.unit]})
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.d}
+                        label='Horizontal distance between guy attachment point and upright ({units.size[values.unit]})'
+                        value={value.dd5}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "dd5",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* dmu3: 0,Friction coefficient between plate and ground (if any) */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.d ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Friction coefficient between plate and ground (if any)
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Friction coefficient between plate and ground (if any)
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.d}
+                        label='Friction coefficient between plate and ground (if any) '
+                        value={value.dmu3}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "dmu3",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* dwplate: 0,Weight of plate (if any) */}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.d ? "inherit" : "none",
+                  }}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Weight of plate (if any)
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Weight of plate ({units.weight[values.unit]})
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        defaultValue={20}
+                        hidden={ballastType.d}
+                        label='Weight of plate (if any) ({units.weight[values.unit]})'
+                        value={value.dwplate}
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "dwplate",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
                 <Grid item xs={6}>
                   <ButtonGroup
                     className={clsx(classes.calculateButton)}

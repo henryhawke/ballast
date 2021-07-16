@@ -30,7 +30,7 @@ export default functions
       return;
     }
 
-    const file = admin.storage().bucket().file("storage/balance.xlsx");
+    const file = admin.storage().bucket().file("storage/jul1621-advanced.xlsx");
     return file.download().then((data) => {
       // import your calc functions lib
       XLSX_CALC.import_functions(formulajs);
@@ -94,79 +94,79 @@ export default functions
       // CALCULATION OF THE SPREADSHEET
       XLSX_CALC(workbook);
 
-      var openFX = worksheet["J10"] ? worksheet["J10"].v : undefined;
-      var openFY = worksheet["J11"] ? worksheet["J11"].v : undefined;
-      var openFZ = worksheet["J12"] ? worksheet["J12"].v : undefined;
-      var openOML = worksheet["J13"] ? worksheet["J13"].v : undefined;
-      var openOMW = worksheet["J14"] ? worksheet["J14"].v : undefined;
+      var openFX = worksheet["J10"] ? worksheet["J10"].v : 0;
+      var openFY = worksheet["J11"] ? worksheet["J11"].v : 0;
+      var openFZ = worksheet["J12"] ? worksheet["J12"].v : 0;
+      var openOML = worksheet["J13"] ? worksheet["J13"].v : 0;
+      var openOMW = worksheet["J14"] ? worksheet["J14"].v : 0;
 
-      var encFX = worksheet["K10"] ? worksheet["K10"].v : undefined;
-      var encFY = worksheet["K11"] ? worksheet["K11"].v : undefined;
-      var encFZ = worksheet["K12"] ? worksheet["K12"].v : undefined;
-      var encOML = worksheet["K13"] ? worksheet["K13"].v : undefined;
-      var encOMW = worksheet["K14"] ? worksheet["K14"].v : undefined;
+      var encFX = worksheet["K10"] ? worksheet["K10"].v : 0;
+      var encFY = worksheet["K11"] ? worksheet["K11"].v : 0;
+      var encFZ = worksheet["K12"] ? worksheet["K12"].v : 0;
+      var encOML = worksheet["K13"] ? worksheet["K13"].v : 0;
+      var encOMW = worksheet["K14"] ? worksheet["K14"].v : 0;
 
-      // var totalBallasts = worksheet["K19"] ? worksheet["K19"].v : undefined;
+      // var totalBallasts = worksheet["K19"] ? worksheet["K19"].v : 0;
 
       // Weights of each ballast  K23, L23, and M23.
-      var openBallastWeight = worksheet["J19"] ? worksheet["J19"].v : undefined;
-      var encBallastWeight = worksheet["K19"] ? worksheet["K19"].v : undefined;
+      var openBallastWeight = worksheet["J19"] ? worksheet["J19"].v : 0;
+      var encBallastWeight = worksheet["K19"] ? worksheet["K19"].v : 0;
 
       // Fixed-to-plate
-      var b2mu3 = worksheet["E42"] ? worksheet["E43"].v : undefined;
-      var b2wplate = worksheet["E43"] ? worksheet["E43"].v : undefined;
+      var b2mu3 = worksheet["E42"] ? worksheet["E43"].v : 0;
+      var b2wplate = worksheet["E43"] ? worksheet["E43"].v : 0;
 
-      var b2open = worksheet["E56"] ? worksheet["E56"].v : undefined;
-      var b2enclosed = worksheet["F56"] ? worksheet["F56"].v : undefined;
+      var b2open = worksheet["E56"] ? worksheet["E56"].v : 0;
+      var b2enclosed = worksheet["F56"] ? worksheet["F56"].v : 0;
 
       // Fixed-to-pole
-      var c2mu1 = worksheet["G40"] ? worksheet["G40"].v : undefined;
+      var c2mu1 = worksheet["G40"] ? worksheet["G40"].v : 0;
 
-      var c2open = worksheet["G56"] ? worksheet["G56"].v : undefined;
-      var c2enclosed = worksheet["H56"] ? worksheet["H56"].v : undefined;
+      var c2open = worksheet["G56"] ? worksheet["G56"].v : 0;
+      var c2enclosed = worksheet["H56"] ? worksheet["H56"].v : 0;
       // A
-      var ad1 = worksheet["I34"] ? worksheet["I34"].v : undefined;
-      var ad2 = worksheet["I35"] ? worksheet["I35"].v : undefined;
+      var ad1 = worksheet["I34"] ? worksheet["I34"].v : 0;
+      var ad2 = worksheet["I35"] ? worksheet["I35"].v : 0;
 
-      var amu3 = worksheet["I42"] ? worksheet["I42"].v : undefined;
-      var awplate = worksheet["I43"] ? worksheet["I43"].v : undefined;
+      var amu3 = worksheet["I42"] ? worksheet["I42"].v : 0;
+      var awplate = worksheet["I43"] ? worksheet["I43"].v : 0;
 
-      var aopen = worksheet["I56"] ? worksheet["I56"].v : undefined;
-      var aenclosed = worksheet["J56"] ? worksheet["J56"].v : undefined;
+      var aopen = worksheet["I56"] ? worksheet["I56"].v : 0;
+      var aenclosed = worksheet["J56"] ? worksheet["J56"].v : 0;
 
       // B Assuming A
-      var bd1 = worksheet["K34"] ? worksheet["K34"].v : undefined;
-      var bd2 = worksheet["K35"] ? worksheet["K35"].v : undefined;
+      var bd1 = worksheet["K34"] ? worksheet["K34"].v : 0;
+      var bd2 = worksheet["K35"] ? worksheet["K35"].v : 0;
 
-      var bd3 = worksheet["M36"] ? worksheet["M36"].v : undefined;
-      var bd4 = worksheet["M37"] ? worksheet["M37"].v : undefined;
-      var bh4 = worksheet["M38"] ? worksheet["M38"].v : undefined;
+      var bd3 = worksheet["M36"] ? worksheet["M36"].v : 0;
+      var bd4 = worksheet["M37"] ? worksheet["M37"].v : 0;
+      var bh4 = worksheet["M38"] ? worksheet["M38"].v : 0;
 
-      var bmu2 = worksheet["M41"] ? worksheet["M41"].v : undefined;
-      var bmu3 = worksheet["K42"] ? worksheet["K42"].v : undefined;
-      var bwplate = worksheet["K43"] ? worksheet["K43"].v : undefined;
+      var bmu2 = worksheet["M41"] ? worksheet["M41"].v : 0;
+      var bmu3 = worksheet["K42"] ? worksheet["K42"].v : 0;
+      var bwplate = worksheet["K43"] ? worksheet["K43"].v : 0;
 
-      var bopen = worksheet["K56"] ? worksheet["K56"].v : undefined;
-      var benclosed = worksheet["L56"] ? worksheet["L56"].v : undefined;
+      var bopen = worksheet["K56"] ? worksheet["K56"].v : 0;
+      var benclosed = worksheet["L56"] ? worksheet["L56"].v : 0;
 
       // C
-      var cd1 = worksheet["O34"] ? worksheet["O34"].v : undefined;
-      var cd3 = worksheet["O36"] ? worksheet["O36"].v : undefined;
-      var cd4 = worksheet["O37"] ? worksheet["O37"].v : undefined;
-      var ch4 = worksheet["O38"] ? worksheet["O38"].v : undefined;
-      var cmu1 = worksheet["O40"] ? worksheet["O40"].v : undefined;
+      var cd1 = worksheet["O34"] ? worksheet["O34"].v : 0;
+      var cd3 = worksheet["O36"] ? worksheet["O36"].v : 0;
+      var cd4 = worksheet["O37"] ? worksheet["O37"].v : 0;
+      var ch4 = worksheet["O38"] ? worksheet["O38"].v : 0;
+      var cmu1 = worksheet["O40"] ? worksheet["O40"].v : 0;
 
-      var copen = worksheet["O56"] ? worksheet["O56"].v : undefined;
-      var cenclosed = worksheet["P56"] ? worksheet["P56"].v : undefined;
+      var copen = worksheet["O56"] ? worksheet["O56"].v : 0;
+      var cenclosed = worksheet["P56"] ? worksheet["P56"].v : 0;
       // D
-      var dd2 = worksheet["Q35"] ? worksheet["Q35"].v : undefined;
-      var dd4 = worksheet["Q37"] ? worksheet["Q37"].v : undefined;
-      var dd5 = worksheet["Q39"] ? worksheet["Q39"].v : undefined;
-      var dmu3 = worksheet["Q42"] ? worksheet["Q42"].v : undefined;
-      var dwplate = worksheet["Q43"] ? worksheet["Q43"].v : undefined;
+      var dd2 = worksheet["Q35"] ? worksheet["Q35"].v : 0;
+      var dd4 = worksheet["Q37"] ? worksheet["Q37"].v : 0;
+      var dd5 = worksheet["Q39"] ? worksheet["Q39"].v : 0;
+      var dmu3 = worksheet["Q42"] ? worksheet["Q42"].v : 0;
+      var dwplate = worksheet["Q43"] ? worksheet["Q43"].v : 0;
 
-      var dopen = worksheet["Q56"] ? worksheet["Q56"].v : undefined;
-      var denclosed = worksheet["R56"] ? worksheet["R56"].v : undefined;
+      var dopen = worksheet["Q56"] ? worksheet["Q56"].v : 0;
+      var denclosed = worksheet["R56"] ? worksheet["R56"].v : 0;
 
       // console.log(encOMW);
 
@@ -248,7 +248,9 @@ export default functions
         dopen: Math.floor(parseFloat(dopen)),
         denclosed: Math.floor(parseFloat(denclosed)),
       };
-
+      console.log(returnData);
+      console.log(openOML);
+      console.log(openOML);
       admin
         .database()
         .ref(`/tasks/${context.auth.uid}/${payload.calcID}`)
