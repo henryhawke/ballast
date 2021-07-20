@@ -29,6 +29,9 @@ import MuiDialogContent from "@material-ui/core/DialogContent";
 // import { noScrollbarsClassName } from "react-remove-scroll-bar";
 import MuiDialogActions from "@material-ui/core/DialogActions";
 import Slide from "@material-ui/core/Slide";
+import Autocomplete, {
+  createFilterOptions,
+} from "@material-ui/lab/Autocomplete";
 import {
   DataGrid,
   GridToolbarContainer,
@@ -333,6 +336,144 @@ const Tools = ({ intl }) => {
       title: "Number of Ballasts Per Corner Post",
       content: "ballastsPerCornerPost",
     },
+    {
+      id: 12,
+      title: "Ballast Type",
+      content: "ballastType",
+    },
+    {
+      id: 13,
+      title: "Friction coefficient between plate and ground ",
+      content: "b2mu3",
+    },
+    {
+      id: 14,
+      title: "Weight of plate (if any)",
+      content: "b2wplate",
+    },
+    {
+      id: 15,
+      title: "Friction coefficient between ballast and ground",
+      content: "c2mu1",
+    },
+    {
+      id: 16,
+      title: "Distance between center of ballast and upright ",
+      content: "ad1",
+    },
+    {
+      id: 17,
+      title: "Distance between far end of plate and upright",
+      content: "ad2",
+    },
+    {
+      id: 18,
+      title: "Friction coefficient between plate and ground (if any)",
+      content: "amu3",
+    },
+    {
+      id: 19,
+      title: "Weight of plate (if any)",
+      content: "awplate",
+    },
+    {
+      id: 20,
+      title: "Distance between center of ballast and upright ",
+      content: "bd1",
+    },
+    {
+      id: 21,
+      title: "Distance between far end of plate and upright ",
+      content: "bd2",
+    },
+    {
+      id: 22,
+      title: "Ballast effective width ",
+      content: "bd3",
+    },
+    {
+      id: 23,
+      title:
+        "Horizontal distance between ballast center and guy attachment point",
+      content: "bd4",
+    },
+    {
+      id: 24,
+      title: "Vertical distance between plate and guy attachment point",
+      content: "bh4",
+    },
+    {
+      id: 25,
+      title: "Friction coefficient between ballast and plate",
+      content: "bmu2",
+    },
+    {
+      id: 26,
+      title: "Friction coefficient between plate and ground",
+      content: "bmu3",
+    },
+    {
+      id: 27,
+      title: "Weight of plate",
+      content: "bwplate",
+    },
+    {
+      id: 28,
+      title: "Distance between center of ballast and upright",
+      content: "cd1",
+    },
+    {
+      id: 29,
+      title: "Ballast effective width",
+      content: "cd3",
+    },
+    {
+      id: 30,
+      title:
+        "Horizontal distance between ballast center and guy attachment point ",
+      content: "cd4",
+    },
+    {
+      id: 31,
+      title: "Vertical distance between plate and guy attachment point",
+      content: "ch4",
+    },
+    {
+      id: 32,
+      title: "Friction coefficient between ballast and ground ",
+      content: "cmu1",
+    },
+    {
+      id: 33,
+      title: "Distance between far end of plate and upright",
+      content: "dd2",
+    },
+    {
+      id: 34,
+      title:
+        "Horizontal distance between ballast center and guy attachment point",
+      content: "dd4",
+    },
+    {
+      id: 35,
+      title: "Horizontal distance between guy attachment point and upright",
+      content: "dd5",
+    },
+    {
+      id: 36,
+      title: "Friction coefficient between plate and ground (if any) ",
+      content: "dmu3",
+    },
+    {
+      id: 37,
+      title: "Weight of plate (if any)",
+      content: "dwplate",
+    },
+    // {
+    //   id: 38,
+    //   title: "",
+    //   content: "",
+    // },
   ];
   const [dialogResults, setResultsDialogResults] = useState({
     title: "",
@@ -360,11 +501,12 @@ const Tools = ({ intl }) => {
     When creating a new variable you want to be stored on Firebase Database, it is necessary to 
     store it here
   */
+  const todaysDate = new Date();
   const [values, setValues] = useState({
     companyName: "",
     project: "",
     location: "",
-    projectDate: new Date().toString(),
+    projectDate: todaysDate.toISOString().substr(0, 10),
     unit: 0,
     openFX: 0,
     openFY: 0,
@@ -404,8 +546,8 @@ const Tools = ({ intl }) => {
     share: {},
     notes: "",
     ballastType: 1,
-    b2mu3: 0,
-    b2wplate: 0,
+    b2mu3: 0.5,
+    b2wplate: 20,
     b2open: 0,
     b2enclosed: 0,
     c2mu1: 0,
@@ -413,8 +555,8 @@ const Tools = ({ intl }) => {
     c2enclosed: 0,
     ad1: 0,
     ad2: 0,
-    amu3: 0,
-    awplate: 0,
+    amu3: 0.5,
+    awplate: 20,
     aopen: 0,
     aenclosed: 0,
     bd1: 0,
@@ -422,23 +564,23 @@ const Tools = ({ intl }) => {
     bd3: 0,
     bd4: 0,
     bh4: 0,
-    bmu2: 0,
-    bmu3: 0,
-    bwplate: 0,
+    bmu2: 0.5,
+    bmu3: 0.5,
+    bwplate: 20,
     bopen: 0,
     benclosed: 0,
     cd1: 0,
     cd3: 0,
     cd4: 0,
     ch4: 0,
-    cmu1: 0,
+    cmu1: 0.5,
     copen: 0,
     cenclosed: 0,
-    dd2: 0,
+    dd2: 5,
     dd4: 0,
-    dd5: 0,
-    dmu3: 0,
-    dwplate: 0,
+    dd5: 2,
+    dmu3: 0.5,
+    dwplate: 20,
     dopen: 0,
     denclosed: 0,
   });
@@ -528,18 +670,18 @@ const Tools = ({ intl }) => {
                 FZ: vals.openFZ,
                 ballastWeight: vals.openBallastWeight,
               },
+              // {
+              //   id: 2,
+              //   Enclosure: "Partially Enclosed",
+              //   overturnMomentLength: vals.partOML,
+              //   overturnMomentWidth: vals.partOMW,
+              //   FX: vals.partFX,
+              //   FY: vals.partFY,
+              //   FZ: vals.partFZ,
+              //   ballastWeight: vals.partBallastWeight,
+              // },
               {
                 id: 2,
-                Enclosure: "Partially Enclosed",
-                overturnMomentLength: vals.partOML,
-                overturnMomentWidth: vals.partOMW,
-                FX: vals.partFX,
-                FY: vals.partFY,
-                FZ: vals.partFZ,
-                ballastWeight: vals.partBallastWeight,
-              },
-              {
-                id: 3,
                 Enclosure: "Enclosed",
                 overturnMomentLength: vals.encOML,
                 overturnMomentWidth: vals.encOMW,
@@ -606,7 +748,9 @@ const Tools = ({ intl }) => {
   const [btnDisabled, setBtnDisabled] = useState(true);
   const handleSelectChange = (event) => {
     const name = event.target.name;
+    const id = event.target;
     console.log(name);
+    console.log(id);
     if (name === "roofType") {
       console.log("is roof change");
       console.log(event.target.value);
@@ -617,6 +761,7 @@ const Tools = ({ intl }) => {
         setBtnDisabled(true);
       }
     }
+    console.log(event.target.value);
     setValues({
       ...values,
       [name]: event.target.value,
@@ -631,6 +776,8 @@ const Tools = ({ intl }) => {
     c: false,
     d: false,
   });
+
+  const filter = createFilterOptions();
 
   const handleBallastSelectChange = (event) => {
     const name = event.target.name;
@@ -852,7 +999,7 @@ const Tools = ({ intl }) => {
           </FormDialogActions>
         </Dialog>
 
-        {/* FLOATER BUTTON */}
+        {/* FLOATER BUTTON
         <div className={classes.fab}>
           <Fab
             variant='extended'
@@ -873,7 +1020,7 @@ const Tools = ({ intl }) => {
             <EditRoundedIcon className={classes.extendedIcon} />
             Help
           </Fab>
-        </div>
+        </div> */}
 
         {/* Popup for results of the calculation */}
         <div>
@@ -998,7 +1145,7 @@ const Tools = ({ intl }) => {
                   alignItems='center'
                   spacing={3}>
                   {/* UNITS */}
-                  <Grid item xs={12}>
+                  <Grid item xs={6}>
                     <FormControl
                       component='fieldset'
                       // error={error}
@@ -1024,7 +1171,30 @@ const Tools = ({ intl }) => {
                       </RadioGroup>
                     </FormControl>
                   </Grid>
+                  {/* CALCULATE BUTTON */}
+                  <Grid item xs={6}>
+                    <ButtonGroup
+                      className={clsx(classes.calculateButton)}
+                      variant='contained'
+                      color='primary'
+                      fullWidth={true}
+                      aria-label='contained primary button group'>
+                      <Button
+                        onClick={async () => {
+                          // const handleClickOpen = () => {
+                          //   setOpen(true);
+                          // };
 
+                          startCloudFunc();
+
+                          // setLoading(true);
+                          history.push("/about");
+                        }}>
+                        Help
+                      </Button>
+                      {/* <Button>Save</Button> */}
+                    </ButtonGroup>
+                  </Grid>
                   {/* DOWNLOAD PRINTABLE */}
 
                   {/* Title */}
@@ -1151,10 +1321,11 @@ const Tools = ({ intl }) => {
                       id='date'
                       label='Project Date'
                       type='date'
+                      defaultValue={new Date().toISOString().substr(0, 10)}
                       value={values.projectDate}
                       onChange={handleChange("projectDate")}
-                      defaultValue={format(new Date(), "yyyy-mmmm-Do")}
                       className={classes.textField}
+                      variant='outlined'
                       InputLabelProps={{
                         shrink: true,
                       }}
@@ -1196,6 +1367,7 @@ const Tools = ({ intl }) => {
                         defaultValue={20}
                         label='Wind Speed ({units.speed[values.unit]})'
                         value={value.windSpeed}
+                        name='windSpeed'
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "windSpeed",
@@ -1372,9 +1544,13 @@ const Tools = ({ intl }) => {
                         <option value={10}>10</option>
                         <option value={15}>15</option>
                         <option value={20}>20</option>
+                        <option value={25}>25</option>
                         <option value={30}>30</option>
+                        <option value={35}>35</option>
                         <option value={40}>40</option>
+                        <option value={45}>45</option>
                         <option value={50}>50</option>
+                        <option value={55}>55</option>
                         <option value={60}>60</option>
                       </Select>
                     </FormControl>
@@ -1613,10 +1789,75 @@ const Tools = ({ intl }) => {
                     <FormControl
                       className={clsx(classes.formControl)}
                       variant='outlined'>
-                      <InputLabel htmlFor='outlined-age-native-simple'>
+                      <Autocomplete
+                        id='postsPerLength'
+                        getOptionLabel={(option) => {
+                          if (typeof option === "string") {
+                            return option;
+                          }
+                          // Add "xxx" option created dynamically
+                          if (option.inputValue) {
+                            return option.inputValue;
+                          }
+                          return option.toString();
+                        }}
+                        freeSolo
+                        autoSelect
+                        selectOnFocus
+                        clearOnBlur
+                        handleHomeEndKeys
+                        defaultValue={value.postsPerLength}
+                        value={value.postsPerLength}
+                        // endAdornment={
+                        //   <InputAdornment position='end'>
+                        //     <EditRoundedIcon
+                        //       onClick={() => {
+                        //         handleCustomDialog(9);
+                        //       }}
+                        //     />
+                        //   </InputAdornment>
+                        // }
+                        onChange={(event, newValue) => {
+                          setValues({
+                            ...values,
+                            postsPerLength: newValue,
+                          });
+                        }}
+                        options={[
+                          0,
+                          "1",
+                          "2",
+                          "3",
+                          "4",
+                          "5",
+                          "6",
+                          "7",
+                          "8",
+                          "9",
+                          "10",
+                          "11",
+                          "12",
+                          "13",
+                          "14",
+                          "15",
+                        ]}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            inputProps={{
+                              ...params.inputProps,
+                              name: "postsPerLength",
+                            }}
+                            label='Number intermediate posts in length (Including Corner Posts)'
+                            margin='normal'
+                            variant='outlined'
+                          />
+                        )}
+                      />
+                      {/* <InputLabel htmlFor='outlined-age-native-simple'>
                         Number Intermediate posts in length
                       </InputLabel>
-                      <Select
+                      <Select 
                         native
                         defaultValue={3}
                         label='Number intermediate posts in length (Including Corner Posts)'
@@ -1634,23 +1875,7 @@ const Tools = ({ intl }) => {
                         inputProps={{
                           name: "postsPerLength",
                           id: "outlined-age-native-simple",
-                        }}>
-                        <option value={1}>1</option>
-                        <option value={2}>2</option>
-                        <option value={3}>3</option>
-                        <option value={4}>4</option>
-                        <option value={5}>5</option>
-                        <option value={6}>6</option>
-                        <option value={7}>7</option>
-                        <option value={8}>8</option>
-                        <option value={9}>9</option>
-                        <option value={10}>10</option>
-                        <option value={11}>11</option>
-                        <option value={12}>12</option>
-                        <option value={13}>13</option>
-                        <option value={14}>14</option>
-                        <option value={15}>15</option>
-                      </Select>
+                        }}></Select>*/}
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
@@ -1782,9 +2007,8 @@ const Tools = ({ intl }) => {
                   </FormControl>
                 </Grid> */}
 
-                {/* Roof Type - 6*/}
+                {/* Ballast Type - 12*/}
                 <Grid item xs={6}>
-                  {/* Roof Type */}
                   <HtmlTooltip
                     enterDelay={200}
                     leaveDelay={150}
@@ -1843,6 +2067,8 @@ const Tools = ({ intl }) => {
                                   style={{
                     display: ballastType.fixedToPlate ? "inherit" : "none",
                   }}
+
+                  13
                 */}
                 <Grid
                   item
@@ -1875,7 +2101,7 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(13);
                               }}
                             />
                           </InputAdornment>
@@ -1889,12 +2115,12 @@ const Tools = ({ intl }) => {
                           name: "b2mu3",
                           id: "outlined-age-native-simple",
                         }}>
-                        <option value={50}>50</option>
+                        <option value={0.5}>0.5</option>
                       </Select>
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* b2wplate: 0,Weight of plate (if any) */}
+                {/* b2wplate: 0,Weight of plate (if any) 14*/}
                 <Grid
                   item
                   xs={6}
@@ -1924,7 +2150,7 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(14);
                               }}
                             />
                           </InputAdornment>
@@ -1960,7 +2186,8 @@ const Tools = ({ intl }) => {
                 {/* 
                 C2 SELECTION
                  */}
-                {/* c2mu1: 0,Friction coefficient between ballast and ground (if applicable) */}
+                {/* c2mu1: 0,Friction coefficient between ballast and ground (if applicable) 
+                15*/}
                 <Grid
                   item
                   xs={6}
@@ -1994,7 +2221,7 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(15);
                               }}
                             />
                           </InputAdornment>
@@ -2028,8 +2255,13 @@ const Tools = ({ intl }) => {
                   </HtmlTooltip>
                 </Grid>
                 {/* A SELECTION */}
-                {/* ad1: 0, Distance between center of ballast and upright (ft)  */}
-                <Grid item xs={6}>
+                {/* ad1: 0, Distance between center of ballast and upright (ft)  16*/}
+                <Grid
+                  item
+                  xs={6}
+                  style={{
+                    display: ballastType.a ? "inherit" : "none",
+                  }}>
                   <HtmlTooltip
                     enterDelay={200}
                     leaveDelay={150}
@@ -2056,7 +2288,7 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(16);
                               }}
                             />
                           </InputAdornment>
@@ -2089,7 +2321,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* ad2:0, Distance between far end of plate and upright (ft)  */}
+                {/* ad2:0, Distance between far end of plate and upright (ft)  17*/}
                 <Grid
                   item
                   xs={6}
@@ -2122,7 +2354,7 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(17);
                               }}
                             />
                           </InputAdornment>
@@ -2155,7 +2387,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* amu3: 0,Friction coefficient between plate and ground (if any) */}
+                {/* amu3: 0,Friction coefficient between plate and ground (if any) 18*/}
                 <Grid
                   item
                   xs={6}
@@ -2187,7 +2419,7 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(18);
                               }}
                             />
                           </InputAdornment>
@@ -2220,7 +2452,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* awplate: 0, Weight of plate (if any)*/}
+                {/* awplate: 0, Weight of plate (if any) 19*/}
                 <Grid
                   item
                   xs={6}
@@ -2252,7 +2484,7 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(19);
                               }}
                             />
                           </InputAdornment>
@@ -2288,7 +2520,7 @@ const Tools = ({ intl }) => {
                 {/* 
                 B SELECTION
                  */}
-                {/* bd1: 0, Distance between center of ballast and upright (ft)  */}
+                {/* bd1: 0, Distance between center of ballast and upright (ft)  20*/}
                 <Grid
                   item
                   xs={6}
@@ -2321,7 +2553,7 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(20);
                               }}
                             />
                           </InputAdornment>
@@ -2354,7 +2586,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* bd2:0,Distance between far end of plate and upright (ft) */}
+                {/* bd2:0,Distance between far end of plate and upright (ft) 21*/}
                 <Grid
                   item
                   xs={6}
@@ -2387,7 +2619,7 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(21);
                               }}
                             />
                           </InputAdornment>
@@ -2420,7 +2652,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* bd3: 0,Ballast effective width (ft) */}
+                {/* bd3: 0,Ballast effective width (ft) 22*/}
                 <Grid
                   item
                   xs={6}
@@ -2452,7 +2684,7 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(22);
                               }}
                             />
                           </InputAdornment>
@@ -2485,7 +2717,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* bd4: 0,Horizontal distance between ballast center and guy attachment point (ft)  */}
+                {/* bd4: 0,Horizontal distance between ballast center and guy attachment point (ft)  23*/}
                 <Grid
                   item
                   xs={6}
@@ -2519,7 +2751,7 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(23);
                               }}
                             />
                           </InputAdornment>
@@ -2552,7 +2784,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* bh4: 0, Vertical distance between plate and guy attachment point (ft) */}
+                {/* bh4: 0, Vertical distance between plate and guy attachment point (ft) 24*/}
                 <Grid
                   item
                   xs={6}
@@ -2586,7 +2818,7 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(24);
                               }}
                             />
                           </InputAdornment>
@@ -2619,7 +2851,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* bmu2: 0,Friction coefficient between ballast and plate (if any) */}
+                {/* bmu2: 0,Friction coefficient between ballast and plate (if any) 25*/}
                 <Grid
                   item
                   xs={6}
@@ -2652,7 +2884,7 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(25);
                               }}
                             />
                           </InputAdornment>
@@ -2685,7 +2917,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* bmu3: 0,Friction coefficient between plate and ground (if any) */}
+                {/* bmu3: 0,Friction coefficient between plate and ground (if any) 26*/}
                 <Grid
                   item
                   xs={6}
@@ -2717,7 +2949,7 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(26);
                               }}
                             />
                           </InputAdornment>
@@ -2750,7 +2982,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* bwplate: 0,Weight of plate (if any) */}
+                {/* bwplate: 0,Weight of plate (if any) 27*/}
                 <Grid
                   item
                   xs={6}
@@ -2782,7 +3014,7 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(27);
                               }}
                             />
                           </InputAdornment>
@@ -2818,7 +3050,7 @@ const Tools = ({ intl }) => {
                 {/* 
                 C SELECTION
                  */}
-                {/* cd1: 0,Distance between center of ballast and upright (ft) */}
+                {/* cd1: 0,Distance between center of ballast and upright (ft) 28*/}
                 <Grid
                   item
                   xs={6}
@@ -2851,7 +3083,7 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(28);
                               }}
                             />
                           </InputAdornment>
@@ -2884,7 +3116,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* cd3:0,Ballast effective width (ft) */}
+                {/* cd3:0,Ballast effective width (ft) 29*/}
                 <Grid
                   item
                   xs={6}
@@ -2916,7 +3148,7 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(29);
                               }}
                             />
                           </InputAdornment>
@@ -2949,7 +3181,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* cd4: 0,Horizontal distance between ballast center and guy attachment point (ft) */}
+                {/* cd4: 0,Horizontal distance between ballast center and guy attachment point (ft) 30*/}
                 <Grid
                   item
                   xs={6}
@@ -2983,12 +3215,12 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(30);
                               }}
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        defaultValue={0}
                         hidden={ballastType.c}
                         label='Horizontal distance between ballast center and guy attachment point ({units.size[values.unit]})'
                         value={value.cd4}
@@ -2997,7 +3229,7 @@ const Tools = ({ intl }) => {
                           name: "cd4",
                           id: "outlined-age-native-simple",
                         }}>
-                        <option value={10}>10</option>
+                        <option value={0}>0</option>
                         <option value={20}>20</option>
                         <option value={30}>30</option>
                         <option value={40}>40</option>
@@ -3017,7 +3249,7 @@ const Tools = ({ intl }) => {
                   </HtmlTooltip>
                 </Grid>
                 {/* ch4: 0,Vertical distance between plate and guy attachment point
-                (ft) */}
+                (ft) 31*/}
                 <Grid
                   item
                   xs={6}
@@ -3051,7 +3283,7 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(31);
                               }}
                             />
                           </InputAdornment>
@@ -3085,7 +3317,7 @@ const Tools = ({ intl }) => {
                   </HtmlTooltip>
                 </Grid>
                 {/* cmu1: 0,Friction coefficient between ballast and ground (if
-                applicable) */}
+                applicable) 32*/}
                 <Grid
                   item
                   xs={6}
@@ -3119,7 +3351,7 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(32);
                               }}
                             />
                           </InputAdornment>
@@ -3155,7 +3387,7 @@ const Tools = ({ intl }) => {
                 {/* 
                 D SELECTION
                  */}
-                {/* dd2: 0,Distance between far end of plate and upright (ft) */}
+                {/* dd2: 0,Distance between far end of plate and upright (ft) 33*/}
                 <Grid
                   item
                   xs={6}
@@ -3188,7 +3420,7 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(33);
                               }}
                             />
                           </InputAdornment>
@@ -3222,7 +3454,7 @@ const Tools = ({ intl }) => {
                   </HtmlTooltip>
                 </Grid>
                 {/* dd4: 0,Horizontal distance between ballast center and guy
-                attachment point (ft)  */}
+                attachment point (ft) 34 */}
                 <Grid
                   item
                   xs={6}
@@ -3256,7 +3488,7 @@ const Tools = ({ intl }) => {
                           <InputAdornment position='end'>
                             <EditRoundedIcon
                               onClick={() => {
-                                handleCustomDialog(1);
+                                handleCustomDialog(34);
                               }}
                             />
                           </InputAdornment>
@@ -3289,7 +3521,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* dd5: 0,Horizontal distance between guy attachment point and upright (ft)  */}
+                {/* dd5: 0,Horizontal distance between guy attachment point and upright (ft)  35*/}
                 <Grid
                   item
                   xs={6}
@@ -3356,7 +3588,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* dmu3: 0,Friction coefficient between plate and ground (if any) */}
+                {/* dmu3: 0,Friction coefficient between plate and ground (if any) 36*/}
                 <Grid
                   item
                   xs={6}
@@ -3421,7 +3653,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* dwplate: 0,Weight of plate (if any) */}
+                {/* dwplate: 0,Weight of plate (if any) 37*/}
                 <Grid
                   item
                   xs={6}
@@ -3486,6 +3718,8 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
+
+                {/* CALCULATE BUTTON */}
                 <Grid item xs={6}>
                   <ButtonGroup
                     className={clsx(classes.calculateButton)}

@@ -360,11 +360,12 @@ const Tools = ({ intl }) => {
     When creating a new variable you want to be stored on Firebase Database, it is necessary to 
     store it here
   */
+  const todaysDate = new Date();
   const [values, setValues] = useState({
     companyName: "",
     project: "",
     location: "",
-    projectDate: new Date().toString(),
+    projectDate: todaysDate.toISOString().substr(0, 10),
     unit: 0,
     openFX: 0,
     openFY: 0,
@@ -728,7 +729,7 @@ const Tools = ({ intl }) => {
         </Dialog>
 
         {/* FLOATER BUTTON */}
-        <div className={classes.fab}>
+        {/* <div className={classes.fab}>
           <Fab
             variant='extended'
             onClick={async () => {
@@ -748,7 +749,7 @@ const Tools = ({ intl }) => {
             <EditRoundedIcon className={classes.extendedIcon} />
             Help
           </Fab>
-        </div>
+        </div> */}
 
         {/* Popup for results of the calculation */}
         <div>
@@ -873,7 +874,7 @@ const Tools = ({ intl }) => {
                   alignItems='center'
                   spacing={3}>
                   {/* UNITS */}
-                  <Grid item xs={12}>
+                  <Grid item xs={6}>
                     <FormControl
                       component='fieldset'
                       // error={error}
@@ -898,6 +899,30 @@ const Tools = ({ intl }) => {
                         />
                       </RadioGroup>
                     </FormControl>
+                  </Grid>
+                  {/* CALCULATE BUTTON */}
+                  <Grid item xs={6}>
+                    <ButtonGroup
+                      className={clsx(classes.calculateButton)}
+                      variant='contained'
+                      color='primary'
+                      fullWidth={true}
+                      aria-label='contained primary button group'>
+                      <Button
+                        onClick={async () => {
+                          // const handleClickOpen = () => {
+                          //   setOpen(true);
+                          // };
+
+                          startCloudFunc();
+
+                          // setLoading(true);
+                          history.push("/about");
+                        }}>
+                        Help
+                      </Button>
+                      {/* <Button>Save</Button> */}
+                    </ButtonGroup>
                   </Grid>
 
                   {/* DOWNLOAD PRINTABLE */}
@@ -1028,10 +1053,11 @@ const Tools = ({ intl }) => {
                       id='date'
                       label='Project Date'
                       type='date'
+                      defaultValue={new Date().toISOString().substr(0, 10)}
                       value={values.projectDate}
                       onChange={handleChange("projectDate")}
-                      defaultValue={format(new Date(), "yyyy-mmmm-Do")}
                       className={classes.textField}
+                      variant='outlined'
                       InputLabelProps={{
                         shrink: true,
                       }}
@@ -1252,9 +1278,13 @@ const Tools = ({ intl }) => {
                         <option value={10}>10</option>
                         <option value={15}>15</option>
                         <option value={20}>20</option>
+                        <option value={25}>25</option>
                         <option value={30}>30</option>
+                        <option value={35}>35</option>
                         <option value={40}>40</option>
+                        <option value={45}>45</option>
                         <option value={50}>50</option>
+                        <option value={55}>55</option>
                         <option value={60}>60</option>
                       </Select>
                     </FormControl>
@@ -1461,18 +1491,12 @@ const Tools = ({ intl }) => {
                           name: "roofHeight",
                           id: "outlined-age-native-simple",
                         }}>
+                        <option value={2.5}>2.5</option>
+                        <option value={4.5}>4.5</option>
                         <option value={5}>5</option>
+                        <option value={7.5}>7.5</option>
                         <option value={10}>10</option>
-                        <option value={15}>15</option>
-                        <option value={20}>20</option>
-                        <option value={25}>25</option>
-                        <option value={30}>30</option>
-                        <option value={35}>35</option>
-                        <option value={40}>40</option>
-                        <option value={45}>45</option>
-                        <option value={50}>50</option>
-                        <option value={55}>55</option>
-                        <option value={60}>60</option>
+                        <option value={12.5}>12.5</option>
                       </Select>
                     </FormControl>
                   </HtmlTooltip>
@@ -1520,6 +1544,7 @@ const Tools = ({ intl }) => {
                           name: "postsPerLength",
                           id: "outlined-age-native-simple",
                         }}>
+                        <option value={0}>0</option>
                         <option value={1}>1</option>
                         <option value={2}>2</option>
                         <option value={3}>3</option>

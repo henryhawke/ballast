@@ -51,7 +51,7 @@ export default functions
       // workbook.Sheets["Main"].A1.v = 42;
       worksheet["D3"] = {
         t: "n",
-        v: Math.floor(parseFloat(payload.tentLength)),
+        v: parseFloat(payload.tentLength),
       };
       worksheet["D4"] = { t: "n", v: parseFloat(payload.tentWidth) }; // ft/m
 
@@ -91,6 +91,107 @@ export default functions
         v: parseFloat(payload.ballastsPerCornerPost),
       };
 
+      worksheet["E42"] = {
+        t: "n",
+        v: parseFloat(payload.b2mu3),
+      };
+      worksheet["E43"] = {
+        t: "n",
+        v: parseFloat(payload.b2wplate),
+      };
+      worksheet["G40"] = {
+        t: "n",
+        v: parseFloat(payload.c2mu1),
+      };
+      worksheet["I34"] = {
+        t: "n",
+        v: parseFloat(payload.ad1),
+      };
+      worksheet["I35"] = {
+        t: "n",
+        v: parseFloat(payload.ad2),
+      };
+      worksheet["I42"] = {
+        t: "n",
+        v: parseFloat(payload.amu3),
+      };
+      worksheet["I43"] = {
+        t: "n",
+        v: parseFloat(payload.awplate),
+      };
+      worksheet["K34"] = {
+        t: "n",
+        v: parseFloat(payload.bd1),
+      };
+      worksheet["K35"] = {
+        t: "n",
+        v: parseFloat(payload.bd2),
+      };
+      worksheet["M36"] = {
+        t: "n",
+        v: parseFloat(payload.bd3),
+      };
+      worksheet["M37"] = {
+        t: "n",
+        v: parseFloat(payload.bd4),
+      };
+      worksheet["M38"] = {
+        t: "n",
+        v: parseFloat(payload.bh4),
+      };
+      worksheet["K41"] = {
+        t: "n",
+        v: parseFloat(payload.bmu2),
+      };
+      worksheet["K42"] = {
+        t: "n",
+        v: parseFloat(payload.bmu3),
+      };
+      worksheet["K43"] = {
+        t: "n",
+        v: parseFloat(payload.bwplate),
+      };
+      worksheet["O34"] = {
+        t: "n",
+        v: parseFloat(payload.cd1),
+      };
+      worksheet["O36"] = {
+        t: "n",
+        v: parseFloat(payload.cd3),
+      };
+      worksheet["O37"] = {
+        t: "n",
+        v: parseFloat(payload.cd4),
+      };
+      worksheet["O38"] = {
+        t: "n",
+        v: parseFloat(payload.ch4),
+      };
+      worksheet["O40"] = {
+        t: "n",
+        v: parseFloat(payload.cmu1),
+      };
+      worksheet["Q35"] = {
+        t: "n",
+        v: parseFloat(payload.dd2),
+      };
+      worksheet["Q37"] = {
+        t: "n",
+        v: parseFloat(payload.dd4),
+      };
+      worksheet["Q39"] = {
+        t: "n",
+        v: parseFloat(payload.dd5),
+      };
+      worksheet["Q42"] = {
+        t: "n",
+        v: parseFloat(payload.dmu3),
+      };
+      worksheet["Q43"] = {
+        t: "n",
+        v: parseFloat(payload.dwplate),
+      };
+
       // CALCULATION OF THE SPREADSHEET
       XLSX_CALC(workbook);
 
@@ -113,18 +214,21 @@ export default functions
       var encBallastWeight = worksheet["K19"] ? worksheet["K19"].v : 0;
 
       // Fixed-to-plate
-      var b2mu3 = worksheet["E42"] ? worksheet["E43"].v : 0;
+
+      var b2mu3 = worksheet["E42"] ? worksheet["E42"].v : 0;
       var b2wplate = worksheet["E43"] ? worksheet["E43"].v : 0;
 
       var b2open = worksheet["E56"] ? worksheet["E56"].v : 0;
       var b2enclosed = worksheet["F56"] ? worksheet["F56"].v : 0;
 
       // Fixed-to-pole
+
       var c2mu1 = worksheet["G40"] ? worksheet["G40"].v : 0;
 
       var c2open = worksheet["G56"] ? worksheet["G56"].v : 0;
       var c2enclosed = worksheet["H56"] ? worksheet["H56"].v : 0;
       // A
+
       var ad1 = worksheet["I34"] ? worksheet["I34"].v : 0;
       var ad2 = worksheet["I35"] ? worksheet["I35"].v : 0;
 
@@ -187,64 +291,60 @@ export default functions
         encFZ: Math.floor(parseFloat(encFZ)),
         encOML: Math.floor(parseFloat(encOML)),
         encOMW: Math.floor(parseFloat(encOMW)),
-        windSpeed: Math.floor(parseFloat(payload.windSpeed)),
-        windFlow: Math.floor(parseFloat(payload.windFlow)),
-        tentWidth: Math.floor(parseFloat(payload.tentWidth)),
-        tentLength: Math.floor(parseFloat(payload.tentLength)),
-        eaveHeight: Math.floor(parseFloat(payload.eaveHeight)),
-        bandHeight: Math.floor(parseFloat(payload.bandHeight)),
-        roofType: Math.floor(parseFloat(payload.roofType)),
-        ridgeLength: Math.floor(parseFloat(payload.ridgeLength)),
-        roofHeight: Math.floor(parseFloat(payload.roofHeight)),
-        postsPerWidth: Math.floor(parseFloat(payload.postsPerWidth)),
-        postsPerLength: Math.floor(parseFloat(payload.postsPerLength)),
-        ballastsPerIntermediate: Math.floor(
-          parseFloat(payload.ballastsPerIntermediate)
-        ),
-        ballastsPerCornerPost: Math.floor(
-          parseFloat(payload.ballastsPerCornerPost)
-        ),
+        windSpeed: parseFloat(payload.windSpeed),
+        windFlow: parseFloat(payload.windFlow),
+        tentWidth: parseFloat(payload.tentWidth),
+        tentLength: parseFloat(payload.tentLength),
+        eaveHeight: parseFloat(payload.eaveHeight),
+        bandHeight: parseFloat(payload.bandHeight),
+        roofType: parseFloat(payload.roofType),
+        ridgeLength: parseFloat(payload.ridgeLength),
+        roofHeight: parseFloat(payload.roofHeight),
+        postsPerWidth: parseFloat(payload.postsPerWidth),
+        postsPerLength: parseFloat(payload.postsPerLength),
+        ballastsPerIntermediate: parseFloat(payload.ballastsPerIntermediate),
+        ballastsPerCornerPost: parseFloat(payload.ballastsPerCornerPost),
         openBallastWeight: Math.floor(parseFloat(openBallastWeight)),
         encBallastWeight: Math.floor(parseFloat(encBallastWeight)),
         title: payload.title,
         time: admin.firestore.Timestamp.now(),
         share: payload.share,
         notes: payload.notes,
-        b2mu3: Math.floor(parseFloat(b2mu3)),
-        b2wplate: Math.floor(parseFloat(b2wplate)),
+        b2mu3: parseFloat(b2mu3),
+        b2wplate: parseFloat(b2wplate),
         b2open: Math.floor(parseFloat(b2open)),
         b2enclosed: Math.floor(parseFloat(b2enclosed)),
-        c2mu1: Math.floor(parseFloat(c2mu1)),
+        c2mu1: parseFloat(c2mu1),
         c2open: Math.floor(parseFloat(c2open)),
         c2enclosed: Math.floor(parseFloat(c2enclosed)),
-        ad1: Math.floor(parseFloat(ad1)),
-        ad2: Math.floor(parseFloat(ad2)),
-        amu3: Math.floor(parseFloat(amu3)),
-        awplate: Math.floor(parseFloat(awplate)),
+        ad1: parseFloat(ad1),
+        ad2: parseFloat(ad2),
+        amu3: parseFloat(amu3),
+        awplate: parseFloat(awplate),
         aopen: Math.floor(parseFloat(aopen)),
         aenclosed: Math.floor(parseFloat(aenclosed)),
-        bd1: Math.floor(parseFloat(bd1)),
-        bd2: Math.floor(parseFloat(bd2)),
-        bd3: Math.floor(parseFloat(bd3)),
-        bd4: Math.floor(parseFloat(bd4)),
-        bh4: Math.floor(parseFloat(bh4)),
-        bmu2: Math.floor(parseFloat(bmu2)),
-        bmu3: Math.floor(parseFloat(bmu3)),
-        bwplate: Math.floor(parseFloat(bwplate)),
+        bd1: parseFloat(bd1),
+        bd2: parseFloat(bd2),
+        bd3: parseFloat(bd3),
+        bd4: parseFloat(bd4),
+        bh4: parseFloat(bh4),
+        bmu2: parseFloat(bmu2),
+        bmu3: parseFloat(bmu3),
+        bwplate: parseFloat(bwplate),
         bopen: Math.floor(parseFloat(bopen)),
         benclosed: Math.floor(parseFloat(benclosed)),
-        cd1: Math.floor(parseFloat(cd1)),
-        cd3: Math.floor(parseFloat(cd3)),
-        cd4: Math.floor(parseFloat(cd4)),
-        ch4: Math.floor(parseFloat(ch4)),
-        cmu1: Math.floor(parseFloat(cmu1)),
+        cd1: parseFloat(cd1),
+        cd3: parseFloat(cd3),
+        cd4: parseFloat(cd4),
+        ch4: parseFloat(ch4),
+        cmu1: parseFloat(cmu1),
         copen: Math.floor(parseFloat(copen)),
         cenclosed: Math.floor(parseFloat(cenclosed)),
-        dd2: Math.floor(parseFloat(dd2)),
-        dd4: Math.floor(parseFloat(dd4)),
-        dd5: Math.floor(parseFloat(dd5)),
-        dmu3: Math.floor(parseFloat(dmu3)),
-        dwplate: Math.floor(parseFloat(dwplate)),
+        dd2: parseFloat(dd2),
+        dd4: parseFloat(dd4),
+        dd5: parseFloat(dd5),
+        dmu3: parseFloat(dmu3),
+        dwplate: parseFloat(dwplate),
         dopen: Math.floor(parseFloat(dopen)),
         denclosed: Math.floor(parseFloat(denclosed)),
       };

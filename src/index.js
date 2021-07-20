@@ -15,9 +15,9 @@ render(
 // Learn more about service workers: https://cra.link/PWA
 serviceWorkerRegistration.register({
   onUpdate: (reg) => {
-    window.update = () => {
-      reg.waiting.postMessage({ type: "SKIP_WAITING" });
-      window.location.reload();
-    };
+    // window.update = () => {
+    //   reg.waiting.postMessage({ type: "SKIP_WAITING" });
+    //   window.location.reload();
+    // };
   },
 });

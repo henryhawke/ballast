@@ -43,6 +43,7 @@ export default (theme) => ({
     "& .MuiTextField-root": {
       margin: theme.spacing(1),
       width: "100%",
+      marginLeft: "0px",
     },
     // "& .MuiContainer-maxWidthLg": {
     //   maxWidth: "900px",
