@@ -37,6 +37,9 @@ import Autocomplete, {
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import parse from "autosuggest-highlight/parse";
 import throttle from "lodash/throttle";
+import ImageList from "@material-ui/core/ImageList";
+import ImageListItem from "@material-ui/core/ImageListItem";
+import ImageListItemBar from "@material-ui/core/ImageListItemBar";
 import {
   DataGrid,
   GridToolbarContainer,
@@ -91,13 +94,16 @@ import Container from "@material-ui/core/Container";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
-import hip from "../../static/hip.png";
-import gable from "../../static/gable.png";
-import pyramid from "../../static/pyramid.png";
-import labeled from "../../static/labeled.png";
-import Axes01 from "../../static/Axes01.png";
-import OverturnX01 from "../../static/OverturnX01.png";
-import OverturnY01 from "../../static/OverturnY01.png";
+import hip from "../../static/Hip07.png";
+import gable from "../../static/Gable07.png";
+import pyramid from "../../static/Pyramid07.png";
+// import labeled from "../../static/labeled.png";ConfigurationA
+import ConfigurationA from "../../static/ConfigurationA.png";
+import ConfigurationB from "../../static/ConfigurationB.png";
+import ConfigurationB2 from "../../static/ConfigurationB2.png";
+import ConfigurationC from "../../static/ConfigurationC.png";
+import ConfigurationC2 from "../../static/ConfigurationC2.png";
+import ConfigurationD from "../../static/ConfigurationD.png";
 
 import DialogContentText from "@material-ui/core/DialogContentText";
 
@@ -1036,46 +1042,58 @@ const Tools = ({ intl }) => {
 
   const tileData = [
     {
-      img: labeled,
-      title: "Input Variables",
+      img: ConfigurationA,
+      title: "Ballast Type A",
       author: "",
       featured: true,
     },
     {
-      img: Axes01,
-      title: "Axes",
-      author: "author",
-      featured: false,
+      img: ConfigurationB,
+      title: "Ballast Type B",
+      author: "",
+      featured: true,
     },
     {
-      img: OverturnX01,
-      title: "Overturn about X-Axis",
-      author: "author",
-      featured: false,
+      img: ConfigurationB2,
+      title: "Ballast Type B2",
+      author: "",
+      featured: true,
     },
     {
-      img: OverturnY01,
-      title: "Overturn about Y-Axis",
-      author: "author",
-      featured: false,
+      img: ConfigurationC,
+      title: "Ballast Type C",
+      author: "",
+      featured: true,
+    },
+    {
+      img: ConfigurationC2,
+      title: "Ballast Type C2",
+      author: "",
+      featured: true,
+    },
+    {
+      img: ConfigurationD,
+      title: "Ballast Type D",
+      author: "",
+      featured: true,
     },
     {
       img: pyramid,
       title: "Pyramid Roof",
-      author: "author",
-      featured: false,
+      author: "",
+      featured: true,
     },
     {
       img: hip,
       title: "Hip Roof",
-      author: "author",
-      featured: false,
+      author: "",
+      featured: true,
     },
     {
       img: gable,
       title: "Gable Roof",
-      author: "author",
-      featured: false,
+      author: "",
+      featured: true,
     },
   ];
   const { auth } = useAuth();
@@ -1085,7 +1103,7 @@ const Tools = ({ intl }) => {
     <Page
       pageTitle={intl.formatMessage({
         id: "advanced",
-        defaultMessage: "IFAI Ballast Tool - Advanced Load Calculation",
+        defaultMessage: "IFAI Ballast Tool",
       })}>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity='success'>
@@ -1317,7 +1335,7 @@ const Tools = ({ intl }) => {
                         label='Advanced'
                       />
                     </FormGroup>
-                    <ButtonGroup
+                    {/* <ButtonGroup
                       row
                       className={clsx(classes.calculateButton)}
                       variant='contained'
@@ -1337,33 +1355,37 @@ const Tools = ({ intl }) => {
                         }}>
                         Help
                       </Button>
-                      {/* <Button>Save</Button> */}
-                    </ButtonGroup>
+                      //<Button>Save</Button>
+                    </ButtonGroup> */}
                   </Grid>
                   {/* DOWNLOAD PRINTABLE */}
 
                   {/* Title */}
 
                   {/* NOTES */}
-                  {/* <Grid item sm={12} md={6}>
-                      {" "}
-                      <FormControl
-                        fullWidth
-                        className={classes.textField}
-                        variant='outlined'>
-                        <InputLabel htmlFor='outlined-adornment-amount'>
-                          Notes
-                        </InputLabel>
-                        <filledInput
-                          label='Notes'
-                          id='outlined-adornment-weight'
-                          value={values.notes}
-                          onChange={handleChange("notes")}
-                          rows={4}
-                          multiline
-                        />
-                      </FormControl>
-                    </Grid> */}
+                  <Grid item xs={6}>
+                  <div className={classes.gridRoot}>
+                    <ImageList className={classes.imageList} cols={2.5}>
+                      {tileData.map((item) => (
+                        <ImageListItem key={item.img}>
+                          <img src={item.img} alt={item.title} />
+                          <ImageListItemBar
+                            title={item.title}
+                            classes={{
+                              root: classes.titleBar,
+                              title: classes.title,
+                            }}
+                            // actionIcon={
+                            //   <IconButton aria-label={`star ${item.title}`}>
+                            //     <StarBorderIcon className={classes.title} />
+                            //   </IconButton>
+                            // }
+                          />
+                        </ImageListItem>
+                      ))}
+                    </ImageList>
+                    </div>
+                  </Grid>
                 </Grid>
                 {/* Project */}
                 <Grid item xs={6}>
@@ -4084,7 +4106,7 @@ const Tools = ({ intl }) => {
                   </Grid>
                 </Grid>
               </Paper> */}
-            <div className={classes.gridRoot}>
+            {/* <div className={classes.gridRoot}>
               <GridList
                 cellHeight={200}
                 spacing={1}
@@ -4115,7 +4137,7 @@ const Tools = ({ intl }) => {
                   </GridListTile>
                 ))}
               </GridList>
-            </div>
+            </div> */}
           </Grid>
 
           <Grid
@@ -4133,7 +4155,7 @@ const Tools = ({ intl }) => {
   ) : (
     <Page
       pageTitle={intl.formatMessage({
-        id: "tools",
+        id: "calculate",
         defaultMessage: "IFAI Ballast Tool",
       })}>
       <Typography variant='h6'>

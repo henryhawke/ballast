@@ -220,23 +220,23 @@ export default (theme) => ({
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "space-around",
-    overflow: "scroll",
+    overflow: "hidden",
     backgroundColor: theme.palette.background.paper,
   },
   gridImageList: {
     width: "100%",
-    maxHeight: 600,
+    maxHeight: "100%",
     overflow: "scroll",
     padding: theme.spacing(1),
     resizeMode: "contain",
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: "translateZ(0)",
   },
-  titleImageBar: {
-    background:
-      "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, " +
-      "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
-  },
+  // titleImageBar: {
+  //   background:
+  //     "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, " +
+  //     "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
+  // },
   mainFeaturedPost: {
     textShadowColor: "black",
     textShadowOffset: { width: -1, height: 10 },
@@ -256,17 +256,25 @@ export default (theme) => ({
     justifyContent: "flex-start",
     overflow: "hidden",
   },
-  img: {
-    margin: "auto",
-    display: "block",
-    maxWidth: "100%",
-    maxHeight: "100%",
-  },
+  // img: {
+  //   margin: "auto",
+  //   display: "block",
+  //   maxWidth: "100%",
+  //   maxHeight: "100%",
+  // },
   gridList: {
     width: 245,
     height: 245,
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: "translateZ(0)",
+  },
+  imageList: {
+    flexWrap: "nowrap",
+    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+    transform: "translateZ(0)",
+  },
+  title: {
+    color: theme.palette.primary.light,
   },
   titleBar: {
     background:

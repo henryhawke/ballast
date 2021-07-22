@@ -86,7 +86,7 @@ const Tasks = (props) => {
         };
       }}
       onCreateClick={() => {
-        history.push("/tools");
+        history.push("/calculate");
       }}
     />
   );

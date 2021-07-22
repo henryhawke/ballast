@@ -4,7 +4,6 @@ import React, { lazy } from "react";
 import { Route } from "react-router-dom";
 
 const About = lazy(() => import("../pages/About"));
-const Tools = lazy(() => import("../pages/Tools"));
 const Advanced = lazy(() => import("../pages/Advanced"));
 const Admin = lazy(() => import("../pages/Demo/Admin"));
 const Companies = lazy(() => import("../pages/Demo/Companies"));
@@ -26,8 +25,7 @@ const GettingStarted = lazy(() =>
 const routes = [
   <Route path='/about' exact component={About} />,
   <Route path='/docu/getting_started' exact component={GettingStarted} />,
-  <AuthorizedRoute path='/tools' exact component={Tools} />,
-  <AuthorizedRoute path='/advanced' exact component={Advanced} />,
+  <AuthorizedRoute path='/calculate' exact component={Advanced} />,
   <AuthorizedRoute path='/dashboard' exact component={Dashboard} />,
   <AuthorizedRoute path='/firebase_paths' exact component={FirebasePaths} />,
   <AuthorizedRoute path='/firebase_lists' exact component={FirebaseLists} />,

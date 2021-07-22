@@ -221,7 +221,7 @@ const LandingPage = () => {
                     color='secondary'
                     name={"signin"}
                     onClick={() => {
-                      history.push("/tools");
+                      history.push("/calculate");
                     }}>
                     LOGIN
                   </Button>

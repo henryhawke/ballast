@@ -33,7 +33,7 @@ const Messaging = () => {
           body,
           icon: auth.photoURL,
           image: auth.photoURL,
-          click_action: "/tools",
+          click_action: "/calculate",
         },
       },
       data: {

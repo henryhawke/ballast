@@ -52,7 +52,7 @@ const config = {
   },
   auth: {
     grants,
-    redirectTo: "/tools",
+    redirectTo: "/calculate",
     persistKey: "base-shell:auth",
     signInURL: "/signin",
     onAuthStateChanged: async (user, auth, firebaseApp) => {

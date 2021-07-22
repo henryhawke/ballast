@@ -120,23 +120,23 @@ const getMenuItems = (props) => {
       leftIcon: isAuthorised ? <ExitToAppIcon /> : <LockIcon />,
     },
     {
-      value: "/tools",
+      value: "/calculate",
       visible: isGranted(auth, "member"),
       primaryText: intl.formatMessage({
-        id: "tools",
-        defaultMessage: "Standard Calculation",
+        id: "calculate",
+        defaultMessage: "Calculate",
       }),
       leftIcon: <BarChartIcon />,
     },
-    {
-      value: "/advanced",
-      visible: isGranted(auth, "member"),
-      primaryText: intl.formatMessage({
-        id: "advanced",
-        defaultMessage: "Advanced Calculation",
-      }),
-      leftIcon: <AssessmentIcon />,
-    },
+    // {
+    //   value: "/advanced",
+    //   visible: isGranted(auth, "member"),
+    //   primaryText: intl.formatMessage({
+    //     id: "advanced",
+    //     defaultMessage: "Advanced Calculation",
+    //   }),
+    //   leftIcon: <AssessmentIcon />,
+    // },
     {
       value: "/tasks",
       visible: isGranted(auth, "member"),
