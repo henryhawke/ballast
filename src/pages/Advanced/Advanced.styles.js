@@ -58,6 +58,10 @@ export default (theme) => ({
       display: "none",
     },
   },
+  icon: {
+    color: theme.palette.text.secondary,
+    marginRight: theme.spacing(2),
+  },
   button: {
     margin: theme.spacing(0.5, 0),
   },

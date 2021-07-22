@@ -12,6 +12,24 @@ const XLSX = require("xlsx");
 const XLSX_CALC = require("xlsx-calc");
 const formulajs = require("formulajs");
 
+function toNumber(value) {
+  if (typeof value !== "number") {
+    // covert type to number
+    // void 0, null, true, false, 'abc', [], {} => NaN
+    // [0] => 0
+    value = parseFloat(value);
+  }
+  if (isNaN(value)) {
+    // check NaN
+    value = 0;
+  }
+  if (!isFinite(value)) {
+    // check Infinity and -Infinity
+    value = Number.MAX_SAFE_INTEGER * Math.sign(value);
+  }
+  return value;
+}
+
 export default functions
   .region("us-central1")
   .runWith(runtimeOpts)
@@ -51,145 +69,145 @@ export default functions
       // workbook.Sheets["Main"].A1.v = 42;
       worksheet["D3"] = {
         t: "n",
-        v: parseFloat(payload.tentLength),
+        v: toNumber(payload.tentLength),
       };
-      worksheet["D4"] = { t: "n", v: parseFloat(payload.tentWidth) }; // ft/m
+      worksheet["D4"] = { t: "n", v: toNumber(payload.tentWidth) }; // ft/m
 
       // ft / m
-      worksheet["D5"] = { t: "n", v: parseFloat(payload.eaveHeight) };
+      worksheet["D5"] = { t: "n", v: toNumber(payload.eaveHeight) };
 
-      worksheet["D6"] = { t: "n", v: parseFloat(payload.roofType) };
+      worksheet["D6"] = { t: "n", v: toNumber(payload.roofType) };
 
       // ft / m
-      worksheet["D7"] = { t: "n", v: parseFloat(payload.ridgeLength) };
-      //worksheet["D5"] = { t: "n", v: parseFloat(payload.bandHeight) };
+      worksheet["D7"] = { t: "n", v: toNumber(payload.ridgeLength) };
+      //worksheet["D5"] = { t: "n", v: toNumber(payload.bandHeight) };
 
       //ft / m
-      worksheet["D9"] = { t: "n", v: parseFloat(payload.roofHeight) };
+      worksheet["D9"] = { t: "n", v: toNumber(payload.roofHeight) };
 
       //worksheet["D9"] = { t: "s", v: "X" };
 
       // mph / km/h
-      worksheet["D12"] = { t: "n", v: parseFloat(payload.windSpeed) };
+      worksheet["D12"] = { t: "n", v: toNumber(payload.windSpeed) };
 
       // mph / km/h
-      worksheet["D13"] = { t: "n", v: parseFloat(payload.windFlow) };
+      worksheet["D13"] = { t: "n", v: toNumber(payload.windFlow) };
 
       // valance height
-      worksheet["D14"] = { t: "n", v: parseFloat(payload.valanceHeight) };
+      worksheet["D14"] = { t: "n", v: toNumber(payload.valanceHeight) };
 
       // Number of intermediate posts in length D13
 
-      worksheet["D20"] = { t: "n", v: parseFloat(payload.postsPerLength) };
+      worksheet["D20"] = { t: "n", v: toNumber(payload.postsPerLength) };
 
       // Number of intermediate posts in width D14
-      worksheet["D21"] = { t: "n", v: parseFloat(payload.postsPerWidth) };
+      worksheet["D21"] = { t: "n", v: toNumber(payload.postsPerWidth) };
 
       // Number of Number of ballasts per corner post D15
       worksheet["D22"] = {
         t: "n",
-        v: parseFloat(payload.ballastsPerCornerPost),
+        v: toNumber(payload.ballastsPerCornerPost),
       };
 
       worksheet["E42"] = {
         t: "n",
-        v: parseFloat(payload.b2mu3),
+        v: toNumber(payload.b2mu3),
       };
       worksheet["E43"] = {
         t: "n",
-        v: parseFloat(payload.b2wplate),
+        v: toNumber(payload.b2wplate),
       };
       worksheet["G40"] = {
         t: "n",
-        v: parseFloat(payload.c2mu1),
+        v: toNumber(payload.c2mu1),
       };
       worksheet["I34"] = {
         t: "n",
-        v: parseFloat(payload.ad1),
+        v: toNumber(payload.ad1),
       };
       worksheet["I35"] = {
         t: "n",
-        v: parseFloat(payload.ad2),
+        v: toNumber(payload.ad2),
       };
       worksheet["I42"] = {
         t: "n",
-        v: parseFloat(payload.amu3),
+        v: toNumber(payload.amu3),
       };
       worksheet["I43"] = {
         t: "n",
-        v: parseFloat(payload.awplate),
+        v: toNumber(payload.awplate),
       };
       worksheet["K34"] = {
         t: "n",
-        v: parseFloat(payload.bd1),
+        v: toNumber(payload.bd1),
       };
       worksheet["K35"] = {
         t: "n",
-        v: parseFloat(payload.bd2),
+        v: toNumber(payload.bd2),
       };
       worksheet["M36"] = {
         t: "n",
-        v: parseFloat(payload.bd3),
+        v: toNumber(payload.bd3),
       };
       worksheet["M37"] = {
         t: "n",
-        v: parseFloat(payload.bd4),
+        v: toNumber(payload.bd4),
       };
       worksheet["M38"] = {
         t: "n",
-        v: parseFloat(payload.bh4),
+        v: toNumber(payload.bh4),
       };
       worksheet["K41"] = {
         t: "n",
-        v: parseFloat(payload.bmu2),
+        v: toNumber(payload.bmu2),
       };
       worksheet["K42"] = {
         t: "n",
-        v: parseFloat(payload.bmu3),
+        v: toNumber(payload.bmu3),
       };
       worksheet["K43"] = {
         t: "n",
-        v: parseFloat(payload.bwplate),
+        v: toNumber(payload.bwplate),
       };
       worksheet["O34"] = {
         t: "n",
-        v: parseFloat(payload.cd1),
+        v: toNumber(payload.cd1),
       };
       worksheet["O36"] = {
         t: "n",
-        v: parseFloat(payload.cd3),
+        v: toNumber(payload.cd3),
       };
       worksheet["O37"] = {
         t: "n",
-        v: parseFloat(payload.cd4),
+        v: toNumber(payload.cd4),
       };
       worksheet["O38"] = {
         t: "n",
-        v: parseFloat(payload.ch4),
+        v: toNumber(payload.ch4),
       };
       worksheet["O40"] = {
         t: "n",
-        v: parseFloat(payload.cmu1),
+        v: toNumber(payload.cmu1),
       };
       worksheet["Q35"] = {
         t: "n",
-        v: parseFloat(payload.dd2),
+        v: toNumber(payload.dd2),
       };
       worksheet["Q37"] = {
         t: "n",
-        v: parseFloat(payload.dd4),
+        v: toNumber(payload.dd4),
       };
       worksheet["Q39"] = {
         t: "n",
-        v: parseFloat(payload.dd5),
+        v: toNumber(payload.dd5),
       };
       worksheet["Q42"] = {
         t: "n",
-        v: parseFloat(payload.dmu3),
+        v: toNumber(payload.dmu3),
       };
       worksheet["Q43"] = {
         t: "n",
-        v: parseFloat(payload.dwplate),
+        v: toNumber(payload.dwplate),
       };
 
       // CALCULATION OF THE SPREADSHEET
@@ -281,72 +299,72 @@ export default functions
       const returnData = {
         calcID: payload.calcID,
         owner: context.auth.uid,
-        openFX: Math.floor(parseFloat(openFX)),
-        openFY: Math.floor(parseFloat(openFY)),
-        openFZ: Math.floor(parseFloat(openFZ)),
-        openOML: Math.floor(parseFloat(openOML)),
-        openOMW: Math.floor(parseFloat(openOMW)),
-        encFX: Math.floor(parseFloat(encFX)),
-        encFY: Math.floor(parseFloat(encFY)),
-        encFZ: Math.floor(parseFloat(encFZ)),
-        encOML: Math.floor(parseFloat(encOML)),
-        encOMW: Math.floor(parseFloat(encOMW)),
-        windSpeed: parseFloat(payload.windSpeed),
-        windFlow: parseFloat(payload.windFlow),
-        tentWidth: parseFloat(payload.tentWidth),
-        tentLength: parseFloat(payload.tentLength),
-        eaveHeight: parseFloat(payload.eaveHeight),
-        bandHeight: parseFloat(payload.bandHeight),
-        roofType: parseFloat(payload.roofType),
-        ridgeLength: parseFloat(payload.ridgeLength),
-        roofHeight: parseFloat(payload.roofHeight),
-        postsPerWidth: parseFloat(payload.postsPerWidth),
-        postsPerLength: parseFloat(payload.postsPerLength),
-        ballastsPerIntermediate: parseFloat(payload.ballastsPerIntermediate),
-        ballastsPerCornerPost: parseFloat(payload.ballastsPerCornerPost),
-        openBallastWeight: Math.floor(parseFloat(openBallastWeight)),
-        encBallastWeight: Math.floor(parseFloat(encBallastWeight)),
+        openFX: Math.floor(toNumber(openFX)),
+        openFY: Math.floor(toNumber(openFY)),
+        openFZ: Math.floor(toNumber(openFZ)),
+        openOML: Math.floor(toNumber(openOML)),
+        openOMW: Math.floor(toNumber(openOMW)),
+        encFX: Math.floor(toNumber(encFX)),
+        encFY: Math.floor(toNumber(encFY)),
+        encFZ: Math.floor(toNumber(encFZ)),
+        encOML: Math.floor(toNumber(encOML)),
+        encOMW: Math.floor(toNumber(encOMW)),
+        windSpeed: toNumber(payload.windSpeed),
+        windFlow: toNumber(payload.windFlow),
+        tentWidth: toNumber(payload.tentWidth),
+        tentLength: toNumber(payload.tentLength),
+        eaveHeight: toNumber(payload.eaveHeight),
+        bandHeight: toNumber(payload.bandHeight),
+        roofType: toNumber(payload.roofType),
+        ridgeLength: toNumber(payload.ridgeLength),
+        roofHeight: toNumber(payload.roofHeight),
+        postsPerWidth: toNumber(payload.postsPerWidth),
+        postsPerLength: toNumber(payload.postsPerLength),
+        ballastsPerIntermediate: toNumber(payload.ballastsPerIntermediate),
+        ballastsPerCornerPost: toNumber(payload.ballastsPerCornerPost),
+        openBallastWeight: Math.floor(toNumber(openBallastWeight)),
+        encBallastWeight: Math.floor(toNumber(encBallastWeight)),
         title: payload.title,
         time: admin.firestore.Timestamp.now(),
         share: payload.share,
         notes: payload.notes,
-        b2mu3: parseFloat(b2mu3),
-        b2wplate: parseFloat(b2wplate),
-        b2open: Math.floor(parseFloat(b2open)),
-        b2enclosed: Math.floor(parseFloat(b2enclosed)),
-        c2mu1: parseFloat(c2mu1),
-        c2open: Math.floor(parseFloat(c2open)),
-        c2enclosed: Math.floor(parseFloat(c2enclosed)),
-        ad1: parseFloat(ad1),
-        ad2: parseFloat(ad2),
-        amu3: parseFloat(amu3),
-        awplate: parseFloat(awplate),
-        aopen: Math.floor(parseFloat(aopen)),
-        aenclosed: Math.floor(parseFloat(aenclosed)),
-        bd1: parseFloat(bd1),
-        bd2: parseFloat(bd2),
-        bd3: parseFloat(bd3),
-        bd4: parseFloat(bd4),
-        bh4: parseFloat(bh4),
-        bmu2: parseFloat(bmu2),
-        bmu3: parseFloat(bmu3),
-        bwplate: parseFloat(bwplate),
-        bopen: Math.floor(parseFloat(bopen)),
-        benclosed: Math.floor(parseFloat(benclosed)),
-        cd1: parseFloat(cd1),
-        cd3: parseFloat(cd3),
-        cd4: parseFloat(cd4),
-        ch4: parseFloat(ch4),
-        cmu1: parseFloat(cmu1),
-        copen: Math.floor(parseFloat(copen)),
-        cenclosed: Math.floor(parseFloat(cenclosed)),
-        dd2: parseFloat(dd2),
-        dd4: parseFloat(dd4),
-        dd5: parseFloat(dd5),
-        dmu3: parseFloat(dmu3),
-        dwplate: parseFloat(dwplate),
-        dopen: Math.floor(parseFloat(dopen)),
-        denclosed: Math.floor(parseFloat(denclosed)),
+        b2mu3: toNumber(b2mu3),
+        b2wplate: toNumber(b2wplate),
+        b2open: Math.floor(toNumber(b2open)),
+        b2enclosed: Math.floor(toNumber(b2enclosed)),
+        c2mu1: toNumber(c2mu1),
+        c2open: Math.floor(toNumber(c2open)),
+        c2enclosed: Math.floor(toNumber(c2enclosed)),
+        ad1: toNumber(ad1),
+        ad2: toNumber(ad2),
+        amu3: toNumber(amu3),
+        awplate: toNumber(awplate),
+        aopen: Math.floor(toNumber(aopen)),
+        aenclosed: Math.floor(toNumber(aenclosed)),
+        bd1: toNumber(bd1),
+        bd2: toNumber(bd2),
+        bd3: toNumber(bd3),
+        bd4: toNumber(bd4),
+        bh4: toNumber(bh4),
+        bmu2: toNumber(bmu2),
+        bmu3: toNumber(bmu3),
+        bwplate: toNumber(bwplate),
+        bopen: Math.floor(toNumber(bopen)),
+        benclosed: Math.floor(toNumber(benclosed)),
+        cd1: toNumber(cd1),
+        cd3: toNumber(cd3),
+        cd4: toNumber(cd4),
+        ch4: toNumber(ch4),
+        cmu1: toNumber(cmu1),
+        copen: Math.floor(toNumber(copen)),
+        cenclosed: Math.floor(toNumber(cenclosed)),
+        dd2: toNumber(dd2),
+        dd4: toNumber(dd4),
+        dd5: toNumber(dd5),
+        dmu3: toNumber(dmu3),
+        dwplate: toNumber(dwplate),
+        dopen: Math.floor(toNumber(dopen)),
+        denclosed: Math.floor(toNumber(denclosed)),
       };
       console.log(returnData);
       console.log(openOML);

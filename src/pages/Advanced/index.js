@@ -6,9 +6,11 @@
 // import _, { map } from "underscore";
 
 import React, { useState, useEffect, useRef } from "react";
+
 import ReactDOM from "react-dom";
 import { useHistory } from "react-router-dom";
 import Calculations from "../../algorithms/Calculations";
+
 import { format } from "date-fns";
 import { useAuth } from "base-shell/lib/providers/Auth/";
 // import { Link } from 'react-router-dom'
@@ -32,6 +34,9 @@ import Slide from "@material-ui/core/Slide";
 import Autocomplete, {
   createFilterOptions,
 } from "@material-ui/lab/Autocomplete";
+import LocationOnIcon from "@material-ui/icons/LocationOn";
+import parse from "autosuggest-highlight/parse";
+import throttle from "lodash/throttle";
 import {
   DataGrid,
   GridToolbarContainer,
@@ -72,6 +77,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Fade from "@material-ui/core/Fade";
 import FormLabel from "@material-ui/core/FormLabel";
 import RadioGroup from "@material-ui/core/RadioGroup";
+import FormGroup from "@material-ui/core/FormGroup";
 import Radio from "@material-ui/core/Radio";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Draggable from "react-draggable";
@@ -112,6 +118,16 @@ import styles from "./Advanced.styles";
 import { withStyles } from "@material-ui/core/styles";
 import { isGranted } from "../../config/auth";
 
+/*
+  `configureMeasurements` is a closure that accepts a directory
+  of measures and returns a factory function (`convert`) that uses
+  only those measures.
+*/
+// `allMeasures` includes all the measures packaged with this library
+// import configureMeasurements, { allMeasures } from "convert-units";
+
+// const convert = configureMeasurements(allMeasures);
+var convert = require("convert-units");
 const useStyles = makeStyles(styles);
 
 const DialogTitle = withStyles(styles)((props) => {
@@ -258,8 +274,8 @@ const Tools = ({ intl }) => {
     const post = findArrayElementByTitle(posts, valueID);
     console.log(post);
     setTimeout(
-      () => setResults({ title: post.content, content: post.content }),
-      1000
+      () => setResults({ title: post.title, content: post.content }),
+      500
     );
     setFormOpen(true);
   }
@@ -343,47 +359,47 @@ const Tools = ({ intl }) => {
     },
     {
       id: 13,
-      title: "Friction coefficient between plate and ground ",
+      title: "Friction coefficient btwn. plate & ground ",
       content: "b2mu3",
     },
     {
       id: 14,
-      title: "Weight of plate (if any)",
+      title: "Weight of plate ",
       content: "b2wplate",
     },
     {
       id: 15,
-      title: "Friction coefficient between ballast and ground",
+      title: "Friction coefficient btwn. ballast & ground",
       content: "c2mu1",
     },
     {
       id: 16,
-      title: "Distance between center of ballast and upright ",
+      title: "Distance btwn. center of ballast & upright ",
       content: "ad1",
     },
     {
       id: 17,
-      title: "Distance between far end of plate and upright",
+      title: "Distance btwn. far end of plate & upright",
       content: "ad2",
     },
     {
       id: 18,
-      title: "Friction coefficient between plate and ground (if any)",
+      title: "Friction coefficient btwn. plate & ground ",
       content: "amu3",
     },
     {
       id: 19,
-      title: "Weight of plate (if any)",
+      title: "Weight of plate ",
       content: "awplate",
     },
     {
       id: 20,
-      title: "Distance between center of ballast and upright ",
+      title: "Distance btwn. center of ballast & upright ",
       content: "bd1",
     },
     {
       id: 21,
-      title: "Distance between far end of plate and upright ",
+      title: "Distance btwn. far end of plate & upright ",
       content: "bd2",
     },
     {
@@ -393,23 +409,22 @@ const Tools = ({ intl }) => {
     },
     {
       id: 23,
-      title:
-        "Horizontal distance between ballast center and guy attachment point",
+      title: "Horizontal distance btwn. ballast center & guy attachment point",
       content: "bd4",
     },
     {
       id: 24,
-      title: "Vertical distance between plate and guy attachment point",
+      title: "Vertical distance btwn. plate & guy attachment point",
       content: "bh4",
     },
     {
       id: 25,
-      title: "Friction coefficient between ballast and plate",
+      title: "Friction coefficient btwn. ballast & plate",
       content: "bmu2",
     },
     {
       id: 26,
-      title: "Friction coefficient between plate and ground",
+      title: "Friction coefficient btwn. plate & ground",
       content: "bmu3",
     },
     {
@@ -419,7 +434,7 @@ const Tools = ({ intl }) => {
     },
     {
       id: 28,
-      title: "Distance between center of ballast and upright",
+      title: "Distance btwn. center of ballast & upright",
       content: "cd1",
     },
     {
@@ -429,44 +444,42 @@ const Tools = ({ intl }) => {
     },
     {
       id: 30,
-      title:
-        "Horizontal distance between ballast center and guy attachment point ",
+      title: "Horizontal distance btwn. ballast center & guy attachment point ",
       content: "cd4",
     },
     {
       id: 31,
-      title: "Vertical distance between plate and guy attachment point",
+      title: "Vertical distance btwn. plate & guy attachment point",
       content: "ch4",
     },
     {
       id: 32,
-      title: "Friction coefficient between ballast and ground ",
+      title: "Friction coefficient btwn. ballast & ground ",
       content: "cmu1",
     },
     {
       id: 33,
-      title: "Distance between far end of plate and upright",
+      title: "Distance btwn. far end of plate & upright",
       content: "dd2",
     },
     {
       id: 34,
-      title:
-        "Horizontal distance between ballast center and guy attachment point",
+      title: "Horizontal distance btwn. ballast center & guy attachment point",
       content: "dd4",
     },
     {
       id: 35,
-      title: "Horizontal distance between guy attachment point and upright",
+      title: "Horizontal distance btwn. guy attachment point and upright",
       content: "dd5",
     },
     {
       id: 36,
-      title: "Friction coefficient between plate and ground (if any) ",
+      title: "Friction coefficient btwn. plate & ground  ",
       content: "dmu3",
     },
     {
       id: 37,
-      title: "Weight of plate (if any)",
+      title: "Weight of plate ",
       content: "dwplate",
     },
     // {
@@ -502,6 +515,7 @@ const Tools = ({ intl }) => {
     store it here
   */
   const todaysDate = new Date();
+
   const [values, setValues] = useState({
     companyName: "",
     project: "",
@@ -513,11 +527,6 @@ const Tools = ({ intl }) => {
     openFZ: 0,
     openOML: 0,
     openOMW: 0,
-    partFX: 0,
-    partFY: 0,
-    partFZ: 0,
-    partOML: 0,
-    partOMW: 0,
     encFX: 0,
     encFY: 0,
     encFZ: 0,
@@ -538,7 +547,6 @@ const Tools = ({ intl }) => {
     ballastsPerCornerPost: 1,
     totalBallasts: 0,
     openBallastWeight: 0,
-    partBallastWeight: 0,
     encBallastWeight: 0,
     calcID: uuidv4(),
     title: "",
@@ -583,24 +591,123 @@ const Tools = ({ intl }) => {
     dwplate: 20,
     dopen: 0,
     denclosed: 0,
+    advanced: false,
   });
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
-  const [radioUnitValue, setRadioUnitValue] = React.useState(
-    "Imperial System (ft)"
-  );
+  const [radioUnitValue, setRadioUnitValue] = React.useState("Imperial (ft)");
 
-  const handleUnitChange = (event) => {
-    if (event.target.value === "Imperial System (ft)") {
-      setValues({ ...values, unit: 0 });
+  function handleUnitChange(e) {
+    if (e.target.value === "Imperial (ft)") {
+      // turning it into imperial
+
+      setValues({
+        ...values,
+        unit: 0,
+        windSpeed: convert(values.windSpeed).from("km/h").to("m/h"),
+        tentWidth: convert(values.tentWidth).from("m").to("ft"),
+        tentLength: convert(values.tentLength).from("m").to("ft"),
+        eaveHeight: convert(values.eaveHeight).from("m").to("ft"),
+        bandHeight: convert(values.bandHeight).from("m").to("ft"),
+        postsPerWidth: convert(values.bandHeight).from("m").to("ft"),
+        postsPerLength: convert(values.bandHeight).from("m").to("ft"),
+        ridgeLength: convert(values.ridgeLength).from("m").to("ft"),
+        roofHeight: convert(values.roofHeight).from("m").to("ft"),
+        b2mu3: convert(values.b2mu3).from("m").to("ft"),
+        b2wplate: convert(values.b2wplate).from("m").to("ft"),
+        b2open: convert(values.b2open).from("m").to("ft"),
+        b2enclosed: convert(values.b2enclosed).from("m").to("ft"),
+        c2mu1: convert(values.c2mu1).from("m").to("ft"),
+        c2open: convert(values.c2open).from("m").to("ft"),
+        c2enclosed: convert(values.c2enclosed).from("m").to("ft"),
+        ad1: convert(values.ad1).from("m").to("ft"),
+        ad2: convert(values.ad2).from("m").to("ft"),
+        amu3: convert(values.amu3).from("m").to("ft"),
+        awplate: convert(values.awplate).from("m").to("ft"),
+        aopen: convert(values.aopen).from("m").to("ft"),
+        aenclosed: convert(values.aenclosed).from("m").to("ft"),
+        bd1: convert(values.bd1).from("m").to("ft"),
+        bd2: convert(values.bd2).from("m").to("ft"),
+        bd3: convert(values.bd3).from("m").to("ft"),
+        bd4: convert(values.bd4).from("m").to("ft"),
+        bh4: convert(values.bh4).from("m").to("ft"),
+        bmu2: convert(values.bmu2).from("m").to("ft"),
+        bmu3: convert(values.bmu3).from("m").to("ft"),
+        bwplate: convert(values.bwplate).from("m").to("ft"),
+        bopen: convert(values.bopen).from("m").to("ft"),
+        benclosed: convert(values.benclosed).from("m").to("ft"),
+        cd1: convert(values.cd1).from("m").to("ft"),
+        cd3: convert(values.cd3).from("m").to("ft"),
+        cd4: convert(values.cd4).from("m").to("ft"),
+        ch4: convert(values.ch4).from("m").to("ft"),
+        cmu1: convert(values.cmu1).from("m").to("ft"),
+        copen: convert(values.copen).from("m").to("ft"),
+        cenclosed: convert(values.cenclosed).from("m").to("ft"),
+        dd2: convert(values.dd2).from("m").to("ft"),
+        dd4: convert(values.dd4).from("m").to("ft"),
+        dd5: convert(values.dd5).from("m").to("ft"),
+        dmu3: convert(values.dmu3).from("m").to("ft"),
+        dwplate: convert(values.dwplate).from("m").to("ft"),
+        dopen: convert(values.dopen).from("m").to("ft"),
+        denclosed: convert(values.denclosed).from("m").to("ft"),
+      });
     } else {
-      setValues({ ...values, unit: 1 });
+      setValues({
+        ...values,
+        unit: 1,
+        windSpeed: convert(values.windSpeed).from("m/h").to("km/h"),
+        tentWidth: convert(values.tentWidth).from("ft").to("m"),
+        tentLength: convert(values.tentLength).from("ft").to("m"),
+        eaveHeight: convert(values.eaveHeight).from("ft").to("m"),
+        bandHeight: convert(values.bandHeight).from("ft").to("m"),
+        postsPerWidth: convert(values.bandHeight).from("ft").to("m"),
+        postsPerLength: convert(values.bandHeight).from("ft").to("m"),
+        ridgeLength: convert(values.ridgeLength).from("ft").to("m"),
+        roofHeight: convert(values.roofHeight).from("ft").to("m"),
+        b2mu3: convert(values.b2mu3).from("ft").to("m"),
+        b2wplate: convert(values.b2wplate).from("ft").to("m"),
+        b2open: convert(values.b2open).from("ft").to("m"),
+        b2enclosed: convert(values.b2enclosed).from("ft").to("m"),
+        c2mu1: convert(values.c2mu1).from("ft").to("m"),
+        c2open: convert(values.c2open).from("ft").to("m"),
+        c2enclosed: convert(values.c2enclosed).from("ft").to("m"),
+        ad1: convert(values.ad1).from("ft").to("m"),
+        ad2: convert(values.ad2).from("ft").to("m"),
+        amu3: convert(values.amu3).from("ft").to("m"),
+        awplate: convert(values.awplate).from("ft").to("m"),
+        aopen: convert(values.aopen).from("ft").to("m"),
+        aenclosed: convert(values.aenclosed).from("ft").to("m"),
+        bd1: convert(values.bd1).from("ft").to("m"),
+        bd2: convert(values.bd2).from("ft").to("m"),
+        bd3: convert(values.bd3).from("ft").to("m"),
+        bd4: convert(values.bd4).from("ft").to("m"),
+        bh4: convert(values.bh4).from("ft").to("m"),
+        bmu2: convert(values.bmu2).from("ft").to("m"),
+        bmu3: convert(values.bmu3).from("ft").to("m"),
+        bwplate: convert(values.bwplate).from("ft").to("m"),
+        bopen: convert(values.bopen).from("ft").to("m"),
+        benclosed: convert(values.benclosed).from("ft").to("m"),
+        cd1: convert(values.cd1).from("ft").to("m"),
+        cd3: convert(values.cd3).from("ft").to("m"),
+        cd4: convert(values.cd4).from("ft").to("m"),
+        ch4: convert(values.ch4).from("ft").to("m"),
+        cmu1: convert(values.cmu1).from("ft").to("m"),
+        copen: convert(values.copen).from("ft").to("m"),
+        cenclosed: convert(values.cenclosed).from("ft").to("m"),
+        dd2: convert(values.dd2).from("ft").to("m"),
+        dd4: convert(values.dd4).from("ft").to("m"),
+        dd5: convert(values.dd5).from("ft").to("m"),
+        dmu3: convert(values.dmu3).from("ft").to("m"),
+        dwplate: convert(values.dwplate).from("ft").to("m"),
+        dopen: convert(values.dopen).from("ft").to("m"),
+        denclosed: convert(values.denclosed).from("ft").to("m"),
+      });
     }
-    setRadioUnitValue(event.target.value);
-  };
+    setRadioUnitValue(e.target.value);
+  }
 
   /* RENDER DATA TABLE */
   const [calculationDataOpen, setCalculationDataOpen] = useState(false);
@@ -610,6 +717,25 @@ const Tools = ({ intl }) => {
     setValues(result.data);
     loadingClose();
     setCalculationDataOpen(true);
+
+    var enclosureVal = "Clear";
+    var overturnMomentLength = vals.openOML;
+    var overturnMomentWidth = vals.openOMW;
+    var FX = vals.openFX;
+    var FY = vals.openFY;
+    var FZ = vals.openFZ;
+    var ballastWeight = vals.openBallastWeight;
+
+    if (values.windFlow !== 1) {
+      enclosureVal = "Obstructed";
+      overturnMomentLength = vals.encOML;
+      overturnMomentWidth = vals.encOMW;
+      FX = vals.encFX;
+      FY = vals.encFY;
+      FZ = vals.encFZ;
+      ballastWeight = vals.openBallastWeight;
+    }
+
     ReactDOM.render(
       <Container className={classes.cardGrid}>
         <div style={{ height: 220 }}>
@@ -662,13 +788,13 @@ const Tools = ({ intl }) => {
             rows={[
               {
                 id: 1,
-                Enclosure: "Open",
-                overturnMomentLength: vals.openOML,
-                overturnMomentWidth: vals.openOMW,
-                FX: vals.openFX,
-                FY: vals.openFY,
-                FZ: vals.openFZ,
-                ballastWeight: vals.openBallastWeight,
+                Enclosure: enclosureVal,
+                ballastWeight: ballastWeight,
+                overturnMomentLength: overturnMomentLength,
+                overturnMomentWidth: overturnMomentWidth,
+                FX: FX,
+                FY: FY,
+                FZ: FZ,
               },
               // {
               //   id: 2,
@@ -680,16 +806,16 @@ const Tools = ({ intl }) => {
               //   FZ: vals.partFZ,
               //   ballastWeight: vals.partBallastWeight,
               // },
-              {
-                id: 2,
-                Enclosure: "Enclosed",
-                overturnMomentLength: vals.encOML,
-                overturnMomentWidth: vals.encOMW,
-                FX: vals.encFX,
-                FY: vals.encFY,
-                FZ: vals.encFZ,
-                ballastWeight: vals.encBallastWeight,
-              },
+              // {
+              //   id: 2,
+              //   Enclosure: "Enclosed",
+              //   overturnMomentLength: vals.encOML,
+              //   overturnMomentWidth: vals.encOMW,
+              //   FX: vals.encFX,
+              //   FY: vals.encFY,
+              //   FZ: vals.encFZ,
+              //   ballastWeight: vals.encBallastWeight,
+              // },
             ]}
             components={{
               Toolbar: CustomToolbar,
@@ -726,6 +852,9 @@ const Tools = ({ intl }) => {
 
   const [value, setValue] = React.useState(10);
 
+  const handleAdvancedChange = (event) => {
+    setValues({ ...values, advanced: event.target.checked });
+  };
   // const { register, handleSubmit, errors } = useForm()
   // const onSubmit = (data) => console.log(data)
   // console.log(errors)
@@ -734,15 +863,17 @@ const Tools = ({ intl }) => {
     setValues(event.target.value);
   };
 
-  const emails = ["Imperial System (ft)", "Metric System (m)"];
+  const emails = ["Imperial (ft)", "Metric (m)"];
   const [optionsOpen, setOptionsOpen] = React.useState(false);
 
   // 0 for imperial (feet), 1 for metric (meters)
   const [units, setUnits] = React.useState({
-    size: ["ft", "m"],
+    size: ["feet", "meters"],
     speed: ["mph", "km/h"],
     weight: ["lbs", "kg"],
   });
+
+  const [inputValues, setInputValues] = React.useState({});
 
   const [dataGridContainer, setGridResults] = React.useState(<div></div>);
   const [btnDisabled, setBtnDisabled] = useState(true);
@@ -1155,25 +1286,39 @@ const Tools = ({ intl }) => {
                         aria-label='units'
                         name='units'
                         value={radioUnitValue}
-                        defaultValue={radioUnitValue}
+                        //defaultValue={radioUnitValue}
                         onChange={handleUnitChange}>
                         <FormControlLabel
-                          value='Imperial System (ft)'
+                          value='Imperial (ft)'
                           selected
                           control={<Radio />}
-                          label='Imperial System (ft)'
+                          label='Imperial (ft)'
                         />
                         <FormControlLabel
-                          value='Metric System (m)'
+                          value='Metric (m)'
                           control={<Radio />}
-                          label='Metric System (m)'
+                          label='Metric (m)'
                         />
                       </RadioGroup>
                     </FormControl>
                   </Grid>
                   {/* CALCULATE BUTTON */}
                   <Grid item xs={6}>
+                    <FormGroup row>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={values.advanced}
+                            onChange={handleAdvancedChange}
+                            name='advanced'
+                            color='primary'
+                          />
+                        }
+                        label='Advanced'
+                      />
+                    </FormGroup>
                     <ButtonGroup
+                      row
                       className={clsx(classes.calculateButton)}
                       variant='contained'
                       color='primary'
@@ -1220,51 +1365,6 @@ const Tools = ({ intl }) => {
                       </FormControl>
                     </Grid> */}
                 </Grid>
-                <Grid item xs={6}>
-                  {/* Title */}
-                  <FormControl
-                    className={clsx(classes.textField)}
-                    variant='outlined'>
-                    <InputLabel htmlFor='outlined-age-native-simple'>
-                      Calculation Title
-                    </InputLabel>
-                    <OutlinedInput
-                      id='outlined-adornment-weight'
-                      value={values.title}
-                      label='Calculation Title'
-                      placeholder='Calculation Title'
-                      onChange={handleChange("title")}
-                      aria-describedby='outlined-weight-helper-text'
-                      inputProps={{
-                        name: "title",
-                        "aria-label": "weight",
-                      }}
-                    />
-                  </FormControl>
-                </Grid>
-                {/* Company Name */}
-                <Grid item xs={6}>
-                  {/* Company Name */}
-                  <FormControl
-                    className={clsx(classes.textField)}
-                    variant='outlined'>
-                    <InputLabel htmlFor='outlined-age-native-simple'>
-                      Company Name
-                    </InputLabel>
-                    <OutlinedInput
-                      id='outlined-adornment-weight'
-                      value={values.companyName}
-                      label='Company Name'
-                      placeholder='Company Name'
-                      onChange={handleChange("companyName")}
-                      aria-describedby='outlined-weight-helper-text'
-                      inputProps={{
-                        name: "title",
-                        "aria-label": "weight",
-                      }}
-                    />
-                  </FormControl>
-                </Grid>
                 {/* Project */}
                 <Grid item xs={6}>
                   {/* Project */}
@@ -1288,13 +1388,38 @@ const Tools = ({ intl }) => {
                     />
                   </FormControl>
                 </Grid>
+                {/* Company Name */}
+                <Grid item xs={6}>
+                  {/* Company Name */}
+                  <FormControl
+                    className={clsx(classes.textField)}
+                    variant='outlined'>
+                    <InputLabel htmlFor='outlined-age-native-simple'>
+                      Company
+                    </InputLabel>
+                    <OutlinedInput
+                      id='outlined-adornment-weight'
+                      value={values.companyName}
+                      label='Company'
+                      placeholder='Company'
+                      onChange={handleChange("companyName")}
+                      aria-describedby='outlined-weight-helper-text'
+                      inputProps={{
+                        name: "companyName",
+                        "aria-label": "weight",
+                      }}
+                    />
+                  </FormControl>
+                </Grid>
+
                 {/* Location */}
                 <Grid item xs={6}>
                   {/* Location */}
                   <FormControl
                     className={clsx(classes.textField)}
                     variant='outlined'>
-                    <InputLabel htmlFor='outlined-age-native-simple'>
+                    <GoogleMaps />
+                    {/* <InputLabel htmlFor='outlined-age-native-simple'>
                       Location
                     </InputLabel>
                     <OutlinedInput
@@ -1308,7 +1433,7 @@ const Tools = ({ intl }) => {
                         name: "location",
                         "aria-label": "weight",
                       }}
-                    />
+                    /> */}
                   </FormControl>
                 </Grid>
                 {/* Project Date */}
@@ -1321,7 +1446,6 @@ const Tools = ({ intl }) => {
                       id='date'
                       label='Project Date'
                       type='date'
-                      defaultValue={new Date().toISOString().substr(0, 10)}
                       value={values.projectDate}
                       onChange={handleChange("projectDate")}
                       className={classes.textField}
@@ -1332,72 +1456,12 @@ const Tools = ({ intl }) => {
                     />
                   </FormControl>
                 </Grid>
-                {/* Wind Speed - 1*/}
-                <Grid item xs={6}>
-                  <HtmlTooltip
-                    enterDelay={200}
-                    leaveDelay={150}
-                    interactive
-                    TransitionComponent={Fade}
-                    TransitionProps={{ timeout: 300 }}
-                    title={
-                      <React.Fragment>
-                        <Typography color='inherit'>
-                          Maximum Wind Speed expected while tent is setup
-                        </Typography>
-                      </React.Fragment>
-                    }>
-                    <FormControl
-                      className={clsx(classes.formControl)}
-                      variant='outlined'>
-                      <InputLabel htmlFor='outlined-age-native-simple'>
-                        Wind Speed ({units.speed[values.unit]})
-                      </InputLabel>
-                      <Select
-                        native
-                        endAdornment={
-                          <InputAdornment position='end'>
-                            <EditRoundedIcon
-                              onClick={() => {
-                                handleCustomDialog(1);
-                              }}
-                            />
-                          </InputAdornment>
-                        }
-                        defaultValue={20}
-                        label='Wind Speed ({units.speed[values.unit]})'
-                        value={value.windSpeed}
-                        name='windSpeed'
-                        onChange={handleSelectChange}
-                        inputProps={{
-                          name: "windSpeed",
-                          id: "outlined-age-native-simple",
-                        }}>
-                        <option value={10}>10</option>
-                        <option value={20}>20</option>
-                        <option value={30}>30</option>
-                        <option value={40}>40</option>
-                        <option value={50}>50</option>
-                        <option value={60}>60</option>
-                        <option value={70}>70</option>
-                        <option value={80}>80</option>
-                        <option value={90}>90</option>
-                        <option value={100}>100</option>
-                        <option value={110}>110</option>
-                        <option value={120}>120</option>
-                        <option value={130}>130</option>
-                        <option value={140}>140</option>
-                        <option value={150}>150</option>
-                      </Select>
-                    </FormControl>
-                  </HtmlTooltip>
-                </Grid>
+
                 {/* Wind Flow - 2*/}
                 <Grid item xs={6}>
                   <HtmlTooltip
                     enterDelay={200}
                     leaveDelay={150}
-                    maxWidth={400}
                     interactive
                     TransitionComponent={Fade}
                     TransitionProps={{ timeout: 300 }}
@@ -1407,9 +1471,7 @@ const Tools = ({ intl }) => {
                         <Typography color='inherit'>
                           Clear - unobstructed wind flow with no blockage (e.g.,
                           plain, grass land, beach). This is the worst case
-                          scenario.Partially obstructed - relatively
-                          unobstructed wind flow with blockage less than or
-                          equal to 50%. Obstructed - objects below roof
+                          scenario. \n Obstructed - objects below roof
                           inhibiting wind flow with >50% blockage (e.g., urban
                           environment, high dense vegetation, high cliff)
                         </Typography>
@@ -1435,173 +1497,14 @@ const Tools = ({ intl }) => {
                         //     />
                         //   </InputAdornment>
                         // }
-                        value={value.windFlow}
+                        value={values.windFlow}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "windFlow",
                           id: "outlined-age-native-simple",
                         }}>
                         <option value={1}>Clear</option>
-                        <option value={2}>Semi-Obstructed</option>
                         <option value={3}>Obstructed</option>
-                      </Select>
-                    </FormControl>
-                  </HtmlTooltip>
-                </Grid>
-                {/* Tent Width - 3*/}
-                <Grid item xs={6}>
-                  {/* Tent Width */}
-                  <HtmlTooltip
-                    enterDelay={200}
-                    leaveDelay={150}
-                    interactive
-                    TransitionComponent={Fade}
-                    TransitionProps={{ timeout: 300 }}
-                    title={
-                      <React.Fragment>
-                        <Typography color='inherit'>
-                          Dimension perpendicular to ridge. Also, the width
-                          defines the Y-axis.
-                        </Typography>
-                      </React.Fragment>
-                    }>
-                    <FormControl
-                      className={clsx(classes.formControl)}
-                      variant='outlined'>
-                      <InputLabel htmlFor='outlined-age-native-simple'>
-                        Tent Width ({units.size[values.unit]})
-                      </InputLabel>
-                      <Select
-                        native
-                        endAdornment={
-                          <InputAdornment position='end'>
-                            <EditRoundedIcon
-                              onClick={() => {
-                                handleCustomDialog(3);
-                              }}
-                            />
-                          </InputAdornment>
-                        }
-                        defaultValue={20}
-                        label='Tent Width'
-                        value={value.tentWidth}
-                        onChange={handleSelectChange}
-                        inputProps={{
-                          name: "tentWidth",
-                          id: "outlined-age-native-simple",
-                        }}>
-                        <option value={10}>10</option>
-                        <option value={15}>15</option>
-                        <option value={20}>20</option>
-                        <option value={30}>30</option>
-                        <option value={40}>40</option>
-                        <option value={50}>50</option>
-                      </Select>
-                    </FormControl>
-                  </HtmlTooltip>
-                </Grid>
-                {/* Tent Length - 4*/}
-                <Grid item xs={6}>
-                  <HtmlTooltip
-                    enterDelay={200}
-                    leaveDelay={150}
-                    interactive
-                    TransitionComponent={Fade}
-                    TransitionProps={{ timeout: 300 }}
-                    title={
-                      <React.Fragment>
-                        <Typography color='inherit'>
-                          Dimension parallel to ridge. Also, the length defines
-                          the X-axis.
-                        </Typography>
-                      </React.Fragment>
-                    }>
-                    <FormControl
-                      className={clsx(classes.formControl)}
-                      variant='outlined'>
-                      <InputLabel htmlFor='outlined-age-native-simple'>
-                        Tent Length ({units.size[values.unit]})
-                      </InputLabel>
-                      <Select
-                        native
-                        endAdornment={
-                          <InputAdornment position='end'>
-                            <EditRoundedIcon
-                              onClick={() => {
-                                handleCustomDialog(4);
-                              }}
-                            />
-                          </InputAdornment>
-                        }
-                        defaultValue={40}
-                        label='Tent Length'
-                        value={value.tentLength}
-                        onChange={handleSelectChange}
-                        inputProps={{
-                          name: "tentLength",
-                          id: "outlined-age-native-simple",
-                        }}>
-                        <option value={10}>10</option>
-                        <option value={15}>15</option>
-                        <option value={20}>20</option>
-                        <option value={25}>25</option>
-                        <option value={30}>30</option>
-                        <option value={35}>35</option>
-                        <option value={40}>40</option>
-                        <option value={45}>45</option>
-                        <option value={50}>50</option>
-                        <option value={55}>55</option>
-                        <option value={60}>60</option>
-                      </Select>
-                    </FormControl>
-                  </HtmlTooltip>
-                </Grid>
-                {/* Eave Height - 5*/}
-                <Grid item xs={6}>
-                  <HtmlTooltip
-                    enterDelay={200}
-                    leaveDelay={150}
-                    interactive
-                    TransitionComponent={Fade}
-                    TransitionProps={{ timeout: 300 }}
-                    title={
-                      <React.Fragment>
-                        <Typography color='inherit'>
-                          Vertical distance between the ground of the lowest
-                          part of the roof. The band is neglected.
-                        </Typography>
-                      </React.Fragment>
-                    }>
-                    <FormControl
-                      className={clsx(classes.formControl)}
-                      variant='outlined'>
-                      {/* Eave Height */}
-                      <InputLabel htmlFor='outlined-age-native-simple'>
-                        Eave Height ({units.size[values.unit]})
-                      </InputLabel>
-                      <Select
-                        native
-                        defaultValue={7}
-                        label='Eave Height'
-                        value={value.eaveHeight}
-                        onChange={handleSelectChange}
-                        endAdornment={
-                          <InputAdornment position='end'>
-                            <EditRoundedIcon
-                              onClick={() => {
-                                handleCustomDialog(5);
-                              }}
-                            />
-                          </InputAdornment>
-                        }
-                        inputProps={{
-                          name: "eaveHeight",
-                          id: "outlined-age-native-simple",
-                        }}>
-                        <option value={7}>7</option>
-                        <option value={8}>8</option>
-                        <option value={9}>9</option>
-                        <option value={10}>10</option>
                       </Select>
                     </FormControl>
                   </HtmlTooltip>
@@ -1632,7 +1535,7 @@ const Tools = ({ intl }) => {
                         native
                         label='Roof Type'
                         defaultValue={1}
-                        value={value.roofType}
+                        value={values.roofType}
                         onChange={handleSelectChange}
                         // endAdornment={
                         //   <InputAdornment position='end'>
@@ -1655,6 +1558,365 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
+                {/* Wind Speed - 1*/}
+                <Grid item xs={6}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Maximum Wind Speed expected while tent is setup (
+                          {units.speed[values.unit]})
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <Autocomplete
+                        id='windSpeed'
+                        getOptionLabel={(option) => {
+                          if (typeof option === "string") {
+                            return option;
+                          }
+                          // Add "xxx" option created dynamically
+                          if (option.inputValues) {
+                            return option.inputValues;
+                          }
+                          return option.toString();
+                        }}
+                        freeSolo
+                        autoSelect
+                        selectOnFocus
+                        clearOnBlur
+                        handleHomeEndKeys
+                        inputValue={inputValues["windSpeed"]}
+                        onInputChange={(event, newInputValue) => {
+                          setInputValues({
+                            ...inputValues,
+                            windSpeed: newInputValue,
+                          });
+                        }}
+                        //defaultValue={values.windSpeed}
+                        value={values.windSpeed}
+                        // endAdornment={
+                        //   <InputAdornment position='end'>
+                        //     <EditRoundedIcon
+                        //       onClick={() => {
+                        //         handleCustomDialog(9);
+                        //       }}
+                        //     />
+                        //   </InputAdornment>
+                        // }
+                        onChange={(event, newValue) => {
+                          setValues({
+                            ...values,
+                            windSpeed: newValue,
+                          });
+                        }}
+                        options={[
+                          10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120,
+                          130, 140, 150, 160,
+                        ]}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            inputProps={{
+                              ...params.inputProps,
+                              name: "windSpeed",
+                            }}
+                            helperText={units.speed[values.unit]}
+                            label='Wind Speed'
+                            margin='normal'
+                            variant='outlined'
+                          />
+                        )}
+                      />
+                    </FormControl>
+                    {/* <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Wind Speed ({units.speed[values.unit]})
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        //defaultValue={20}
+                        label='Wind Speed ({units.speed[values.unit]})'
+                        value={values.windSpeed}
+                        name='windSpeed'
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "windSpeed",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl> */}
+                  </HtmlTooltip>
+                </Grid>
+                {/* Tent Width - 3*/}
+                <Grid item xs={6}>
+                  {/* Tent Width */}
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Tent Width ({units.size[values.unit]})
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <Autocomplete
+                        id='tentWidth'
+                        getOptionLabel={(option) => {
+                          if (typeof option === "string") {
+                            return option;
+                          }
+                          // Add "xxx" option created dynamically
+                          if (option.inputValues) {
+                            return option.inputValues;
+                          }
+                          return option.toString();
+                        }}
+                        freeSolo
+                        autoSelect
+                        selectOnFocus
+                        clearOnBlur
+                        handleHomeEndKeys
+                        inputValue={inputValues["tentWidth"]}
+                        onInputChange={(event, newInputValue) => {
+                          setInputValues({
+                            ...inputValues,
+                            tentWidth: newInputValue,
+                          });
+                        }}
+                        //defaultValue={values.tentWidth}
+                        value={values.tentWidth}
+                        // endAdornment={
+                        //   <InputAdornment position='end'>
+                        //     <EditRoundedIcon
+                        //       onClick={() => {
+                        //         handleCustomDialog(9);
+                        //       }}
+                        //     />
+                        //   </InputAdornment>
+                        // }
+                        onChange={(event, newValue) => {
+                          setValues({
+                            ...values,
+                            tentWidth: newValue,
+                          });
+                        }}
+                        options={[10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            inputProps={{
+                              ...params.inputProps,
+                              name: "tentWidth",
+                            }}
+                            helperText={units.size[values.unit]}
+                            label='Tent Width'
+                            margin='normal'
+                            variant='outlined'
+                          />
+                        )}
+                      />
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* Tent Length - 4*/}
+                <Grid item xs={6}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Dimension parallel to ridge. Also, the length defines
+                          the X-axis.
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <Autocomplete
+                        id='tentLength'
+                        getOptionLabel={(option) => {
+                          if (typeof option === "string") {
+                            return option;
+                          }
+                          // Add "xxx" option created dynamically
+                          if (option.inputValues) {
+                            return option.inputValues;
+                          }
+                          return option.toString();
+                        }}
+                        freeSolo
+                        autoSelect
+                        selectOnFocus
+                        clearOnBlur
+                        handleHomeEndKeys
+                        inputValue={inputValues["tentLength"]}
+                        onInputChange={(event, newInputValue) => {
+                          setInputValues({
+                            ...inputValues,
+                            tentLength: newInputValue,
+                          });
+                        }}
+                        //defaultValue={values.tentLength}
+                        value={values.tentLength}
+                        // endAdornment={
+                        //   <InputAdornment position='end'>
+                        //     <EditRoundedIcon
+                        //       onClick={() => {
+                        //         handleCustomDialog(9);
+                        //       }}
+                        //     />
+                        //   </InputAdornment>
+                        // }
+                        onChange={(event, newValue) => {
+                          setValues({
+                            ...values,
+                            tentLength: newValue,
+                          });
+                        }}
+                        options={[10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            inputProps={{
+                              ...params.inputProps,
+                              name: "tentLength",
+                            }}
+                            helperText={units.size[values.unit]}
+                            label='Tent Length'
+                            margin='normal'
+                            variant='outlined'
+                          />
+                        )}
+                      />
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                {/* Eave Height - 5*/}
+                <Grid item xs={6}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Vertical distance btwn. the ground of the lowest part
+                          of the roof. The band is neglected.
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    {/* Eave Height */}
+                    <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <Autocomplete
+                        id='eaveHeight'
+                        getOptionLabel={(option) => {
+                          if (typeof option === "string") {
+                            return option;
+                          }
+                          // Add "xxx" option created dynamically
+                          if (option.inputValues) {
+                            return option.inputValues;
+                          }
+                          return option.toString();
+                        }}
+                        freeSolo
+                        autoSelect
+                        selectOnFocus
+                        clearOnBlur
+                        handleHomeEndKeys
+                        inputValue={inputValues["eaveHeight"]}
+                        onInputChange={(event, newInputValue) => {
+                          setInputValues({
+                            ...inputValues,
+                            eaveHeight: newInputValue,
+                          });
+                        }}
+                        //defaultValue={values.postsPerLength}
+                        value={values.eaveHeight}
+                        // endAdornment={
+                        //   <InputAdornment position='end'>
+                        //     <EditRoundedIcon
+                        //       onClick={() => {
+                        //         handleCustomDialog(9);
+                        //       }}
+                        //     />
+                        //   </InputAdornment>
+                        // }
+                        onChange={(event, newValue) => {
+                          setValues({
+                            ...values,
+                            eaveHeight: newValue,
+                          });
+                        }}
+                        options={[7, 8, 9, 10]}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            inputProps={{
+                              ...params.inputProps,
+                              name: "eaveHeight",
+                            }}
+                            helperText={units.size[values.unit]}
+                            label='Eave Height'
+                            margin='normal'
+                            variant='outlined'
+                          />
+                        )}
+                      />
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
                 {/* Ridge Length - 7*/}
                 <Grid item xs={6}>
                   <HtmlTooltip
@@ -1673,42 +1935,64 @@ const Tools = ({ intl }) => {
                     <FormControl
                       className={clsx(classes.formControl)}
                       variant='outlined'>
-                      <InputLabel htmlFor='outlined-age-native-simple'>
-                        Ridge Length ({units.size[values.unit]})
-                      </InputLabel>
-                      <Select
-                        native
-                        defaultValue={5}
-                        label='Ridge Length'
-                        value={value.ridgeLength}
-                        disabled={btnDisabled}
-                        onChange={handleSelectChange}
-                        endAdornment={
-                          <InputAdornment position='end'>
-                            <EditRoundedIcon
-                              onClick={() => {
-                                handleCustomDialog(7);
-                              }}
-                            />
-                          </InputAdornment>
-                        }
-                        inputProps={{
-                          name: "ridgeLength",
-                          id: "outlined-age-native-simple",
-                        }}>
-                        <option value={5}>5</option>
-                        <option value={10}>10</option>
-                        <option value={15}>15</option>
-                        <option value={20}>20</option>
-                        <option value={25}>25</option>
-                        <option value={30}>30</option>
-                        <option value={35}>35</option>
-                        <option value={40}>40</option>
-                        <option value={45}>45</option>
-                        <option value={50}>50</option>
-                        <option value={55}>55</option>
-                        <option value={60}>60</option>
-                      </Select>
+                      <Autocomplete
+                        id='ridgeLength'
+                        getOptionLabel={(option) => {
+                          if (typeof option === "string") {
+                            return option;
+                          }
+                          // Add "xxx" option created dynamically
+                          if (option.inputValues) {
+                            return option.inputValues;
+                          }
+                          return option.toString();
+                        }}
+                        freeSolo
+                        autoSelect
+                        selectOnFocus
+                        clearOnBlur
+                        handleHomeEndKeys
+                        inputValue={inputValues["ridgeLength"]}
+                        onInputChange={(event, newInputValue) => {
+                          setInputValues({
+                            ...inputValues,
+                            ridgeLength: newInputValue,
+                          });
+                        }}
+                        //defaultValue={values.roofHeight}
+                        value={values.ridgeLength}
+                        // endAdornment={
+                        //   <InputAdornment position='end'>
+                        //     <EditRoundedIcon
+                        //       onClick={() => {
+                        //         handleCustomDialog(9);
+                        //       }}
+                        //     />
+                        //   </InputAdornment>
+                        // }
+                        onChange={(event, newValue) => {
+                          setValues({
+                            ...values,
+                            ridgeLength: newValue,
+                          });
+                        }}
+                        options={[
+                          5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60,
+                        ]}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            inputProps={{
+                              ...params.inputProps,
+                              name: "ridgeLength",
+                            }}
+                            helperText={units.size[values.unit]}
+                            label='Ridge Length'
+                            margin='normal'
+                            variant='outlined'
+                          />
+                        )}
+                      />
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
@@ -1722,13 +2006,70 @@ const Tools = ({ intl }) => {
                     TransitionProps={{ timeout: 300 }}
                     title={
                       <React.Fragment>
-                        <Typography color='inherit'>
-                          Vertical distance between the lowest part of the roof
-                          (top of posts) and the highest part of the roof.
-                        </Typography>
+                        <Typography color='inherit'>Roof Height</Typography>
                       </React.Fragment>
                     }>
                     <FormControl
+                      className={clsx(classes.formControl)}
+                      variant='outlined'>
+                      <Autocomplete
+                        id='roofHeight'
+                        getOptionLabel={(option) => {
+                          if (typeof option === "string") {
+                            return option;
+                          }
+                          // Add "xxx" option created dynamically
+                          if (option.inputValues) {
+                            return option.inputValues;
+                          }
+                          return option.toString();
+                        }}
+                        freeSolo
+                        autoSelect
+                        selectOnFocus
+                        clearOnBlur
+                        handleHomeEndKeys
+                        inputValue={inputValues["roofHeight"]}
+                        onInputChange={(event, newInputValue) => {
+                          setInputValues({
+                            ...inputValues,
+                            roofHeight: newInputValue,
+                          });
+                        }}
+                        //defaultValue={values.roofHeight}
+                        value={values.roofHeight}
+                        // endAdornment={
+                        //   <InputAdornment position='end'>
+                        //     <EditRoundedIcon
+                        //       onClick={() => {
+                        //         handleCustomDialog(9);
+                        //       }}
+                        //     />
+                        //   </InputAdornment>
+                        // }
+                        onChange={(event, newValue) => {
+                          setValues({
+                            ...values,
+                            roofHeight: newValue,
+                          });
+                        }}
+                        options={[2, 2.5, 3, 3.5, 4, 4.5, 5, 6, 7.5, 10, 12.5]}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            inputProps={{
+                              ...params.inputProps,
+                              name: "roofHeight",
+                            }}
+                            helperText={units.size[values.unit]}
+                            label='Roof Height'
+                            margin='normal'
+                            variant='outlined'
+                          />
+                        )}
+                      />
+                    </FormControl>
+                    {/* <FormControl
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
@@ -1736,9 +2077,9 @@ const Tools = ({ intl }) => {
                       </InputLabel>
                       <Select
                         native
-                        defaultValue={5}
+                        //defaultValue={5}
                         label='Roof Height '
-                        value={value.roofHeight}
+                        value={values.roofHeight}
                         onChange={handleSelectChange}
                         endAdornment={
                           <InputAdornment position='end'>
@@ -1766,7 +2107,7 @@ const Tools = ({ intl }) => {
                         <option value={55}>55</option>
                         <option value={60}>60</option>
                       </Select>
-                    </FormControl>
+                    </FormControl> */}
                   </HtmlTooltip>
                 </Grid>
                 {/* Posts In Length - 9*/}
@@ -1781,8 +2122,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Number of intermediate posts in length (Excluding
-                          corner posts)
+                          Intermediate Posts in length (Excluding corner posts)
                         </Typography>
                       </React.Fragment>
                     }>
@@ -1796,8 +2136,8 @@ const Tools = ({ intl }) => {
                             return option;
                           }
                           // Add "xxx" option created dynamically
-                          if (option.inputValue) {
-                            return option.inputValue;
+                          if (option.inputValues) {
+                            return option.inputValues;
                           }
                           return option.toString();
                         }}
@@ -1806,8 +2146,15 @@ const Tools = ({ intl }) => {
                         selectOnFocus
                         clearOnBlur
                         handleHomeEndKeys
-                        defaultValue={value.postsPerLength}
-                        value={value.postsPerLength}
+                        inputValue={inputValues["postsPerLength"]}
+                        onInputChange={(event, newInputValue) => {
+                          setInputValues({
+                            ...inputValues,
+                            postsPerLength: newInputValue,
+                          });
+                        }}
+                        //defaultValue={values.postsPerLength}
+                        value={values.postsPerLength}
                         // endAdornment={
                         //   <InputAdornment position='end'>
                         //     <EditRoundedIcon
@@ -1824,22 +2171,7 @@ const Tools = ({ intl }) => {
                           });
                         }}
                         options={[
-                          0,
-                          "1",
-                          "2",
-                          "3",
-                          "4",
-                          "5",
-                          "6",
-                          "7",
-                          "8",
-                          "9",
-                          "10",
-                          "11",
-                          "12",
-                          "13",
-                          "14",
-                          "15",
+                          0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
                         ]}
                         renderInput={(params) => (
                           <TextField
@@ -1848,34 +2180,13 @@ const Tools = ({ intl }) => {
                               ...params.inputProps,
                               name: "postsPerLength",
                             }}
-                            label='Number intermediate posts in length (Including Corner Posts)'
+                            helperText={units.size[values.unit]}
+                            label='Intermediate posts in Length'
                             margin='normal'
                             variant='outlined'
                           />
                         )}
                       />
-                      {/* <InputLabel htmlFor='outlined-age-native-simple'>
-                        Number Intermediate posts in length
-                      </InputLabel>
-                      <Select 
-                        native
-                        defaultValue={3}
-                        label='Number intermediate posts in length (Including Corner Posts)'
-                        value={value.postsPerLength}
-                        onChange={handleSelectChange}
-                        endAdornment={
-                          <InputAdornment position='end'>
-                            <EditRoundedIcon
-                              onClick={() => {
-                                handleCustomDialog(9);
-                              }}
-                            />
-                          </InputAdornment>
-                        }
-                        inputProps={{
-                          name: "postsPerLength",
-                          id: "outlined-age-native-simple",
-                        }}></Select>*/}
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
@@ -1898,45 +2209,64 @@ const Tools = ({ intl }) => {
                     <FormControl
                       className={clsx(classes.formControl)}
                       variant='outlined'>
-                      <InputLabel htmlFor='outlined-age-native-simple'>
-                        Number of intermediate posts in width
-                      </InputLabel>
-                      <Select
-                        native
-                        defaultValue={3}
-                        label='Number of intermediate posts in width (Excluding corner posts)'
-                        value={value.postsPerWidth}
-                        onChange={handleSelectChange}
-                        endAdornment={
-                          <InputAdornment position='end'>
-                            <EditRoundedIcon
-                              onClick={() => {
-                                handleCustomDialog(10);
-                              }}
-                            />
-                          </InputAdornment>
-                        }
-                        inputProps={{
-                          name: "postsPerWidth",
-                          id: "outlined-age-native-simple",
-                        }}>
-                        <option value={0}>0</option>
-                        <option value={1}>1</option>
-                        <option value={2}>2</option>
-                        <option value={3}>3</option>
-                        <option value={4}>4</option>
-                        <option value={5}>5</option>
-                        <option value={6}>6</option>
-                        <option value={7}>7</option>
-                        <option value={8}>8</option>
-                        <option value={9}>9</option>
-                        <option value={10}>10</option>
-                        <option value={11}>11</option>
-                        <option value={12}>12</option>
-                        <option value={13}>13</option>
-                        <option value={14}>14</option>
-                        <option value={15}>15</option>
-                      </Select>
+                      <Autocomplete
+                        id='postsPerWidth'
+                        getOptionLabel={(option) => {
+                          if (typeof option === "string") {
+                            return option;
+                          }
+                          // Add "xxx" option created dynamically
+                          if (option.inputValues) {
+                            return option.inputValues;
+                          }
+                          return option.toString();
+                        }}
+                        freeSolo
+                        autoSelect
+                        selectOnFocus
+                        clearOnBlur
+                        handleHomeEndKeys
+                        inputValue={inputValues["postsPerWidth"]}
+                        onInputChange={(event, newInputValue) => {
+                          setInputValues({
+                            ...inputValues,
+                            postsPerWidth: newInputValue,
+                          });
+                        }}
+                        //defaultValue={values.postsPerLength}
+                        value={values.postsPerWidth}
+                        // endAdornment={
+                        //   <InputAdornment position='end'>
+                        //     <EditRoundedIcon
+                        //       onClick={() => {
+                        //         handleCustomDialog(9);
+                        //       }}
+                        //     />
+                        //   </InputAdornment>
+                        // }
+                        onChange={(event, newValue) => {
+                          setValues({
+                            ...values,
+                            postsPerWidth: newValue,
+                          });
+                        }}
+                        options={[
+                          0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+                        ]}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            inputProps={{
+                              ...params.inputProps,
+                              name: "postsPerWidth",
+                            }}
+                            helperText={units.size[values.unit]}
+                            label='Intermediate posts in Width'
+                            margin='normal'
+                            variant='outlined'
+                          />
+                        )}
+                      />
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
@@ -1964,9 +2294,9 @@ const Tools = ({ intl }) => {
                       </InputLabel>
                       <Select
                         native
-                        defaultValue={1}
+                        //defaultValue={1}
                         label='# ballasts per corner post'
-                        value={value.ballastsPerCornerPost}
+                        value={values.ballastsPerCornerPost}
                         onChange={handleSelectChange}
                         // endAdornment={
                         //   <InputAdornment position='end'>
@@ -2006,7 +2336,6 @@ const Tools = ({ intl }) => {
 
                   </FormControl>
                 </Grid> */}
-
                 {/* Ballast Type - 12*/}
                 <Grid item xs={6}>
                   <HtmlTooltip
@@ -2032,7 +2361,7 @@ const Tools = ({ intl }) => {
                         native
                         label='Ballast Type'
                         defaultValue={1}
-                        value={value.ballastType}
+                        value={values.ballastType}
                         onChange={handleBallastSelectChange}
                         // endAdornment={
                         //   <InputAdornment position='end'>
@@ -2058,12 +2387,11 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-
                 {/* 
                 B2 
                 SELECTION 
                 */}
-                {/* b2mu3: 0,Friction coefficient between plate and ground (if any) 
+                {/* b2mu3: 0,Friction coefficient btwn. plate & ground  
                                   style={{
                     display: ballastType.fixedToPlate ? "inherit" : "none",
                   }}
@@ -2085,7 +2413,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Friction coefficient between plate and ground (if any)
+                          Friction coefficient btwn. plate & ground
                         </Typography>
                       </React.Fragment>
                     }>
@@ -2093,7 +2421,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Friction coefficient between plate and ground
+                        Friction coefficient btwn. plate & ground
                       </InputLabel>
                       <Select
                         native
@@ -2107,9 +2435,9 @@ const Tools = ({ intl }) => {
                           </InputAdornment>
                         }
                         hidden={ballastType.fixedToPlate}
-                        defaultValue={20}
-                        label='Friction coefficient between plate and ground (if any)'
-                        value={value.b2mu3}
+                        //defaultValue={20}
+                        label='Friction coefficient btwn. plate & ground '
+                        value={values.b2mu3}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "b2mu3",
@@ -2120,7 +2448,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* b2wplate: 0,Weight of plate (if any) 14*/}
+                {/* b2wplate: 0,Weight of plate  14*/}
                 <Grid
                   item
                   xs={6}
@@ -2142,7 +2470,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Weight of plate ({units.speed[values.unit]})
+                        Weight of plate ({units.weight[values.unit]})
                       </InputLabel>
                       <Select
                         native
@@ -2155,10 +2483,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.fixedToPlate}
                         label='Weight of plate ({units.speed[values.unit]})'
-                        value={value.b2wplate}
+                        value={values.b2wplate}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "b2wplate",
@@ -2186,7 +2514,7 @@ const Tools = ({ intl }) => {
                 {/* 
                 C2 SELECTION
                  */}
-                {/* c2mu1: 0,Friction coefficient between ballast and ground (if applicable) 
+                {/* c2mu1: 0,Friction coefficient btwn. ballast & ground (if applicable) 
                 15*/}
                 <Grid
                   item
@@ -2203,7 +2531,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Friction coefficient between ballast and ground (if
+                          Friction coefficient btwn. ballast & ground (if
                           applicable)
                         </Typography>
                       </React.Fragment>
@@ -2212,8 +2540,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Friction coefficient between ballast and ground (if
-                        applicable)
+                        Friction coefficient btwn. ballast & ground
                       </InputLabel>
                       <Select
                         native
@@ -2226,10 +2553,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.fixedToPole}
-                        label='Friction coefficient between ballast and ground (if applicable)'
-                        value={value.c2mu1}
+                        label='Friction coefficient btwn. ballast & ground (if applicable)'
+                        value={values.c2mu1}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "c2mu1",
@@ -2255,7 +2582,7 @@ const Tools = ({ intl }) => {
                   </HtmlTooltip>
                 </Grid>
                 {/* A SELECTION */}
-                {/* ad1: 0, Distance between center of ballast and upright (ft)  16*/}
+                {/* ad1: 0, Distance btwn. center of ballast & upright (ft)  16*/}
                 <Grid
                   item
                   xs={6}
@@ -2271,7 +2598,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Distance between center of ballast and upright
+                          Distance btwn. center of ballast & upright
                         </Typography>
                       </React.Fragment>
                     }>
@@ -2279,7 +2606,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Distance between center of ballast and upright (
+                        Distance btwn. center of ballast & upright (
                         {units.size[values.unit]})
                       </InputLabel>
                       <Select
@@ -2293,10 +2620,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.a}
-                        label='Distance between center of ballast and upright ({units.size[values.unit]})'
-                        value={value.ad1}
+                        label='Distance btwn. center of ballast & upright ({units.size[values.unit]})'
+                        value={values.ad1}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "ad1",
@@ -2321,7 +2648,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* ad2:0, Distance between far end of plate and upright (ft)  17*/}
+                {/* ad2:0, Distance btwn. far end of plate & upright (ft)  17*/}
                 <Grid
                   item
                   xs={6}
@@ -2337,7 +2664,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Distance between far end of plate and upright
+                          Distance btwn. far end of plate & upright
                         </Typography>
                       </React.Fragment>
                     }>
@@ -2345,7 +2672,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Distance between far end of plate and upright (
+                        Distance btwn. far end of plate & upright (
                         {units.size[values.unit]})
                       </InputLabel>
                       <Select
@@ -2359,10 +2686,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.a}
-                        label='Distance between far end of plate and upright ({units.size[values.unit]})'
-                        value={value.ad2}
+                        label='Distance btwn. far end of plate & upright ({units.size[values.unit]})'
+                        value={values.ad2}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "ad2",
@@ -2387,7 +2714,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* amu3: 0,Friction coefficient between plate and ground (if any) 18*/}
+                {/* amu3: 0,Friction coefficient btwn. plate & ground  18*/}
                 <Grid
                   item
                   xs={6}
@@ -2403,7 +2730,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Friction coefficient between plate and ground (if any)
+                          Friction coefficient btwn. plate & ground
                         </Typography>
                       </React.Fragment>
                     }>
@@ -2411,7 +2738,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Friction coefficient between plate and ground (if any)
+                        Friction coefficient btwn. plate & ground
                       </InputLabel>
                       <Select
                         native
@@ -2424,10 +2751,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.a}
-                        label=' Friction coefficient between plate and ground (if any)'
-                        value={value.amu3}
+                        label=' Friction coefficient btwn. plate & ground '
+                        value={values.amu3}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "amu3",
@@ -2452,7 +2779,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* awplate: 0, Weight of plate (if any) 19*/}
+                {/* awplate: 0, Weight of plate  19*/}
                 <Grid
                   item
                   xs={6}
@@ -2467,9 +2794,7 @@ const Tools = ({ intl }) => {
                     TransitionProps={{ timeout: 300 }}
                     title={
                       <React.Fragment>
-                        <Typography color='inherit'>
-                          Weight of plate (if any)
-                        </Typography>
+                        <Typography color='inherit'>Weight of plate</Typography>
                       </React.Fragment>
                     }>
                     <FormControl
@@ -2489,10 +2814,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.a}
                         label='Weight of plate ({units.weight[values.unit]})'
-                        value={value.awplate}
+                        value={values.awplate}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "awplate",
@@ -2520,7 +2845,7 @@ const Tools = ({ intl }) => {
                 {/* 
                 B SELECTION
                  */}
-                {/* bd1: 0, Distance between center of ballast and upright (ft)  20*/}
+                {/* bd1: 0, Distance btwn. center of ballast & upright (ft)  20*/}
                 <Grid
                   item
                   xs={6}
@@ -2536,7 +2861,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Distance between center of ballast and upright
+                          Distance btwn. center of ballast & upright
                         </Typography>
                       </React.Fragment>
                     }>
@@ -2544,7 +2869,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Distance between center of ballast and upright (
+                        Distance btwn. center of ballast & upright (
                         {units.size[values.unit]})
                       </InputLabel>
                       <Select
@@ -2558,10 +2883,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.b}
-                        label='Distance between center of ballast and upright ({units.size[values.unit]})'
-                        value={value.bd1}
+                        label='Distance btwn. center of ballast & upright ({units.size[values.unit]})'
+                        value={values.bd1}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "bd1",
@@ -2586,7 +2911,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* bd2:0,Distance between far end of plate and upright (ft) 21*/}
+                {/* bd2:0,Distance btwn. far end of plate & upright (ft) 21*/}
                 <Grid
                   item
                   xs={6}
@@ -2602,7 +2927,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Distance between far end of plate and upright
+                          Distance btwn. far end of plate & upright
                         </Typography>
                       </React.Fragment>
                     }>
@@ -2610,7 +2935,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Distance between far end of plate and upright(
+                        Distance btwn. far end of plate & upright(
                         {units.size[values.unit]})
                       </InputLabel>
                       <Select
@@ -2624,10 +2949,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.b}
-                        label='Distance between far end of plate and upright ({units.size[values.unit]})'
-                        value={value.bd2}
+                        label='Distance btwn. far end of plate & upright ({units.size[values.unit]})'
+                        value={values.bd2}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "bd2",
@@ -2689,10 +3014,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.b}
                         label='Ballast effective width ({units.size[values.unit]})'
-                        value={value.bd3}
+                        value={values.bd3}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "bd3",
@@ -2717,7 +3042,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* bd4: 0,Horizontal distance between ballast center and guy attachment point (ft)  23*/}
+                {/* bd4: 0,Horizontal distance btwn. ballast center & guy attachment point (ft)  23*/}
                 <Grid
                   item
                   xs={6}
@@ -2733,7 +3058,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Horizontal distance between ballast center and guy
+                          Horizontal distance btwn. ballast center & guy
                           attachment point
                         </Typography>
                       </React.Fragment>
@@ -2742,7 +3067,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Horizontal distance between ballast center and guy
+                        Horizontal distance btwn. ballast center & guy
                         attachment point ({units.size[values.unit]})
                       </InputLabel>
                       <Select
@@ -2756,10 +3081,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.b}
-                        label='Horizontal distance between ballast center and guy attachment point ({units.size[values.unit]})'
-                        value={value.bd4}
+                        label='Horizontal distance btwn. ballast center & guy attachment point ({units.size[values.unit]})'
+                        value={values.bd4}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "bd4",
@@ -2784,7 +3109,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* bh4: 0, Vertical distance between plate and guy attachment point (ft) 24*/}
+                {/* bh4: 0, Vertical distance btwn. plate & guy attachment point (ft) 24*/}
                 <Grid
                   item
                   xs={6}
@@ -2800,8 +3125,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Vertical distance between plate and guy attachment
-                          point
+                          Vertical distance btwn. plate & guy attachment point
                         </Typography>
                       </React.Fragment>
                     }>
@@ -2809,8 +3133,8 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Vertical distance between plate and guy attachment point
-                        ({units.size[values.unit]})
+                        Vertical distance btwn. plate & guy attachment point (
+                        {units.size[values.unit]})
                       </InputLabel>
                       <Select
                         native
@@ -2823,10 +3147,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.b}
-                        label='Vertical distance between plate and guy attachment point ({units.size[values.unit]})'
-                        value={value.bh4}
+                        label='Vertical distance btwn. plate & guy attachment point ({units.size[values.unit]})'
+                        value={values.bh4}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "bh4",
@@ -2851,7 +3175,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* bmu2: 0,Friction coefficient between ballast and plate (if any) 25*/}
+                {/* bmu2: 0,Friction coefficient btwn. ballast & plate  25*/}
                 <Grid
                   item
                   xs={6}
@@ -2867,8 +3191,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Friction coefficient between ballast and plate (if
-                          any)
+                          Friction coefficient btwn. ballast & plate
                         </Typography>
                       </React.Fragment>
                     }>
@@ -2876,7 +3199,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Friction coefficient between ballast and plate (if any)
+                        Friction coefficient btwn. ballast & plate
                       </InputLabel>
                       <Select
                         native
@@ -2889,10 +3212,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.b}
-                        label='Friction coefficient between ballast and plate (if any)'
-                        value={value.bmu2}
+                        label='Friction coefficient btwn. ballast & plate '
+                        value={values.bmu2}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "bmu2",
@@ -2917,7 +3240,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* bmu3: 0,Friction coefficient between plate and ground (if any) 26*/}
+                {/* bmu3: 0,Friction coefficient btwn. plate & ground  26*/}
                 <Grid
                   item
                   xs={6}
@@ -2933,7 +3256,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Friction coefficient between plate and ground (if any)
+                          Friction coefficient btwn. plate & ground
                         </Typography>
                       </React.Fragment>
                     }>
@@ -2941,7 +3264,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Friction coefficient between plate and ground (if any)
+                        Friction coefficient btwn. plate & ground
                       </InputLabel>
                       <Select
                         native
@@ -2954,10 +3277,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.b}
-                        label='Friction coefficient between plate and ground (if any)'
-                        value={value.bmu3}
+                        label='Friction coefficient btwn. plate & ground '
+                        value={values.bmu3}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "bmu3",
@@ -2982,7 +3305,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* bwplate: 0,Weight of plate (if any) 27*/}
+                {/* bwplate: 0,Weight of plate  27*/}
                 <Grid
                   item
                   xs={6}
@@ -2997,16 +3320,14 @@ const Tools = ({ intl }) => {
                     TransitionProps={{ timeout: 300 }}
                     title={
                       <React.Fragment>
-                        <Typography color='inherit'>
-                          Weight of plate (if any)
-                        </Typography>
+                        <Typography color='inherit'>Weight of plate</Typography>
                       </React.Fragment>
                     }>
                     <FormControl
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Weight of plate (if any) ({units.weight[values.unit]})
+                        Weight of plate ({units.weight[values.unit]})
                       </InputLabel>
                       <Select
                         native
@@ -3019,10 +3340,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.b}
-                        label='Weight of plate (if any) ({units.weight[values.unit]})'
-                        value={value.bwplate}
+                        label='Weight of plate  ({units.weight[values.unit]})'
+                        value={values.bwplate}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "bwplate",
@@ -3050,7 +3371,7 @@ const Tools = ({ intl }) => {
                 {/* 
                 C SELECTION
                  */}
-                {/* cd1: 0,Distance between center of ballast and upright (ft) 28*/}
+                {/* cd1: 0,Distance btwn. center of ballast & upright (ft) 28*/}
                 <Grid
                   item
                   xs={6}
@@ -3066,7 +3387,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Distance between center of ballast and upright
+                          Distance btwn. center of ballast & upright
                         </Typography>
                       </React.Fragment>
                     }>
@@ -3074,7 +3395,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Distance between center of ballast and upright (
+                        Distance btwn. center of ballast & upright (
                         {units.size[values.unit]})
                       </InputLabel>
                       <Select
@@ -3088,10 +3409,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.c}
-                        label='Distance between center of ballast and upright ({units.size[values.unit]})'
-                        value={value.cd1}
+                        label='Distance btwn. center of ballast & upright ({units.size[values.unit]})'
+                        value={values.cd1}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "cd1",
@@ -3153,10 +3474,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.c}
                         label='Ballast effective width ({units.size[values.unit]})'
-                        value={value.cd3}
+                        value={values.cd3}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "cd3",
@@ -3181,7 +3502,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* cd4: 0,Horizontal distance between ballast center and guy attachment point (ft) 30*/}
+                {/* cd4: 0,Horizontal distance btwn. ballast center & guy attachment point (ft) 30*/}
                 <Grid
                   item
                   xs={6}
@@ -3197,7 +3518,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Horizontal distance between ballast center and guy
+                          Horizontal distance btwn. ballast center & guy
                           attachment point
                         </Typography>
                       </React.Fragment>
@@ -3206,7 +3527,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Horizontal distance between ballast center and guy
+                        Horizontal distance btwn. ballast center & guy
                         attachment point ({units.size[values.unit]})
                       </InputLabel>
                       <Select
@@ -3220,10 +3541,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={0}
+                        //defaultValue={0}
                         hidden={ballastType.c}
-                        label='Horizontal distance between ballast center and guy attachment point ({units.size[values.unit]})'
-                        value={value.cd4}
+                        label='Horizontal distance btwn. ballast center & guy attachment point ({units.size[values.unit]})'
+                        value={values.cd4}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "cd4",
@@ -3248,7 +3569,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* ch4: 0,Vertical distance between plate and guy attachment point
+                {/* ch4: 0,Vertical distance btwn. plate & guy attachment point
                 (ft) 31*/}
                 <Grid
                   item
@@ -3265,8 +3586,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Vertical distance between plate and guy attachment
-                          point
+                          Vertical distance btwn. plate & guy attachment point
                         </Typography>
                       </React.Fragment>
                     }>
@@ -3274,8 +3594,8 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Vertical distance between plate and guy attachment point
-                        ({units.size[values.unit]})
+                        Vertical distance btwn. plate & guy attachment point (
+                        {units.size[values.unit]})
                       </InputLabel>
                       <Select
                         native
@@ -3288,10 +3608,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.c}
-                        label='Vertical distance between plate and guy attachment point ({units.size[values.unit]})'
-                        value={value.ch4}
+                        label='Vertical distance btwn. plate & guy attachment point ({units.size[values.unit]})'
+                        value={values.ch4}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "ch4",
@@ -3316,7 +3636,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* cmu1: 0,Friction coefficient between ballast and ground (if
+                {/* cmu1: 0,Friction coefficient btwn. ballast & ground (if
                 applicable) 32*/}
                 <Grid
                   item
@@ -3333,7 +3653,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Friction coefficient between ballast and ground (if
+                          Friction coefficient btwn. ballast & ground (if
                           applicable)
                         </Typography>
                       </React.Fragment>
@@ -3342,7 +3662,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Friction coefficient between ballast and ground (if
+                        Friction coefficient btwn. ballast & ground (if
                         applicable) ({units.size[values.unit]})
                       </InputLabel>
                       <Select
@@ -3356,10 +3676,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.c}
-                        label='Friction coefficient between ballast and ground (if applicable)'
-                        value={value.cmu1}
+                        label='Friction coefficient btwn. ballast & ground (if applicable)'
+                        value={values.cmu1}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "cmu1",
@@ -3387,7 +3707,7 @@ const Tools = ({ intl }) => {
                 {/* 
                 D SELECTION
                  */}
-                {/* dd2: 0,Distance between far end of plate and upright (ft) 33*/}
+                {/* dd2: 0,Distance btwn. far end of plate & upright (ft) 33*/}
                 <Grid
                   item
                   xs={6}
@@ -3403,7 +3723,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Distance between far end of plate and upright
+                          Distance btwn. far end of plate & upright
                         </Typography>
                       </React.Fragment>
                     }>
@@ -3411,7 +3731,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Distance between far end of plate and upright (
+                        Distance btwn. far end of plate & upright (
                         {units.size[values.unit]})
                       </InputLabel>
                       <Select
@@ -3425,10 +3745,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.d}
-                        label='Distance between far end of plate and upright ({units.size[values.unit]})'
-                        value={value.dd2}
+                        label='Distance btwn. far end of plate & upright ({units.size[values.unit]})'
+                        value={values.dd2}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "dd2",
@@ -3453,7 +3773,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* dd4: 0,Horizontal distance between ballast center and guy
+                {/* dd4: 0,Horizontal distance btwn. ballast center & guy
                 attachment point (ft) 34 */}
                 <Grid
                   item
@@ -3470,7 +3790,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Horizontal distance between ballast center and guy
+                          Horizontal distance btwn. ballast center & guy
                           attachment point
                         </Typography>
                       </React.Fragment>
@@ -3479,7 +3799,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Horizontal distance between ballast center and guy
+                        Horizontal distance btwn. ballast center & guy
                         attachment point ({units.size[values.unit]})
                       </InputLabel>
                       <Select
@@ -3493,10 +3813,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.d}
-                        label='Horizontal distance between ballast center and guy attachment point ({units.size[values.unit]})'
-                        value={value.dd4}
+                        label='Horizontal distance btwn. ballast center & guy attachment point ({units.size[values.unit]})'
+                        value={values.dd4}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "dd4",
@@ -3521,7 +3841,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* dd5: 0,Horizontal distance between guy attachment point and upright (ft)  35*/}
+                {/* dd5: 0,Horizontal distance btwn. guy attachment point and upright (ft)  35*/}
                 <Grid
                   item
                   xs={6}
@@ -3537,7 +3857,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Horizontal distance between guy attachment point and
+                          Horizontal distance btwn. guy attachment point and
                           upright
                         </Typography>
                       </React.Fragment>
@@ -3546,7 +3866,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Horizontal distance between guy attachment point and
+                        Horizontal distance btwn. guy attachment point and
                         upright ({units.size[values.unit]})
                       </InputLabel>
                       <Select
@@ -3560,10 +3880,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.d}
-                        label='Horizontal distance between guy attachment point and upright ({units.size[values.unit]})'
-                        value={value.dd5}
+                        label='Horizontal distance btwn. guy attachment point and upright ({units.size[values.unit]})'
+                        value={values.dd5}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "dd5",
@@ -3588,7 +3908,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* dmu3: 0,Friction coefficient between plate and ground (if any) 36*/}
+                {/* dmu3: 0,Friction coefficient btwn. plate & ground  36*/}
                 <Grid
                   item
                   xs={6}
@@ -3604,7 +3924,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Friction coefficient between plate and ground (if any)
+                          Friction coefficient btwn. plate & ground
                         </Typography>
                       </React.Fragment>
                     }>
@@ -3612,7 +3932,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.formControl)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Friction coefficient between plate and ground (if any)
+                        Friction coefficient btwn. plate & ground
                       </InputLabel>
                       <Select
                         native
@@ -3625,10 +3945,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.d}
-                        label='Friction coefficient between plate and ground (if any) '
-                        value={value.dmu3}
+                        label='Friction coefficient btwn. plate & ground  '
+                        value={values.dmu3}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "dmu3",
@@ -3653,7 +3973,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* dwplate: 0,Weight of plate (if any) 37*/}
+                {/* dwplate: 0,Weight of plate  37*/}
                 <Grid
                   item
                   xs={6}
@@ -3668,9 +3988,7 @@ const Tools = ({ intl }) => {
                     TransitionProps={{ timeout: 300 }}
                     title={
                       <React.Fragment>
-                        <Typography color='inherit'>
-                          Weight of plate (if any)
-                        </Typography>
+                        <Typography color='inherit'>Weight of plate</Typography>
                       </React.Fragment>
                     }>
                     <FormControl
@@ -3690,10 +4008,10 @@ const Tools = ({ intl }) => {
                             />
                           </InputAdornment>
                         }
-                        defaultValue={20}
+                        //defaultValue={20}
                         hidden={ballastType.d}
-                        label='Weight of plate (if any) ({units.weight[values.unit]})'
-                        value={value.dwplate}
+                        label='Weight of plate  ({units.weight[values.unit]})'
+                        value={values.dwplate}
                         onChange={handleSelectChange}
                         inputProps={{
                           name: "dwplate",
@@ -3718,9 +4036,8 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-
                 {/* CALCULATE BUTTON */}
-                <Grid item xs={6}>
+                <Grid item xs={12}>
                   <ButtonGroup
                     className={clsx(classes.calculateButton)}
                     variant='contained'
@@ -3779,7 +4096,7 @@ const Tools = ({ intl }) => {
                     rows={tile.featured ? 2 : 1}>
                     <img
                       src={tile.img}
-                      class={classes.tileImage}
+                      className={classes.tileImage}
                       alt={tile.title}
                     />
                     <GridListTileBar
@@ -3828,3 +4145,141 @@ const Tools = ({ intl }) => {
 };
 
 export default injectIntl(Tools);
+
+function loadScript(src, position, id) {
+  if (!position) {
+    return;
+  }
+
+  const script = document.createElement("script");
+  script.setAttribute("async", "");
+  script.setAttribute("id", id);
+  script.src = src;
+  position.appendChild(script);
+}
+
+const autocompleteService = { current: null };
+
+function GoogleMaps() {
+  const classes = useStyles();
+  const [value, setValue] = React.useState(null);
+  const [inputValue, setInputValue] = React.useState("");
+  const [options, setOptions] = React.useState([]);
+  const loaded = React.useRef(false);
+
+  if (typeof window !== "undefined" && !loaded.current) {
+    if (!document.querySelector("#google-maps")) {
+      loadScript(
+        "https://maps.googleapis.com/maps/api/js?key=AIzaSyBEHfOrxt6np-feXWg3VzZ3GQGhz_wYoDM&libraries=places",
+        document.querySelector("head"),
+        "google-maps"
+      );
+    }
+
+    loaded.current = true;
+  }
+
+  const fetch = React.useMemo(
+    () =>
+      throttle((request, callback) => {
+        autocompleteService.current.getPlacePredictions(request, callback);
+      }, 200),
+    []
+  );
+
+  React.useEffect(() => {
+    let active = true;
+
+    if (!autocompleteService.current && window.google) {
+      autocompleteService.current =
+        new window.google.maps.places.AutocompleteService();
+    }
+    if (!autocompleteService.current) {
+      return undefined;
+    }
+
+    if (inputValue === "") {
+      setOptions(value ? [value] : []);
+      return undefined;
+    }
+
+    fetch({ input: inputValue }, (results) => {
+      if (active) {
+        let newOptions = [];
+
+        if (value) {
+          newOptions = [value];
+        }
+
+        if (results) {
+          newOptions = [...newOptions, ...results];
+        }
+
+        setOptions(newOptions);
+      }
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [value, inputValue, fetch]);
+
+  return (
+    <Autocomplete
+      id='google-map-demo'
+      getOptionLabel={(option) =>
+        typeof option === "string" ? option : option.description
+      }
+      filterOptions={(x) => x}
+      options={options}
+      autoComplete
+      includeInputInList
+      filterSelectedOptions
+      value={value}
+      onChange={(event, newValue) => {
+        setOptions(newValue ? [newValue, ...options] : options);
+        setValue(newValue);
+      }}
+      onInputChange={(event, newInputValue) => {
+        setInputValue(newInputValue);
+      }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label='Add a location'
+          variant='outlined'
+          fullWidth
+        />
+      )}
+      renderOption={(option) => {
+        const matches =
+          option.structured_formatting.main_text_matched_substrings;
+        const parts = parse(
+          option.structured_formatting.main_text,
+          matches.map((match) => [match.offset, match.offset + match.length])
+        );
+
+        return (
+          <Grid container alignItems='center'>
+            <Grid item>
+              <LocationOnIcon className={classes.icon} />
+            </Grid>
+            <Grid item xs>
+              {parts.map((part, index) => (
+                <span
+                  key={index}
+                  style={{ fontWeight: part.highlight ? 700 : 400 }}>
+                  {part.text}
+                </span>
+              ))}
+
+              <Typography variant='body2' color='textSecondary'>
+                {option.structured_formatting.secondary_text}
+              </Typography>
+            </Grid>
+          </Grid>
+        );
+      }}
+    />
+  );
+}
