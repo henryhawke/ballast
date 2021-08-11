@@ -48,7 +48,10 @@ export default functions
       return;
     }
 
-    const file = admin.storage().bucket().file("storage/jul1621-advanced.xlsx");
+    const file = admin
+      .storage()
+      .bucket()
+      .file("storage/38.1-frictioncoeff.xlsx");
     return file.download().then((data) => {
       // import your calc functions lib
       XLSX_CALC.import_functions(formulajs);
@@ -79,7 +82,12 @@ export default functions
       worksheet["D6"] = { t: "n", v: toNumber(payload.roofType) };
 
       // ft / m
-      worksheet["D7"] = { t: "n", v: toNumber(payload.ridgeLength) };
+
+      if (payload.roofType === "2") {
+        worksheet["D7"] = { t: "n", v: toNumber(payload.ridgeLength) };
+      }
+
+      //worksheet["D7"] = { t: "n", v: toNumber(payload.ridgeLength) };
       //worksheet["D5"] = { t: "n", v: toNumber(payload.bandHeight) };
 
       //ft / m
@@ -94,7 +102,7 @@ export default functions
       worksheet["D13"] = { t: "n", v: toNumber(payload.windFlow) };
 
       // valance height
-      worksheet["D14"] = { t: "n", v: toNumber(payload.valanceHeight) };
+      worksheet["D14"] = { t: "n", v: toNumber(payload.valenceHeight) };
 
       // Number of intermediate posts in length D13
 
@@ -109,106 +117,187 @@ export default functions
         v: toNumber(payload.ballastsPerCornerPost),
       };
 
-      worksheet["E42"] = {
-        t: "n",
-        v: toNumber(payload.b2mu3),
-      };
-      worksheet["E43"] = {
-        t: "n",
-        v: toNumber(payload.b2wplate),
-      };
-      worksheet["G40"] = {
-        t: "n",
-        v: toNumber(payload.c2mu1),
-      };
-      worksheet["I34"] = {
-        t: "n",
-        v: toNumber(payload.ad1),
-      };
-      worksheet["I35"] = {
-        t: "n",
-        v: toNumber(payload.ad2),
-      };
-      worksheet["I42"] = {
-        t: "n",
-        v: toNumber(payload.amu3),
-      };
-      worksheet["I43"] = {
-        t: "n",
-        v: toNumber(payload.awplate),
-      };
-      worksheet["K34"] = {
-        t: "n",
-        v: toNumber(payload.bd1),
-      };
-      worksheet["K35"] = {
-        t: "n",
-        v: toNumber(payload.bd2),
-      };
-      worksheet["M36"] = {
-        t: "n",
-        v: toNumber(payload.bd3),
-      };
-      worksheet["M37"] = {
-        t: "n",
-        v: toNumber(payload.bd4),
-      };
-      worksheet["M38"] = {
-        t: "n",
-        v: toNumber(payload.bh4),
-      };
-      worksheet["K41"] = {
-        t: "n",
-        v: toNumber(payload.bmu2),
-      };
-      worksheet["K42"] = {
-        t: "n",
-        v: toNumber(payload.bmu3),
-      };
-      worksheet["K43"] = {
-        t: "n",
-        v: toNumber(payload.bwplate),
-      };
-      worksheet["O34"] = {
-        t: "n",
-        v: toNumber(payload.cd1),
-      };
-      worksheet["O36"] = {
-        t: "n",
-        v: toNumber(payload.cd3),
-      };
-      worksheet["O37"] = {
-        t: "n",
-        v: toNumber(payload.cd4),
-      };
-      worksheet["O38"] = {
-        t: "n",
-        v: toNumber(payload.ch4),
-      };
-      worksheet["O40"] = {
-        t: "n",
-        v: toNumber(payload.cmu1),
-      };
-      worksheet["Q35"] = {
-        t: "n",
-        v: toNumber(payload.dd2),
-      };
-      worksheet["Q37"] = {
-        t: "n",
-        v: toNumber(payload.dd4),
-      };
-      worksheet["Q39"] = {
-        t: "n",
-        v: toNumber(payload.dd5),
-      };
-      worksheet["Q42"] = {
-        t: "n",
-        v: toNumber(payload.dmu3),
-      };
-      worksheet["Q43"] = {
-        t: "n",
-        v: toNumber(payload.dwplate),
-      };
+      worksheet["I59"] = { t: "n", v: toNumber(payload.groundSurface) };
+
+      var groundSurface = toNumber(payload.groundSurface);
+      var ballastMaterial = toNumber(payload.ballastMaterial);
+
+      var mu1 = 0.26;
+      var mu2 = 0.2;
+      var mu3 = 0.26;
+
+      if (payload.advanced) {
+        if (ballastMaterial === 1) {
+          mu2 = 0.2;
+        } else if (ballastMaterial === 2) {
+          mu2 = 0.5;
+        } else if (ballastMaterial === 3) {
+          mu2 = 0.44;
+        }
+
+        if (groundSurface === 1) {
+          // smoothConcrete
+          if (ballastMaterial === 1) {
+            mu1 = 0.26;
+          } else if (ballastMaterial === 2) {
+            mu1 = 0.3;
+          } else if (ballastMaterial === 3) {
+            mu1 = 0.38;
+          }
+          mu3 = 0.44;
+        } else if (groundSurface === 2) {
+          // roughConcrete
+          if (ballastMaterial === 1) {
+            mu1 = 0.4;
+          } else if (ballastMaterial === 2) {
+            mu1 = 0.74;
+          } else if (ballastMaterial === 3) {
+            mu1 = 0.77;
+          }
+          mu3 = 0.53;
+        } else if (groundSurface === 3) {
+          if (ballastMaterial === 1) {
+            mu1 = 0.43;
+          } else if (ballastMaterial === 2) {
+            mu1 = 0.86;
+          } else if (ballastMaterial === 3) {
+            mu1 = 0.79;
+          }
+          // Asphalt
+          mu3 = 0.48;
+        } else if (groundSurface === 4) {
+          // Gravel
+          if (ballastMaterial === 1) {
+            mu1 = 0.39;
+          } else if (ballastMaterial === 2) {
+            mu1 = 0.45;
+          } else if (ballastMaterial === 3) {
+            mu1 = 0.52;
+          }
+          mu3 = 0.51;
+        } else if (groundSurface === 5) {
+          // Dirt
+          if (ballastMaterial === 1) {
+            mu1 = 0.42;
+          } else if (ballastMaterial === 2) {
+            mu1 = 0.43;
+          } else if (ballastMaterial === 3) {
+            mu1 = 0.37;
+          }
+          mu3 = 0.58;
+        } else if (groundSurface === 6) {
+          // Grass
+          if (ballastMaterial === 1) {
+            mu1 = 0.46;
+          } else if (ballastMaterial === 2) {
+            mu1 = 0.81;
+          } else if (ballastMaterial === 3) {
+            mu1 = 0.69;
+          }
+          mu3 = 0.61;
+        }
+
+        worksheet["E42"] = {
+          t: "n",
+          v: mu3,
+        };
+        worksheet["E43"] = {
+          t: "n",
+          v: toNumber(payload.b2wplate),
+        };
+        worksheet["G40"] = {
+          t: "n",
+          v: mu1,
+        };
+        worksheet["I34"] = {
+          t: "n",
+          v: toNumber(payload.ad1),
+        };
+        worksheet["I35"] = {
+          t: "n",
+          v: toNumber(payload.ad2),
+        };
+        worksheet["I42"] = {
+          t: "n",
+          v: mu3,
+        };
+        worksheet["I43"] = {
+          t: "n",
+          v: toNumber(payload.awplate),
+        };
+        worksheet["K34"] = {
+          t: "n",
+          v: toNumber(payload.bd1),
+        };
+        worksheet["K35"] = {
+          t: "n",
+          v: toNumber(payload.bd2),
+        };
+        worksheet["M36"] = {
+          t: "n",
+          v: toNumber(payload.bd3),
+        };
+        worksheet["M37"] = {
+          t: "n",
+          v: toNumber(payload.bd4),
+        };
+        worksheet["M38"] = {
+          t: "n",
+          v: toNumber(payload.bh4),
+        };
+        worksheet["K41"] = {
+          t: "n",
+          v: mu2,
+        };
+        worksheet["K42"] = {
+          t: "n",
+          v: mu3,
+        };
+        worksheet["K43"] = {
+          t: "n",
+          v: toNumber(payload.bwplate),
+        };
+        worksheet["O34"] = {
+          t: "n",
+          v: toNumber(payload.cd1),
+        };
+        worksheet["O36"] = {
+          t: "n",
+          v: toNumber(payload.cd3),
+        };
+        worksheet["O37"] = {
+          t: "n",
+          v: toNumber(payload.cd4),
+        };
+        worksheet["O38"] = {
+          t: "n",
+          v: toNumber(payload.ch4),
+        };
+        worksheet["O40"] = {
+          t: "n",
+          v: mu1,
+        };
+        worksheet["Q35"] = {
+          t: "n",
+          v: toNumber(payload.dd2),
+        };
+        worksheet["Q37"] = {
+          t: "n",
+          v: toNumber(payload.dd4),
+        };
+        worksheet["Q39"] = {
+          t: "n",
+          v: toNumber(payload.dd5),
+        };
+        worksheet["Q42"] = {
+          t: "n",
+          v: mu3,
+        };
+        worksheet["Q43"] = {
+          t: "n",
+          v: toNumber(payload.dwplate),
+        };
+      }
 
       // CALCULATION OF THE SPREADSHEET
       XLSX_CALC(workbook);
@@ -230,6 +319,8 @@ export default functions
       // Weights of each ballast  K23, L23, and M23.
       var openBallastWeight = worksheet["J19"] ? worksheet["J19"].v : 0;
       var encBallastWeight = worksheet["K19"] ? worksheet["K19"].v : 0;
+      var advOpenBallastWeight = worksheet["J19"] ? worksheet["J19"].v : 0;
+      var advEncBallastWeight = worksheet["K19"] ? worksheet["K19"].v : 0;
 
       // Fixed-to-plate
 
@@ -324,6 +415,9 @@ export default functions
         ballastsPerCornerPost: toNumber(payload.ballastsPerCornerPost),
         openBallastWeight: Math.floor(toNumber(openBallastWeight)),
         encBallastWeight: Math.floor(toNumber(encBallastWeight)),
+        advOpenBallastWeight: Math.floor(toNumber(advOpenBallastWeight)),
+        advEncBallastWeight: Math.floor(toNumber(advEncBallastWeight)),
+        valenceHeight: Math.floor(toNumber(payload.valenceHeight)),
         title: payload.title,
         time: admin.firestore.Timestamp.now(),
         share: payload.share,

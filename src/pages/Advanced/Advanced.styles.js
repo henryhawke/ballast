@@ -37,23 +37,42 @@ export default (theme) => ({
         : theme.palette.primary1Color,
     justifyContent: "center",
     alignContent: "stretch",
-    alignItems: "flex-start",
+    alignItems: "center",
     boxSizing: "content-box",
     paddingTop: theme.spacing(1),
     "& .MuiTextField-root": {
-      margin: theme.spacing(1),
+      margin: theme.spacing(0),
       width: "100%",
-      marginLeft: "0px",
+    },
+    "& .MuiGrid-item": {
+      textAlign: "center",
+    },
+    "& .MuiFormControl-root": {
+      marginLeft: theme.spacing(0),
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(0),
+    },
+    "& .MuiDivider-root": {
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
+    },
+    "& .MuiAutocomplete-root": {
+      margin: theme.spacing(0),
+      width: "100%",
     },
     // "& .MuiContainer-maxWidthLg": {
     //   maxWidth: "900px",
     // },
-    "& .MuiDataGrid-columnHeaderTitle": {
-      overflow: "hidden",
-      lineHeight: "1",
-      whiteSpace: "initial",
-      textOverflow: "clip",
+    "& .MuiFormControlLabel-root, & .MuiFormGroup-root": {
+      textAlign: "center",
     },
+    "& .MuiDataGrid-columnHeaderTitle, & .MuiDataGrid-columnHeaderTitleContainer, .MuiDataGrid-root .MuiDataGrid-columnHeaderTitle":
+      {
+        overflow: "inherit",
+        lineHeight: "1",
+        whiteSpace: "normal",
+        textOverflow: "clip",
+      },
     "& .MuiSelect-icon": {
       display: "none",
     },
@@ -69,17 +88,14 @@ export default (theme) => ({
     padding: theme.spacing(2),
     textAlign: "center",
   },
-  margin: {
-    margin: theme.spacing(1),
-  },
   withoutLabel: {
     marginTop: theme.spacing(3),
   },
   textField: {
     width: "95%",
 
-    marginLeft: "2.5%",
-    marginBottom: "2.5%",
+    marginLeft: "0",
+    marginBottom: "0",
   },
   fab: {
     position: "absolute",
@@ -183,13 +199,12 @@ export default (theme) => ({
   },
   paper: {
     padding: theme.spacing(1),
+    paddingBottom: 0,
     textAlign: "center",
     color: theme.palette.text.secondary,
+    borderRadius: "5px",
     whiteSpace: "nowrap",
-    marginBottom: theme.spacing(1),
-  },
-  divider: {
-    margin: theme.spacing(2, 0),
+    margin: theme.spacing(5),
   },
   heroContent: {
     padding: theme.spacing(8, 0, 6),
@@ -221,7 +236,7 @@ export default (theme) => ({
     flexWrap: "wrap",
     justifyContent: "space-around",
     overflow: "hidden",
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: "transparent",
   },
   gridImageList: {
     width: "100%",
@@ -256,15 +271,19 @@ export default (theme) => ({
     justifyContent: "flex-start",
     overflow: "hidden",
   },
-  // img: {
-  //   margin: "auto",
-  //   display: "block",
-  //   maxWidth: "100%",
-  //   maxHeight: "100%",
-  // },
+  infoImage: {
+    position: "relative",
+    maxHeight: 200,
+    marginBottom: -10,
+    width: "100%",
+  },
+  topInfoImage: {
+    position: "relative",
+    marginBottom: -10,
+    width: "100%",
+  },
   gridList: {
-    width: 245,
-    height: 245,
+    width: "100%",
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: "translateZ(0)",
   },
@@ -277,9 +296,7 @@ export default (theme) => ({
     color: theme.palette.primary.light,
   },
   titleBar: {
-    background:
-      "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, " +
-      "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
+    background: "transparent",
   },
   imageHead: {
     position: "absolute",
