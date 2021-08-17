@@ -127,6 +127,8 @@ export default functions
       var mu3 = 0.26;
 
       if (payload.advanced) {
+        worksheet["D2"] = { t: "n", v: toNumber(payload.tentType) };
+
         if (ballastMaterial === 1) {
           mu2 = 0.2;
         } else if (ballastMaterial === 2) {
@@ -407,6 +409,7 @@ export default functions
         eaveHeight: toNumber(payload.eaveHeight),
         bandHeight: toNumber(payload.bandHeight),
         roofType: toNumber(payload.roofType),
+        tentType: toNumber(payload.tentType),
         ridgeLength: toNumber(payload.ridgeLength),
         roofHeight: toNumber(payload.roofHeight),
         postsPerWidth: toNumber(payload.postsPerWidth),

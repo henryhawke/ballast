@@ -542,6 +542,7 @@ const Tools = ({ intl }) => {
     tentLength: 40,
     eaveHeight: 8,
     bandHeight: 1,
+    tentType: 1
     roofType: 1,
     ridgeLength: 6,
     valenceHeight: 1,
@@ -608,9 +609,14 @@ const Tools = ({ intl }) => {
   const calculateRef = useRef();
 
   const handleSwitchChange = (event) => {
+    ReactDOM.render(
+      <div></div>,
+      document.getElementById("calculationDataTable")
+    );
+
     setAdvancedBtnDisabled(event.target.checked);
     setValues({ ...values, advanced: event.target.checked });
-    setCalculationDataOpen(false);
+
     calculateRef.current.scrollIntoView();
   };
 
@@ -797,7 +803,7 @@ const Tools = ({ intl }) => {
     }
 
     ReactDOM.render(
-      <Container className={classes.cardGrid}>
+      <Container className={classes.cardGrid} hidden={calculationDataOpen}>
         <div style={{ height: 220 }}>
           <DataGrid
             columns={[
@@ -810,7 +816,7 @@ const Tools = ({ intl }) => {
               },
               {
                 field: "ballastWeight",
-                headerName: "Ballast weight per leg/upright (lbs)",
+                headerName: "Weight of each ballast including plate (lbs)",
                 type: "number",
                 width: 150,
               },
@@ -873,6 +879,9 @@ const Tools = ({ intl }) => {
             autoHeight={true}
             hideFooter={true}
             headerHeight={100}
+            alignItems='center'
+            disableColumnSelector={true}
+            disableColumnFilter={true}
             disableColumnMenu={true}
           />
         </div>
@@ -1750,6 +1759,56 @@ const Tools = ({ intl }) => {
                         }}>
                         <option value={1}>Clear</option>
                         <option value={3}>Obstructed</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+                                {/* Roof Type - 6*/}
+                <Grid item xs={6}>
+                  {/* Roof Type */}
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Three options: Gable, Hip, Pyramid
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      variant='outlined'
+                      className={classes.textField}>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Tent Type
+                      </InputLabel>
+                      <Select
+                        native
+                        label='Tent Type'
+                        defaultValue={1}
+                        value={values.tentType}
+                        onChange={handleSelectChange}
+                        helperText='Frame Tent, Hybrid Tent, Pole Tent'
+                        // endAdornment={
+                        //   <InputAdornment position='end'>
+                        //     <EditRoundedIcon
+                        //       onClick={() => {
+                        //         handleCustomDialog(6);
+                        //         handleFormOpen();
+                        //       }}
+                        //     />
+                        //   </InputAdornment>
+                        // }
+                        inputProps={{
+                          name: "tentType",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={1}>Frame Tent</option>
+                        <option value={2}>Hybrid Tent</option>
+                        <option value={3}>Pole Tent</option>
                       </Select>
                     </FormControl>
                   </HtmlTooltip>
@@ -3048,7 +3107,7 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              b2wplate - Weight of plate
+                              b2Weight of plate
                             </Typography>
                           </React.Fragment>
                         }>
@@ -3056,7 +3115,7 @@ const Tools = ({ intl }) => {
                           className={clsx(classes.textField)}
                           variant='outlined'>
                           <InputLabel htmlFor='outlined-age-native-simple'>
-                            b2wplate - Weight of plate (lbs)
+                            b2Weight of plate (lbs)
                           </InputLabel>
                           <Select
                             native
@@ -3071,7 +3130,7 @@ const Tools = ({ intl }) => {
                             // }
                             //defaultValue={20}
                             hidden={ballastType.fixedToPlate}
-                            label='b2wplate - Weight of plate (lbs)'
+                            label='Weight of plate (lbs)'
                             value={values.b2wplate}
                             onChange={handleSelectChange}
                             inputProps={{
@@ -3368,7 +3427,7 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              mu3 - Weight of plate (lbs)
+                              Weight of plate (lbs)
                             </Typography>
                           </React.Fragment>
                         }>
@@ -3376,7 +3435,7 @@ const Tools = ({ intl }) => {
                           className={clsx(classes.textField)}
                           variant='outlined'>
                           <InputLabel htmlFor='outlined-age-native-simple'>
-                            mu3 - Weight of plate (lbs)
+                            Weight of plate (lbs)
                           </InputLabel>
                           <Select
                             native
@@ -3391,7 +3450,7 @@ const Tools = ({ intl }) => {
                             // }
                             //defaultValue={20}
                             hidden={ballastType.a}
-                            label='mu3 - Weight of plate (lbs)'
+                            label='Weight of plate (lbs)'
                             value={values.awplate}
                             onChange={handleSelectChange}
                             inputProps={{
@@ -3444,8 +3503,7 @@ const Tools = ({ intl }) => {
                           className={clsx(classes.textField)}
                           variant='outlined'>
                           <InputLabel htmlFor='outlined-age-native-simple'>
-                            d1 - Distance btw center of ballast & upright (
-                            {units.size[values.unit]})
+                            d1 - Distance btw center of ballast & upright (ft)
                           </InputLabel>
                           <Select
                             native
@@ -3460,7 +3518,7 @@ const Tools = ({ intl }) => {
                             // }
                             //defaultValue={20}
                             hidden={ballastType.b}
-                            label='d1 - Distance btw center of ballast & upright ({units.size[values.unit]})'
+                            label='d1 - Distance btw center of ballast & upright  (ft)'
                             value={values.bd1}
                             onChange={handleSelectChange}
                             inputProps={{
@@ -3499,7 +3557,7 @@ const Tools = ({ intl }) => {
                           className={clsx(classes.textField)}
                           variant='outlined'>
                           <InputLabel htmlFor='outlined-age-native-simple'>
-                            d2- Distance btw far end of plate & upright(ft)
+                            d2- Distance btw far end of plate & upright (ft)
                           </InputLabel>
                           <Select
                             native
@@ -3885,7 +3943,7 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              wplate - Weight of plate (lbs)
+                              Weight of plate (lbs)
                             </Typography>
                           </React.Fragment>
                         }>
@@ -3893,7 +3951,7 @@ const Tools = ({ intl }) => {
                           className={clsx(classes.textField)}
                           variant='outlined'>
                           <InputLabel htmlFor='outlined-age-native-simple'>
-                            wplate - Weight of plate (lbs)
+                            Weight of plate (lbs)
                           </InputLabel>
                           <Select
                             native
@@ -3908,7 +3966,7 @@ const Tools = ({ intl }) => {
                             // }
                             //defaultValue={20}
                             hidden={ballastType.b}
-                            label='wplate - Weight of plate  (lbs)'
+                            label='Weight of plate  (lbs)'
                             value={values.bwplate}
                             onChange={handleSelectChange}
                             inputProps={{
@@ -3953,7 +4011,7 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              d1 - Distance btw center of ballast & upright
+                              d1 - Distance btw center of ballast & upright (ft)
                             </Typography>
                           </React.Fragment>
                         }>
@@ -3961,8 +4019,7 @@ const Tools = ({ intl }) => {
                           className={clsx(classes.textField)}
                           variant='outlined'>
                           <InputLabel htmlFor='outlined-age-native-simple'>
-                            d1 - Distance btw center of ballast & upright (
-                            {units.size[values.unit]})
+                            d1 - Distance btw center of ballast & upright (ft)
                           </InputLabel>
                           <Select
                             native
@@ -3977,7 +4034,7 @@ const Tools = ({ intl }) => {
                             // }
                             //defaultValue={20}
                             hidden={ballastType.c}
-                            label='d1 - Distance btw center of ballast & upright ({units.size[values.unit]})'
+                            label='d1 - Distance btw center of ballast & upright (ft)'
                             value={values.cd1}
                             onChange={handleSelectChange}
                             inputProps={{
@@ -4545,7 +4602,7 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              wplate - Weight of plate (lbs)
+                              Weight of plate (lbs)
                             </Typography>
                           </React.Fragment>
                         }>
@@ -4553,7 +4610,7 @@ const Tools = ({ intl }) => {
                           className={clsx(classes.textField)}
                           variant='outlined'>
                           <InputLabel htmlFor='outlined-age-native-simple'>
-                            wplate - Weight of plate (lbs)
+                            Weight of plate (lbs)
                           </InputLabel>
                           <Select
                             native

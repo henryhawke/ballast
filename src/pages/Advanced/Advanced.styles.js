@@ -73,8 +73,11 @@ export default (theme) => ({
         whiteSpace: "normal",
         textOverflow: "clip",
       },
-    "& .MuiSelect-icon": {
+    "& .MuiSelect-icon, & .MuiDataGrid-iconButtonContainer": {
       display: "none",
+    },
+    "& .MuiDataGrid-root .MuiDataGrid-cellRight": {
+      textAlign: "center",
     },
   },
   icon: {
