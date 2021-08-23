@@ -51,7 +51,7 @@ export default functions
     const file = admin
       .storage()
       .bucket()
-      .file("storage/38.1-frictioncoeff.xlsx");
+      .file("storage/aug.22.21-main40.1.xlsx");
     return file.download().then((data) => {
       // import your calc functions lib
       XLSX_CALC.import_functions(formulajs);

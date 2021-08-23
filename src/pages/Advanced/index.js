@@ -542,7 +542,7 @@ const Tools = ({ intl }) => {
     tentLength: 40,
     eaveHeight: 8,
     bandHeight: 1,
-    tentType: 1
+    tentType: 1,
     roofType: 1,
     ridgeLength: 6,
     valenceHeight: 1,
@@ -561,40 +561,40 @@ const Tools = ({ intl }) => {
     notes: "",
     ballastType: 1,
     b2mu3: 0.5,
-    b2wplate: 20,
+    b2wplate: 50,
     b2open: 0,
     b2enclosed: 0,
     c2mu1: 0,
     c2open: 0,
     c2enclosed: 0,
-    ad1: 0,
-    ad2: 0,
+    ad1: 2,
+    ad2: 3,
     amu3: 0.5,
-    awplate: 20,
+    awplate: 50,
     aopen: 0,
     aenclosed: 0,
-    bd1: 0,
-    bd2: 0,
-    bd3: 0,
-    bd4: 0,
-    bh4: 0,
+    bd1: 2,
+    bd2: 3,
+    bd3: 1.5,
+    bd4: 2,
+    bh4: 1.5,
     bmu2: 0.5,
     bmu3: 0.5,
-    bwplate: 20,
+    bwplate: 50,
     bopen: 0,
     benclosed: 0,
-    cd1: 0,
-    cd3: 0,
-    cd4: 0,
-    ch4: 0,
+    cd1: 2,
+    cd3: 1.5,
+    cd4: 2,
+    ch4: 1.5,
     cmu1: 0.5,
     copen: 0,
     cenclosed: 0,
-    dd2: 5,
-    dd4: 0,
+    dd2: 3,
+    dd4: 2,
     dd5: 2,
     dmu3: 0.5,
-    dwplate: 20,
+    dwplate: 50,
     dopen: 0,
     denclosed: 0,
     advanced: false,
@@ -934,11 +934,44 @@ const Tools = ({ intl }) => {
   const [dataGridContainer, setGridResults] = React.useState(<div></div>);
   const [btnDisabled, setBtnDisabled] = useState(true);
   const [btnAdvancedDisabled, setAdvancedBtnDisabled] = useState(false);
+  const [isPoleTent, setIsPoleTent] = useState(false);
+
+  const [ballastTypeText, setBallastTypeText] = useState(
+    "Ballast configurations for frame tents: Fixed-to-plate, Fixed-to-pole, A, B, C, D"
+  );
+
   const handleSelectChange = (event) => {
     const name = event.target.name;
     const id = event.target;
     console.log(name);
     console.log(id);
+    if (name === "tentType") {
+      console.log("is tent type change");
+      console.log(event.target.value);
+      if (event.target.value === "1") {
+        //setInfoImages({ ...infoImages, type: gable });
+        //console.log("is gable");
+        setBallastTypeText(
+          "Ballast configurations for frame tents: Fixed-to-plate, Fixed-to-pole, A, B, C, D"
+        );
+        setIsPoleTent(false);
+      } else if (event.target.value === "2") {
+        //setBtnDisabled(false);
+        //console.log("is hip");
+        // setInfoImages({ ...infoImages, type: hip });
+        setBallastTypeText(
+          "Ballast configurations for hybrid tents: Fixed-to-plate, Fixed-to-pole, A, B, C, D"
+        );
+        setIsPoleTent(false);
+      } else {
+        //setInfoImages({ ...infoImages, type: pyramid });
+        //console.log("is pyramid");
+        setBallastTypeText(
+          "Ballast configurations for pole tents: Fixed-to-plate, B, D, C"
+        );
+        setIsPoleTent(true);
+      }
+    }
     if (name === "roofType") {
       console.log("is roof change");
       console.log(event.target.value);
@@ -965,7 +998,7 @@ const Tools = ({ intl }) => {
 
   const [infoImages, setInfoImages] = React.useState({
     type: gable,
-    ballast: ConfigurationA,
+    ballast: ConfigurationB2,
     groundSurface: smoothConcrete,
     ballastMaterial: plasticBarrel,
   });
@@ -1353,7 +1386,7 @@ const Tools = ({ intl }) => {
           <CircularProgress color='inherit' />
         </Backdrop>
 
-        {/* DIALOG FOR CUSTOM INPUT OF FORM VARIABLES */}
+        {/* DIALOG FOR CUSTOM INPUT OF FORM  variableS */}
         <Dialog onClose={handleFormClose} open={openForm}>
           <FormDialogTitle
             id='customized-dialog-title'
@@ -1710,60 +1743,7 @@ const Tools = ({ intl }) => {
                   <Divider />
                 </Grid>
 
-                {/* Wind Flow - 2*/}
-                <Grid item xs={6}>
-                  <HtmlTooltip
-                    enterDelay={200}
-                    leaveDelay={150}
-                    interactive
-                    TransitionComponent={Fade}
-                    TransitionProps={{ timeout: 300 }}
-                    classes={{ tooltip: classes.windFlowWidth }}
-                    title={
-                      <React.Fragment>
-                        <Typography color='inherit'>
-                          Clear - unobstructed wind flow with no blockage (e.g.,
-                          plain, grass land, beach). This is the worst case
-                          scenario. \n Obstructed - objects below roof
-                          inhibiting wind flow with >50% blockage (e.g., urban
-                          environment, high dense vegetation, high cliff)
-                        </Typography>
-                      </React.Fragment>
-                    }>
-                    <FormControl
-                      variant='outlined'
-                      className={classes.textField}>
-                      <InputLabel htmlFor='outlined-age-native-simple'>
-                        Wind Flow
-                      </InputLabel>
-                      <Select
-                        native
-                        defaultValue={1}
-                        label='Wind Flow'
-                        // endAdornment={
-                        //   <InputAdornment position='end'>
-                        //     <EditRoundedIcon
-                        //       onClick={() => {
-                        //         handleCustomDialog(2);
-                        //         handleFormOpen();
-                        //       }}
-                        //     />
-                        //   </InputAdornment>
-                        // }
-                        value={values.windFlow}
-                        onChange={handleSelectChange}
-                        helperText='Clear or Obstructed'
-                        inputProps={{
-                          name: "windFlow",
-                          id: "outlined-age-native-simple",
-                        }}>
-                        <option value={1}>Clear</option>
-                        <option value={3}>Obstructed</option>
-                      </Select>
-                    </FormControl>
-                  </HtmlTooltip>
-                </Grid>
-                                {/* Roof Type - 6*/}
+                {/*Tent Type - 6*/}
                 <Grid item xs={6}>
                   {/* Roof Type */}
                   <HtmlTooltip
@@ -1813,182 +1793,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* Roof Type - 6*/}
-                <Grid item xs={6}>
-                  {/* Roof Type */}
-                  <HtmlTooltip
-                    enterDelay={200}
-                    leaveDelay={150}
-                    interactive
-                    TransitionComponent={Fade}
-                    TransitionProps={{ timeout: 300 }}
-                    title={
-                      <React.Fragment>
-                        <Typography color='inherit'>
-                          Three options: Gable, Hip, Pyramid
-                        </Typography>
-                      </React.Fragment>
-                    }>
-                    <FormControl
-                      variant='outlined'
-                      className={classes.textField}>
-                      <InputLabel htmlFor='outlined-age-native-simple'>
-                        Roof Type
-                      </InputLabel>
-                      <Select
-                        native
-                        label='Roof Type'
-                        defaultValue={1}
-                        value={values.roofType}
-                        onChange={handleSelectChange}
-                        helperText='Gable, Hip, Pyramid'
-                        // endAdornment={
-                        //   <InputAdornment position='end'>
-                        //     <EditRoundedIcon
-                        //       onClick={() => {
-                        //         handleCustomDialog(6);
-                        //         handleFormOpen();
-                        //       }}
-                        //     />
-                        //   </InputAdornment>
-                        // }
-                        inputProps={{
-                          name: "roofType",
-                          id: "outlined-age-native-simple",
-                        }}>
-                        <option value={1}>Gable</option>
-                        <option value={2}>Hip</option>
-                        <option value={3}>Pyramid</option>
-                      </Select>
-                    </FormControl>
-                  </HtmlTooltip>
-                </Grid>
-                {/* Wind Speed - 1*/}
-                <Grid item xs={6}>
-                  <HtmlTooltip
-                    enterDelay={200}
-                    leaveDelay={150}
-                    interactive
-                    TransitionComponent={Fade}
-                    TransitionProps={{ timeout: 300 }}
-                    title={
-                      <React.Fragment>
-                        <Typography color='inherit'>
-                          Maximum Wind Speed expected while tent is setup (
-                          {units.speed[values.unit]})
-                        </Typography>
-                      </React.Fragment>
-                    }>
-                    <FormControl
-                      className={clsx(classes.textField)}
-                      variant='outlined'>
-                      <Autocomplete
-                        id='windSpeed'
-                        getOptionLabel={(option) => {
-                          if (typeof option === "string") {
-                            return option;
-                          }
-                          // Add "xxx" option created dynamically
-                          if (option.inputValues) {
-                            return option.inputValues;
-                          }
-                          return option.toString();
-                        }}
-                        freeSolo
-                        autoSelect
-                        selectOnFocus
-                        clearOnBlur
-                        handleHomeEndKeys
-                        inputValue={inputValues["windSpeed"]}
-                        onInputChange={(event, newInputValue) => {
-                          setInputValues({
-                            ...inputValues,
-                            windSpeed: newInputValue,
-                          });
-                        }}
-                        //defaultValue={values.windSpeed}
-                        value={values.windSpeed}
-                        // endAdornment={
-                        //   <InputAdornment position='end'>
-                        //     <EditRoundedIcon
-                        //       onClick={() => {
-                        //         handleCustomDialog(9);
-                        //       }}
-                        //     />
-                        //   </InputAdornment>
-                        // }
-                        onChange={(event, newValue) => {
-                          setValues({
-                            ...values,
-                            windSpeed: newValue,
-                          });
-                        }}
-                        options={[
-                          10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120,
-                          130, 140, 150, 160,
-                        ]}
-                        renderInput={(params) => (
-                          <TextField
-                            onKeyPress={(e) => {
-                              e.key === "Enter" && e.preventDefault();
-                            }}
-                            {...params}
-                            inputProps={{
-                              ...params.inputProps,
-                              name: "windSpeed",
-                            }}
-                            label='Wind Speed (mph)'
-                            margin='normal'
-                            variant='outlined'
-                          />
-                        )}
-                      />
-                    </FormControl>
-                    {/* <FormControl
-                      className={clsx(classes.textField)}
-                      variant='outlined'>
-                      <InputLabel htmlFor='outlined-age-native-simple'>
-                        Wind Speed ({units.speed[values.unit]})
-                      </InputLabel>
-                      <Select
-                        native
-                        endAdornment={
-                          <InputAdornment position='end'>
-                            <EditRoundedIcon
-                              onClick={() => {
-                                handleCustomDialog(1);
-                              }}
-                            />
-                          </InputAdornment>
-                        }
-                        //defaultValue={20}
-                        label='Wind Speed ({units.speed[values.unit]})'
-                        value={values.windSpeed}
-                        name='windSpeed'
-                        onChange={handleSelectChange}
-                        inputProps={{
-                          name: "windSpeed",
-                          id: "outlined-age-native-simple",
-                        }}>
-                        <option value={10}>10</option>
-                        <option value={20}>20</option>
-                        <option value={30}>30</option>
-                        <option value={40}>40</option>
-                        <option value={50}>50</option>
-                        <option value={60}>60</option>
-                        <option value={70}>70</option>
-                        <option value={80}>80</option>
-                        <option value={90}>90</option>
-                        <option value={100}>100</option>
-                        <option value={110}>110</option>
-                        <option value={120}>120</option>
-                        <option value={130}>130</option>
-                        <option value={140}>140</option>
-                        <option value={150}>150</option>
-                      </Select>
-                    </FormControl> */}
-                  </HtmlTooltip>
-                </Grid>
+
                 {/* Tent Width - 3*/}
                 <Grid item xs={6}>
                   {/* Tent Width */}
@@ -2069,6 +1874,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
+
                 {/* Tent Length - 4*/}
                 <Grid item xs={6}>
                   <HtmlTooltip
@@ -2149,8 +1955,10 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
-                {/* Eave Height - 5*/}
+
+                {/* Roof Type - 6*/}
                 <Grid item xs={6}>
+                  {/* Roof Type */}
                   <HtmlTooltip
                     enterDelay={200}
                     leaveDelay={150}
@@ -2160,76 +1968,45 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Vertical distance btw the ground of the lowest part of
-                          the roof. The band is neglected.
+                          Three options: Gable, Hip, Pyramid
                         </Typography>
                       </React.Fragment>
                     }>
-                    {/* Eave Height */}
                     <FormControl
-                      className={clsx(classes.textField)}
-                      variant='outlined'>
-                      <Autocomplete
-                        id='eaveHeight'
-                        getOptionLabel={(option) => {
-                          if (typeof option === "string") {
-                            return option;
-                          }
-                          // Add "xxx" option created dynamically
-                          if (option.inputValues) {
-                            return option.inputValues;
-                          }
-                          return option.toString();
-                        }}
-                        freeSolo
-                        autoSelect
-                        selectOnFocus
-                        clearOnBlur
-                        handleHomeEndKeys
-                        inputValue={inputValues["eaveHeight"]}
-                        onInputChange={(event, newInputValue) => {
-                          setInputValues({
-                            ...inputValues,
-                            eaveHeight: newInputValue,
-                          });
-                        }}
-                        //defaultValue={values.postsPerLength}
-                        value={values.eaveHeight}
+                      variant='outlined'
+                      className={classes.textField}>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Roof Type
+                      </InputLabel>
+                      <Select
+                        native
+                        label='Roof Type'
+                        defaultValue={1}
+                        value={values.roofType}
+                        onChange={handleSelectChange}
+                        helperText='Gable, Hip, Pyramid'
                         // endAdornment={
                         //   <InputAdornment position='end'>
                         //     <EditRoundedIcon
                         //       onClick={() => {
-                        //         handleCustomDialog(9);
+                        //         handleCustomDialog(6);
+                        //         handleFormOpen();
                         //       }}
                         //     />
                         //   </InputAdornment>
                         // }
-                        onChange={(event, newValue) => {
-                          setValues({
-                            ...values,
-                            eaveHeight: newValue,
-                          });
-                        }}
-                        options={[7, 8, 9, 10]}
-                        renderInput={(params) => (
-                          <TextField
-                            onKeyPress={(e) => {
-                              e.key === "Enter" && e.preventDefault();
-                            }}
-                            {...params}
-                            inputProps={{
-                              ...params.inputProps,
-                              name: "eaveHeight",
-                            }}
-                            label='Eave Height (ft)'
-                            margin='normal'
-                            variant='outlined'
-                          />
-                        )}
-                      />
+                        inputProps={{
+                          name: "roofType",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={1}>Gable</option>
+                        <option value={2}>Hip</option>
+                        <option value={3}>Pyramid</option>
+                      </Select>
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
+
                 {/* Ridge Length - 7*/}
                 <Grid item xs={6}>
                   <HtmlTooltip
@@ -2312,6 +2089,89 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
+
+                {/* Eave Height - 5*/}
+                <Grid item xs={6}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Vertical distance btw the ground of the lowest part of
+                          the roof. The band is neglected.
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    {/* Eave Height */}
+                    <FormControl
+                      className={clsx(classes.textField)}
+                      variant='outlined'>
+                      <Autocomplete
+                        id='eaveHeight'
+                        getOptionLabel={(option) => {
+                          if (typeof option === "string") {
+                            return option;
+                          }
+                          // Add "xxx" option created dynamically
+                          if (option.inputValues) {
+                            return option.inputValues;
+                          }
+                          return option.toString();
+                        }}
+                        freeSolo
+                        autoSelect
+                        selectOnFocus
+                        clearOnBlur
+                        handleHomeEndKeys
+                        inputValue={inputValues["eaveHeight"]}
+                        onInputChange={(event, newInputValue) => {
+                          setInputValues({
+                            ...inputValues,
+                            eaveHeight: newInputValue,
+                          });
+                        }}
+                        //defaultValue={values.postsPerLength}
+                        value={values.eaveHeight}
+                        // endAdornment={
+                        //   <InputAdornment position='end'>
+                        //     <EditRoundedIcon
+                        //       onClick={() => {
+                        //         handleCustomDialog(9);
+                        //       }}
+                        //     />
+                        //   </InputAdornment>
+                        // }
+                        onChange={(event, newValue) => {
+                          setValues({
+                            ...values,
+                            eaveHeight: newValue,
+                          });
+                        }}
+                        options={[7, 8, 9, 10]}
+                        renderInput={(params) => (
+                          <TextField
+                            onKeyPress={(e) => {
+                              e.key === "Enter" && e.preventDefault();
+                            }}
+                            {...params}
+                            inputProps={{
+                              ...params.inputProps,
+                              name: "eaveHeight",
+                            }}
+                            label='Eave Height (ft)'
+                            margin='normal'
+                            variant='outlined'
+                          />
+                        )}
+                      />
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+
                 {/* Roof Height - 8*/}
                 <Grid item xs={6}>
                   <HtmlTooltip
@@ -2545,6 +2405,7 @@ const Tools = ({ intl }) => {
                     </FormControl> */}
                   </HtmlTooltip>
                 </Grid>
+
                 {/* Posts In Length - 9*/}
                 <Grid item xs={6}>
                   {/* Posts Per Length */}
@@ -2709,6 +2570,7 @@ const Tools = ({ intl }) => {
                     </FormControl>
                   </HtmlTooltip>
                 </Grid>
+
                 {/* Ballasts Per Corner - 11*/}
                 <Grid item xs={6}>
                   {/* ballastsPerCornerPost */}
@@ -2753,6 +2615,187 @@ const Tools = ({ intl }) => {
                         <option value={1}>1</option>
                         <option value={2}>2</option>
                         <option value={3}>3</option>
+                      </Select>
+                    </FormControl>
+                  </HtmlTooltip>
+                </Grid>
+
+                {/* Wind Speed - 1*/}
+                <Grid item xs={6}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Maximum Wind Speed expected while tent is setup (
+                          {units.speed[values.unit]})
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      className={clsx(classes.textField)}
+                      variant='outlined'>
+                      <Autocomplete
+                        id='windSpeed'
+                        getOptionLabel={(option) => {
+                          if (typeof option === "string") {
+                            return option;
+                          }
+                          // Add "xxx" option created dynamically
+                          if (option.inputValues) {
+                            return option.inputValues;
+                          }
+                          return option.toString();
+                        }}
+                        freeSolo
+                        autoSelect
+                        selectOnFocus
+                        clearOnBlur
+                        handleHomeEndKeys
+                        inputValue={inputValues["windSpeed"]}
+                        onInputChange={(event, newInputValue) => {
+                          setInputValues({
+                            ...inputValues,
+                            windSpeed: newInputValue,
+                          });
+                        }}
+                        //defaultValue={values.windSpeed}
+                        value={values.windSpeed}
+                        // endAdornment={
+                        //   <InputAdornment position='end'>
+                        //     <EditRoundedIcon
+                        //       onClick={() => {
+                        //         handleCustomDialog(9);
+                        //       }}
+                        //     />
+                        //   </InputAdornment>
+                        // }
+                        onChange={(event, newValue) => {
+                          setValues({
+                            ...values,
+                            windSpeed: newValue,
+                          });
+                        }}
+                        options={[
+                          10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120,
+                          130, 140, 150, 160,
+                        ]}
+                        renderInput={(params) => (
+                          <TextField
+                            onKeyPress={(e) => {
+                              e.key === "Enter" && e.preventDefault();
+                            }}
+                            {...params}
+                            inputProps={{
+                              ...params.inputProps,
+                              name: "windSpeed",
+                            }}
+                            label='Wind Speed (mph)'
+                            margin='normal'
+                            variant='outlined'
+                          />
+                        )}
+                      />
+                    </FormControl>
+                    {/* <FormControl
+                      className={clsx(classes.textField)}
+                      variant='outlined'>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Wind Speed ({units.speed[values.unit]})
+                      </InputLabel>
+                      <Select
+                        native
+                        endAdornment={
+                          <InputAdornment position='end'>
+                            <EditRoundedIcon
+                              onClick={() => {
+                                handleCustomDialog(1);
+                              }}
+                            />
+                          </InputAdornment>
+                        }
+                        //defaultValue={20}
+                        label='Wind Speed ({units.speed[values.unit]})'
+                        value={values.windSpeed}
+                        name='windSpeed'
+                        onChange={handleSelectChange}
+                        inputProps={{
+                          name: "windSpeed",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
+                        <option value={50}>50</option>
+                        <option value={60}>60</option>
+                        <option value={70}>70</option>
+                        <option value={80}>80</option>
+                        <option value={90}>90</option>
+                        <option value={100}>100</option>
+                        <option value={110}>110</option>
+                        <option value={120}>120</option>
+                        <option value={130}>130</option>
+                        <option value={140}>140</option>
+                        <option value={150}>150</option>
+                      </Select>
+                    </FormControl> */}
+                  </HtmlTooltip>
+                </Grid>
+
+                {/* Wind Flow - 2*/}
+                <Grid item xs={6}>
+                  <HtmlTooltip
+                    enterDelay={200}
+                    leaveDelay={150}
+                    interactive
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 300 }}
+                    classes={{ tooltip: classes.windFlowWidth }}
+                    title={
+                      <React.Fragment>
+                        <Typography color='inherit'>
+                          Clear - unobstructed wind flow with no blockage (e.g.,
+                          plain, grass land, beach). This is the worst case
+                          scenario. \n Obstructed - objects below roof
+                          inhibiting wind flow with >50% blockage (e.g., urban
+                          environment, high dense vegetation, high cliff)
+                        </Typography>
+                      </React.Fragment>
+                    }>
+                    <FormControl
+                      variant='outlined'
+                      className={classes.textField}>
+                      <InputLabel htmlFor='outlined-age-native-simple'>
+                        Wind Flow
+                      </InputLabel>
+                      <Select
+                        native
+                        defaultValue={1}
+                        label='Wind Flow'
+                        // endAdornment={
+                        //   <InputAdornment position='end'>
+                        //     <EditRoundedIcon
+                        //       onClick={() => {
+                        //         handleCustomDialog(2);
+                        //         handleFormOpen();
+                        //       }}
+                        //     />
+                        //   </InputAdornment>
+                        // }
+                        value={values.windFlow}
+                        onChange={handleSelectChange}
+                        helperText='Clear or Obstructed'
+                        inputProps={{
+                          name: "windFlow",
+                          id: "outlined-age-native-simple",
+                        }}>
+                        <option value={1}>Clear</option>
+                        <option value={3}>Obstructed</option>
                       </Select>
                     </FormControl>
                   </HtmlTooltip>
@@ -2831,6 +2874,10 @@ const Tools = ({ intl }) => {
                     alignItems='center'
                     spacing={1}>
                     <Grid item xs={12} md={3}>
+                      <Typography variant='subtitle2' gutterBottom>
+                        {ballastTypeText}
+                      </Typography>
+
                       <HtmlTooltip
                         enterDelay={200}
                         leaveDelay={150}
@@ -2875,8 +2922,12 @@ const Tools = ({ intl }) => {
                               id: "outlined-age-native-simple",
                             }}>
                             <option value={1}>Fixed-To-Plate</option>
-                            <option value={2}>Fixed-To-Pole</option>
-                            <option value={3}>A</option>
+                            <option disabled={isPoleTent} value={2}>
+                              Fixed-To-Pole
+                            </option>
+                            <option disabled={isPoleTent} value={3}>
+                              A
+                            </option>
                             <option value={4}>B</option>
                             <option value={5}>C</option>
                             <option value={6}>D</option>
@@ -3041,56 +3092,6 @@ const Tools = ({ intl }) => {
                       <Divider />
                     </Grid>
 
-                    {/* <Grid
-                      item
-                      xs={6}
-                      style={{
-                        display: ballastType.fixedToPlate ? "inherit" : "none",
-                      }}>
-                      <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
-                        interactive
-                        TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
-                        title={
-                          <React.Fragment>
-                            <Typography color='inherit'>
-                              Friction coefficient btw plate & ground
-                            </Typography>
-                          </React.Fragment>
-                        }>
-                        <FormControl
-                          className={clsx(classes.textField)}
-                          variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            Friction coefficient btw plate & ground
-                          </InputLabel>
-                          <Select
-                            native
-                            endAdornment={
-                              <InputAdornment position='end'>
-                                <EditRoundedIcon
-                                  onClick={() => {
-                                    handleCustomDialog(13);
-                                  }}
-                                />
-                              </InputAdornment>
-                            }
-                            hidden={ballastType.fixedToPlate}
-                            //defaultValue={20}
-                            label='Friction coefficient btw plate & ground '
-                            value={values.b2mu3}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "b2mu3",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={0.5}>0.5</option>
-                          </Select>
-                        </FormControl>
-                      </HtmlTooltip>
-                    </Grid> */}
                     {/* b2wplate: 0,Weight of plate  14*/}
                     <Grid
                       item
@@ -3099,135 +3100,86 @@ const Tools = ({ intl }) => {
                         display: ballastType.fixedToPlate ? "inherit" : "none",
                       }}>
                       <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
+                        enterDelay={400}
+                        leaveDelay={300}
                         interactive
                         TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
+                        TransitionProps={{ timeout: 600 }}
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              b2Weight of plate
+                              Weight of plate (lbs)
                             </Typography>
                           </React.Fragment>
                         }>
                         <FormControl
                           className={clsx(classes.textField)}
                           variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            b2Weight of plate (lbs)
-                          </InputLabel>
-                          <Select
-                            native
+                          <Autocomplete
+                            id='b2wplate'
+                            getOptionLabel={(option) => {
+                              if (typeof option === "string") {
+                                return option;
+                              }
+                              // Add "xxx" option created dynamically
+                              if (option.inputValues) {
+                                return option.inputValues;
+                              }
+                              return option.toString();
+                            }}
+                            freeSolo
+                            autoSelect
+                            selectOnFocus
+                            clearOnBlur
+                            handleHomeEndKeys
+                            inputValue={inputValues["b2wplate"]}
+                            onInputChange={(event, newInputValue) => {
+                              setInputValues({
+                                ...inputValues,
+                                b2wplate: newInputValue,
+                              });
+                            }}
+                            //defaultValue={values.postsPerLength}
+                            value={values.b2wplate}
                             // endAdornment={
                             //   <InputAdornment position='end'>
                             //     <EditRoundedIcon
                             //       onClick={() => {
-                            //         handleCustomDialog(14);
+                            //         handleCustomDialog(9);
                             //       }}
                             //     />
                             //   </InputAdornment>
                             // }
-                            //defaultValue={20}
-                            hidden={ballastType.fixedToPlate}
-                            label='Weight of plate (lbs)'
-                            value={values.b2wplate}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "b2wplate",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={10}>10</option>
-                            <option value={20}>20</option>
-                            <option value={30}>30</option>
-                            <option value={40}>40</option>
-                            <option value={50}>50</option>
-                            <option value={60}>60</option>
-                            <option value={70}>70</option>
-                            <option value={80}>80</option>
-                            <option value={90}>90</option>
-                            <option value={100}>100</option>
-                            <option value={110}>110</option>
-                            <option value={120}>120</option>
-                            <option value={130}>130</option>
-                            <option value={140}>140</option>
-                            <option value={150}>150</option>
-                          </Select>
+                            onChange={(event, newValue) => {
+                              setValues({
+                                ...values,
+                                b2wplate: newValue,
+                              });
+                            }}
+                            options={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+                            renderInput={(params) => (
+                              <TextField
+                                onKeyPress={(e) => {
+                                  e.key === "Enter" && e.preventDefault();
+                                }}
+                                {...params}
+                                inputProps={{
+                                  ...params.inputProps,
+                                  name: "b2wplate",
+                                }}
+                                label='Weight of plate (lbs)'
+                                margin='normal'
+                                variant='outlined'
+                              />
+                            )}
+                          />
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
-                    {/* 
-                C2 SELECTION
-                 */}
-                    {/* c2mu1: 0,Friction coefficient btw ballast & ground (if applicable) 
-                15*/}
-                    {/* <Grid
-                      item
-                      xs={6}
-                      style={{
-                        display: ballastType.fixedToPole ? "inherit" : "none",
-                      }}>
-                      <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
-                        interactive
-                        TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
-                        title={
-                          <React.Fragment>
-                            <Typography color='inherit'>
-                              Friction coefficient btw ballast & ground (if
-                              applicable)
-                            </Typography>
-                          </React.Fragment>
-                        }>
-                        <FormControl
-                          className={clsx(classes.textField)}
-                          variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            Friction coefficient btw ballast & ground
-                          </InputLabel>
-                          <Select
-                            native
-                            endAdornment={
-                              <InputAdornment position='end'>
-                                <EditRoundedIcon
-                                  onClick={() => {
-                                    handleCustomDialog(15);
-                                  }}
-                                />
-                              </InputAdornment>
-                            }
-                            //defaultValue={20}
-                            hidden={ballastType.fixedToPole}
-                            label='Friction coefficient btw ballast & ground (if applicable)'
-                            value={values.c2mu1}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "c2mu1",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={10}>10</option>
-                            <option value={20}>20</option>
-                            <option value={30}>30</option>
-                            <option value={40}>40</option>
-                            <option value={50}>50</option>
-                            <option value={60}>60</option>
-                            <option value={70}>70</option>
-                            <option value={80}>80</option>
-                            <option value={90}>90</option>
-                            <option value={100}>100</option>
-                            <option value={110}>110</option>
-                            <option value={120}>120</option>
-                            <option value={130}>130</option>
-                            <option value={140}>140</option>
-                            <option value={150}>150</option>
-                          </Select>
-                        </FormControl>
-                      </HtmlTooltip>
-                    </Grid> */}
+
                     {/* A SELECTION */}
                     {/* ad1: 0, d1 - Distance btw center of ballast & upright (ft)  16*/}
+
                     <Grid
                       item
                       xs={6}
@@ -3235,11 +3187,11 @@ const Tools = ({ intl }) => {
                         display: ballastType.a ? "inherit" : "none",
                       }}>
                       <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
+                        enterDelay={400}
+                        leaveDelay={300}
                         interactive
                         TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
+                        TransitionProps={{ timeout: 600 }}
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
@@ -3250,34 +3202,64 @@ const Tools = ({ intl }) => {
                         <FormControl
                           className={clsx(classes.textField)}
                           variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            d1 - Distance btw center of ballast & upright (ft)
-                          </InputLabel>
-                          <Select
-                            native
+                          <Autocomplete
+                            id='ad1'
+                            getOptionLabel={(option) => {
+                              if (typeof option === "string") {
+                                return option;
+                              }
+                              // Add "xxx" option created dynamically
+                              if (option.inputValues) {
+                                return option.inputValues;
+                              }
+                              return option.toString();
+                            }}
+                            freeSolo
+                            autoSelect
+                            selectOnFocus
+                            clearOnBlur
+                            handleHomeEndKeys
+                            inputValue={inputValues["ad1"]}
+                            onInputChange={(event, newInputValue) => {
+                              setInputValues({
+                                ...inputValues,
+                                ad1: newInputValue,
+                              });
+                            }}
+                            //defaultValue={values.postsPerLength}
+                            value={values.ad1}
                             // endAdornment={
                             //   <InputAdornment position='end'>
                             //     <EditRoundedIcon
                             //       onClick={() => {
-                            //         handleCustomDialog(16);
+                            //         handleCustomDialog(9);
                             //       }}
                             //     />
                             //   </InputAdornment>
                             // }
-                            //defaultValue={20}
-                            hidden={ballastType.a}
-                            label='d1 - Distance btw center of ballast & upright (ft)'
-                            value={values.ad1}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "ad1",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={1}>1</option>
-                            <option value={2}>2</option>
-                            <option value={3}>3</option>
-                            <option value={4}>4</option>
-                          </Select>
+                            onChange={(event, newValue) => {
+                              setValues({
+                                ...values,
+                                ad1: newValue,
+                              });
+                            }}
+                            options={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+                            renderInput={(params) => (
+                              <TextField
+                                onKeyPress={(e) => {
+                                  e.key === "Enter" && e.preventDefault();
+                                }}
+                                {...params}
+                                inputProps={{
+                                  ...params.inputProps,
+                                  name: "ad1",
+                                }}
+                                label='d1 - Distance btw center of ballast & upright (ft)'
+                                margin='normal'
+                                variant='outlined'
+                              />
+                            )}
+                          />
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
@@ -3289,128 +3271,82 @@ const Tools = ({ intl }) => {
                         display: ballastType.a ? "inherit" : "none",
                       }}>
                       <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
+                        enterDelay={400}
+                        leaveDelay={300}
                         interactive
                         TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
+                        TransitionProps={{ timeout: 600 }}
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              d2 - Distance btw far end of plate & upright
+                              d2 - Distance btw far end of plate & upright (ft)
                             </Typography>
                           </React.Fragment>
                         }>
                         <FormControl
                           className={clsx(classes.textField)}
                           variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            d2 - Distance btw far end of plate & upright (ft)
-                          </InputLabel>
-                          <Select
-                            native
+                          <Autocomplete
+                            id='ad2'
+                            getOptionLabel={(option) => {
+                              if (typeof option === "string") {
+                                return option;
+                              }
+                              // Add "xxx" option created dynamically
+                              if (option.inputValues) {
+                                return option.inputValues;
+                              }
+                              return option.toString();
+                            }}
+                            freeSolo
+                            autoSelect
+                            selectOnFocus
+                            clearOnBlur
+                            handleHomeEndKeys
+                            inputValue={inputValues["ad2"]}
+                            onInputChange={(event, newInputValue) => {
+                              setInputValues({
+                                ...inputValues,
+                                ad2: newInputValue,
+                              });
+                            }}
+                            //defaultValue={values.postsPerLength}
+                            value={values.ad2}
                             // endAdornment={
                             //   <InputAdornment position='end'>
                             //     <EditRoundedIcon
                             //       onClick={() => {
-                            //         handleCustomDialog(17);
+                            //         handleCustomDialog(9);
                             //       }}
                             //     />
                             //   </InputAdornment>
                             // }
-                            //defaultValue={20}
-                            hidden={ballastType.a}
-                            label='d2 - Distance btw far end of plate & upright (ft)'
-                            value={values.ad2}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "ad2",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={10}>10</option>
-                            <option value={20}>20</option>
-                            <option value={30}>30</option>
-                            <option value={40}>40</option>
-                            <option value={50}>50</option>
-                            <option value={60}>60</option>
-                            <option value={70}>70</option>
-                            <option value={80}>80</option>
-                            <option value={90}>90</option>
-                            <option value={100}>100</option>
-                            <option value={110}>110</option>
-                            <option value={120}>120</option>
-                            <option value={130}>130</option>
-                            <option value={140}>140</option>
-                            <option value={150}>150</option>
-                          </Select>
+                            onChange={(event, newValue) => {
+                              setValues({
+                                ...values,
+                                ad2: newValue,
+                              });
+                            }}
+                            options={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+                            renderInput={(params) => (
+                              <TextField
+                                onKeyPress={(e) => {
+                                  e.key === "Enter" && e.preventDefault();
+                                }}
+                                {...params}
+                                inputProps={{
+                                  ...params.inputProps,
+                                  name: "ad2",
+                                }}
+                                label='d2 - Distance btw far end of plate & upright (ft)'
+                                margin='normal'
+                                variant='outlined'
+                              />
+                            )}
+                          />
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
-                    {/* amu3: 0,Friction coefficient btw plate & ground  18*/}
-                    {/* <Grid
-                      item
-                      xs={6}
-                      style={{
-                        display: ballastType.a ? "inherit" : "none",
-                      }}>
-                      <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
-                        interactive
-                        TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
-                        title={
-                          <React.Fragment>
-                            <Typography color='inherit'>
-                              Friction coefficient btw plate & ground
-                            </Typography>
-                          </React.Fragment>
-                        }>
-                        <FormControl
-                          className={clsx(classes.textField)}
-                          variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            Friction coefficient btw plate & ground
-                          </InputLabel>
-                          <Select
-                            native
-                            endAdornment={
-                              <InputAdornment position='end'>
-                                <EditRoundedIcon
-                                  onClick={() => {
-                                    handleCustomDialog(18);
-                                  }}
-                                />
-                              </InputAdornment>
-                            }
-                            //defaultValue={20}
-                            hidden={ballastType.a}
-                            label=' Friction coefficient btw plate & ground '
-                            value={values.amu3}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "amu3",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={10}>10</option>
-                            <option value={20}>20</option>
-                            <option value={30}>30</option>
-                            <option value={40}>40</option>
-                            <option value={50}>50</option>
-                            <option value={60}>60</option>
-                            <option value={70}>70</option>
-                            <option value={80}>80</option>
-                            <option value={90}>90</option>
-                            <option value={100}>100</option>
-                            <option value={110}>110</option>
-                            <option value={120}>120</option>
-                            <option value={130}>130</option>
-                            <option value={140}>140</option>
-                            <option value={150}>150</option>
-                          </Select>
-                        </FormControl>
-                      </HtmlTooltip>
-                    </Grid> */}
                     {/* awplate: 0, Weight of plate  19*/}
                     <Grid
                       item
@@ -3419,11 +3355,11 @@ const Tools = ({ intl }) => {
                         display: ballastType.a ? "inherit" : "none",
                       }}>
                       <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
+                        enterDelay={400}
+                        leaveDelay={300}
                         interactive
                         TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
+                        TransitionProps={{ timeout: 600 }}
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
@@ -3434,52 +3370,63 @@ const Tools = ({ intl }) => {
                         <FormControl
                           className={clsx(classes.textField)}
                           variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            Weight of plate (lbs)
-                          </InputLabel>
-                          <Select
-                            native
-                            // endAdornment={
-                            //   <InputAdornment position='end'>
-                            //     <EditRoundedIcon
-                            //       onClick={() => {
-                            //         handleCustomDialog(19);
-                            //       }}
-                            //     />
-                            //   </InputAdornment>
-                            // }
-                            //defaultValue={20}
-                            hidden={ballastType.a}
-                            label='Weight of plate (lbs)'
+                          <Autocomplete
+                            id='awplate'
+                            getOptionLabel={(option) => {
+                              if (typeof option === "string") {
+                                return option;
+                              }
+
+                              if (option.inputValues) {
+                                return option.inputValues;
+                              }
+                              return option.toString();
+                            }}
+                            freeSolo
+                            autoSelect
+                            selectOnFocus
+                            clearOnBlur
+                            handleHomeEndKeys
+                            inputValue={inputValues["awplate"]}
+                            onInputChange={(event, newInputValue) => {
+                              setInputValues({
+                                ...inputValues,
+                                awplate: newInputValue,
+                              });
+                            }}
                             value={values.awplate}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "awplate",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={10}>10</option>
-                            <option value={20}>20</option>
-                            <option value={30}>30</option>
-                            <option value={40}>40</option>
-                            <option value={50}>50</option>
-                            <option value={60}>60</option>
-                            <option value={70}>70</option>
-                            <option value={80}>80</option>
-                            <option value={90}>90</option>
-                            <option value={100}>100</option>
-                            <option value={110}>110</option>
-                            <option value={120}>120</option>
-                            <option value={130}>130</option>
-                            <option value={140}>140</option>
-                            <option value={150}>150</option>
-                          </Select>
+                            onChange={(event, newValue) => {
+                              setValues({
+                                ...values,
+                                awplate: newValue,
+                              });
+                            }}
+                            options={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+                            renderInput={(params) => (
+                              <TextField
+                                onKeyPress={(e) => {
+                                  e.key === "Enter" && e.preventDefault();
+                                }}
+                                {...params}
+                                inputProps={{
+                                  ...params.inputProps,
+                                  name: "awplate",
+                                }}
+                                label='Weight of plate (lbs)'
+                                margin='normal'
+                                variant='outlined'
+                              />
+                            )}
+                          />
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
+
                     {/* 
                 B SELECTION
                  */}
                     {/* bd1: 0, d1 - Distance btw center of ballast & upright (ft)  20*/}
+
                     <Grid
                       item
                       xs={6}
@@ -3487,53 +3434,85 @@ const Tools = ({ intl }) => {
                         display: ballastType.b ? "inherit" : "none",
                       }}>
                       <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
+                        enterDelay={400}
+                        leaveDelay={300}
                         interactive
                         TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
+                        TransitionProps={{ timeout: 600 }}
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              d1 - Distance btw center of ballast & upright
+                              d1 - Distance btw center of ballast & upright (ft)
                             </Typography>
                           </React.Fragment>
                         }>
                         <FormControl
                           className={clsx(classes.textField)}
                           variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            d1 - Distance btw center of ballast & upright (ft)
-                          </InputLabel>
-                          <Select
-                            native
-                            // endAdornment={
-                            //   <InputAdornment position='end'>
-                            //     <EditRoundedIcon
-                            //       onClick={() => {
-                            //         handleCustomDialog(20);
-                            //       }}
-                            //     />
-                            //   </InputAdornment>
-                            // }
-                            //defaultValue={20}
-                            hidden={ballastType.b}
-                            label='d1 - Distance btw center of ballast & upright  (ft)'
+                          <Autocomplete
+                            id='bd1'
+                            getOptionLabel={(option) => {
+                              if (typeof option === "string") {
+                                return option;
+                              }
+                              // Add "xxx" option created dynamically
+                              if (option.inputValues) {
+                                return option.inputValues;
+                              }
+                              return option.toString();
+                            }}
+                            freeSolo
+                            autoSelect
+                            selectOnFocus
+                            clearOnBlur
+                            handleHomeEndKeys
+                            inputValue={inputValues["bd1"]}
+                            onInputChange={(event, newInputValue) => {
+                              setInputValues({
+                                ...inputValues,
+                                bd1: newInputValue,
+                              });
+                            }}
+                            //defaultValue={values.postsPerLength}
                             value={values.bd1}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "bd1",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={1}>1</option>
-                            <option value={2}>2</option>
-                            <option value={3}>3</option>
-                            <option value={4}>4</option>
-                          </Select>
+                            // endAdornment={
+                            //   <InputAdornment position='end'>
+                            //     <EditRoundedIcon
+                            //       onClick={() => {
+                            //         handleCustomDialog(9);
+                            //       }}
+                            //     />
+                            //   </InputAdornment>
+                            // }
+                            onChange={(event, newValue) => {
+                              setValues({
+                                ...values,
+                                bd1: newValue,
+                              });
+                            }}
+                            options={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+                            renderInput={(params) => (
+                              <TextField
+                                onKeyPress={(e) => {
+                                  e.key === "Enter" && e.preventDefault();
+                                }}
+                                {...params}
+                                inputProps={{
+                                  ...params.inputProps,
+                                  name: "bd1",
+                                }}
+                                label='d1 - Distance btw center of ballast & upright (ft)'
+                                margin='normal'
+                                variant='outlined'
+                              />
+                            )}
+                          />
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
+
                     {/* bd2:0,Distance btw far end of plate & upright (ft) 21*/}
+
                     <Grid
                       item
                       xs={6}
@@ -3541,64 +3520,85 @@ const Tools = ({ intl }) => {
                         display: ballastType.b ? "inherit" : "none",
                       }}>
                       <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
+                        enterDelay={400}
+                        leaveDelay={300}
                         interactive
                         TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
+                        TransitionProps={{ timeout: 600 }}
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              d2 - Distance btw far end of plate & upright
+                              d2 - Distance btw far end of plate & upright (ft)
                             </Typography>
                           </React.Fragment>
                         }>
                         <FormControl
                           className={clsx(classes.textField)}
                           variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            d2- Distance btw far end of plate & upright (ft)
-                          </InputLabel>
-                          <Select
-                            native
+                          <Autocomplete
+                            id='bd2'
+                            getOptionLabel={(option) => {
+                              if (typeof option === "string") {
+                                return option;
+                              }
+                              // Add "xxx" option created dynamically
+                              if (option.inputValues) {
+                                return option.inputValues;
+                              }
+                              return option.toString();
+                            }}
+                            freeSolo
+                            autoSelect
+                            selectOnFocus
+                            clearOnBlur
+                            handleHomeEndKeys
+                            inputValue={inputValues["bd2"]}
+                            onInputChange={(event, newInputValue) => {
+                              setInputValues({
+                                ...inputValues,
+                                bd2: newInputValue,
+                              });
+                            }}
+                            //defaultValue={values.postsPerLength}
+                            value={values.bd2}
                             // endAdornment={
                             //   <InputAdornment position='end'>
                             //     <EditRoundedIcon
                             //       onClick={() => {
-                            //         handleCustomDialog(21);
+                            //         handleCustomDialog(9);
                             //       }}
                             //     />
                             //   </InputAdornment>
                             // }
-                            //defaultValue={20}
-                            hidden={ballastType.b}
-                            label='d2 - Distance btw far end of plate & upright (ft)'
-                            value={values.bd2}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "bd2",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={10}>10</option>
-                            <option value={20}>20</option>
-                            <option value={30}>30</option>
-                            <option value={40}>40</option>
-                            <option value={50}>50</option>
-                            <option value={60}>60</option>
-                            <option value={70}>70</option>
-                            <option value={80}>80</option>
-                            <option value={90}>90</option>
-                            <option value={100}>100</option>
-                            <option value={110}>110</option>
-                            <option value={120}>120</option>
-                            <option value={130}>130</option>
-                            <option value={140}>140</option>
-                            <option value={150}>150</option>
-                          </Select>
+                            onChange={(event, newValue) => {
+                              setValues({
+                                ...values,
+                                bd2: newValue,
+                              });
+                            }}
+                            options={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+                            renderInput={(params) => (
+                              <TextField
+                                onKeyPress={(e) => {
+                                  e.key === "Enter" && e.preventDefault();
+                                }}
+                                {...params}
+                                inputProps={{
+                                  ...params.inputProps,
+                                  name: "bd2",
+                                }}
+                                label='d2 - Distance btw far end of plate & upright (ft)'
+                                margin='normal'
+                                variant='outlined'
+                              />
+                            )}
+                          />
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
+
                     {/* bd3: 0,Ballast effective width (ft) 22*/}
+
                     <Grid
                       item
                       xs={6}
@@ -3606,11 +3606,11 @@ const Tools = ({ intl }) => {
                         display: ballastType.b ? "inherit" : "none",
                       }}>
                       <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
+                        enterDelay={400}
+                        leaveDelay={300}
                         interactive
                         TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
+                        TransitionProps={{ timeout: 600 }}
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
@@ -3621,49 +3621,69 @@ const Tools = ({ intl }) => {
                         <FormControl
                           className={clsx(classes.textField)}
                           variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            d3 - Ballast effective width (ft)
-                          </InputLabel>
-                          <Select
-                            native
+                          <Autocomplete
+                            id='bd3'
+                            getOptionLabel={(option) => {
+                              if (typeof option === "string") {
+                                return option;
+                              }
+                              // Add "xxx" option created dynamically
+                              if (option.inputValues) {
+                                return option.inputValues;
+                              }
+                              return option.toString();
+                            }}
+                            freeSolo
+                            autoSelect
+                            selectOnFocus
+                            clearOnBlur
+                            handleHomeEndKeys
+                            inputValue={inputValues["bd3"]}
+                            onInputChange={(event, newInputValue) => {
+                              setInputValues({
+                                ...inputValues,
+                                bd3: newInputValue,
+                              });
+                            }}
+                            //defaultValue={values.postsPerLength}
+                            value={values.bd3}
                             // endAdornment={
                             //   <InputAdornment position='end'>
                             //     <EditRoundedIcon
                             //       onClick={() => {
-                            //         handleCustomDialog(22);
+                            //         handleCustomDialog(9);
                             //       }}
                             //     />
                             //   </InputAdornment>
                             // }
-                            //defaultValue={20}
-                            hidden={ballastType.b}
-                            label='d3 - Ballast effective width (ft)'
-                            value={values.bd3}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "bd3",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={10}>10</option>
-                            <option value={20}>20</option>
-                            <option value={30}>30</option>
-                            <option value={40}>40</option>
-                            <option value={50}>50</option>
-                            <option value={60}>60</option>
-                            <option value={70}>70</option>
-                            <option value={80}>80</option>
-                            <option value={90}>90</option>
-                            <option value={100}>100</option>
-                            <option value={110}>110</option>
-                            <option value={120}>120</option>
-                            <option value={130}>130</option>
-                            <option value={140}>140</option>
-                            <option value={150}>150</option>
-                          </Select>
+                            onChange={(event, newValue) => {
+                              setValues({
+                                ...values,
+                                bd3: newValue,
+                              });
+                            }}
+                            options={[1, 1.5, 2, 2.5, 3]}
+                            renderInput={(params) => (
+                              <TextField
+                                onKeyPress={(e) => {
+                                  e.key === "Enter" && e.preventDefault();
+                                }}
+                                {...params}
+                                inputProps={{
+                                  ...params.inputProps,
+                                  name: "bd3",
+                                }}
+                                label='d3 - Ballast effective width (ft)'
+                                margin='normal'
+                                variant='outlined'
+                              />
+                            )}
+                          />
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
-                    {/* bd4: 0,Horizontal distance btw ballast center & guy attachment point (ft)  23*/}
+
+                    {/* bd4: 0,Horizontal distance btw guy attachment point and upright (ft)  23*/}
                     <Grid
                       item
                       xs={6}
@@ -3671,66 +3691,86 @@ const Tools = ({ intl }) => {
                         display: ballastType.b ? "inherit" : "none",
                       }}>
                       <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
+                        enterDelay={400}
+                        leaveDelay={300}
                         interactive
                         TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
+                        TransitionProps={{ timeout: 600 }}
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              d4 - Horizontal distance btw ballast center & guy
-                              attachment point (ft)
+                              d4 - Horizontal distance btw guy attachment point
+                              and upright (ft)
                             </Typography>
                           </React.Fragment>
                         }>
                         <FormControl
                           className={clsx(classes.textField)}
                           variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            d4 - Horizontal distance btw ballast center & guy
-                            attachment point (ft)
-                          </InputLabel>
-                          <Select
-                            native
+                          <Autocomplete
+                            id='bd4'
+                            getOptionLabel={(option) => {
+                              if (typeof option === "string") {
+                                return option;
+                              }
+                              // Add "xxx" option created dynamically
+                              if (option.inputValues) {
+                                return option.inputValues;
+                              }
+                              return option.toString();
+                            }}
+                            freeSolo
+                            autoSelect
+                            selectOnFocus
+                            clearOnBlur
+                            handleHomeEndKeys
+                            inputValue={inputValues["bd4"]}
+                            onInputChange={(event, newInputValue) => {
+                              setInputValues({
+                                ...inputValues,
+                                bd4: newInputValue,
+                              });
+                            }}
+                            //defaultValue={values.postsPerLength}
+                            value={values.bd4}
                             // endAdornment={
                             //   <InputAdornment position='end'>
                             //     <EditRoundedIcon
                             //       onClick={() => {
-                            //         handleCustomDialog(23);
+                            //         handleCustomDialog(9);
                             //       }}
                             //     />
                             //   </InputAdornment>
                             // }
-                            //defaultValue={20}
-                            hidden={ballastType.b}
-                            label='d4 - Horizontal distance btw ballast center & guy attachment point (ft)'
-                            value={values.bd4}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "bd4",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={10}>10</option>
-                            <option value={20}>20</option>
-                            <option value={30}>30</option>
-                            <option value={40}>40</option>
-                            <option value={50}>50</option>
-                            <option value={60}>60</option>
-                            <option value={70}>70</option>
-                            <option value={80}>80</option>
-                            <option value={90}>90</option>
-                            <option value={100}>100</option>
-                            <option value={110}>110</option>
-                            <option value={120}>120</option>
-                            <option value={130}>130</option>
-                            <option value={140}>140</option>
-                            <option value={150}>150</option>
-                          </Select>
+                            onChange={(event, newValue) => {
+                              setValues({
+                                ...values,
+                                bd4: newValue,
+                              });
+                            }}
+                            options={[0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4]}
+                            renderInput={(params) => (
+                              <TextField
+                                onKeyPress={(e) => {
+                                  e.key === "Enter" && e.preventDefault();
+                                }}
+                                {...params}
+                                inputProps={{
+                                  ...params.inputProps,
+                                  name: "bd4",
+                                }}
+                                label='d4 - Horizontal distance btw guy attachment point
+                              and upright (ft)'
+                                margin='normal'
+                                variant='outlined'
+                              />
+                            )}
+                          />
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
-                    {/* bh4: 0, Vertical distance btw plate & guy attachment point (ft) 24*/}
+
+                    {/* bh4 - Vertical distance btw plate & guy attachment point (ft) 24*/}
                     <Grid
                       item
                       xs={6}
@@ -3738,11 +3778,11 @@ const Tools = ({ intl }) => {
                         display: ballastType.b ? "inherit" : "none",
                       }}>
                       <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
+                        enterDelay={400}
+                        leaveDelay={300}
                         interactive
                         TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
+                        TransitionProps={{ timeout: 600 }}
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
@@ -3754,179 +3794,68 @@ const Tools = ({ intl }) => {
                         <FormControl
                           className={clsx(classes.textField)}
                           variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            h4 - Vertical distance btw plate & guy attachment
-                            point (ft)
-                          </InputLabel>
-                          <Select
-                            native
+                          <Autocomplete
+                            id='bh4'
+                            getOptionLabel={(option) => {
+                              if (typeof option === "string") {
+                                return option;
+                              }
+                              // Add "xxx" option created dynamically
+                              if (option.inputValues) {
+                                return option.inputValues;
+                              }
+                              return option.toString();
+                            }}
+                            freeSolo
+                            autoSelect
+                            selectOnFocus
+                            clearOnBlur
+                            handleHomeEndKeys
+                            inputValue={inputValues["bh4"]}
+                            onInputChange={(event, newInputValue) => {
+                              setInputValues({
+                                ...inputValues,
+                                bh4: newInputValue,
+                              });
+                            }}
+                            //defaultValue={values.postsPerLength}
+                            value={values.bh4}
                             // endAdornment={
                             //   <InputAdornment position='end'>
                             //     <EditRoundedIcon
                             //       onClick={() => {
-                            //         handleCustomDialog(24);
+                            //         handleCustomDialog(9);
                             //       }}
                             //     />
                             //   </InputAdornment>
                             // }
-                            //defaultValue={20}
-                            hidden={ballastType.b}
-                            label='h4 - Vertical distance btw plate & guy attachment point (ft)'
-                            value={values.bh4}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "bh4",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={10}>10</option>
-                            <option value={20}>20</option>
-                            <option value={30}>30</option>
-                            <option value={40}>40</option>
-                            <option value={50}>50</option>
-                            <option value={60}>60</option>
-                            <option value={70}>70</option>
-                            <option value={80}>80</option>
-                            <option value={90}>90</option>
-                            <option value={100}>100</option>
-                            <option value={110}>110</option>
-                            <option value={120}>120</option>
-                            <option value={130}>130</option>
-                            <option value={140}>140</option>
-                            <option value={150}>150</option>
-                          </Select>
+                            onChange={(event, newValue) => {
+                              setValues({
+                                ...values,
+                                bh4: newValue,
+                              });
+                            }}
+                            options={[0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0]}
+                            renderInput={(params) => (
+                              <TextField
+                                onKeyPress={(e) => {
+                                  e.key === "Enter" && e.preventDefault();
+                                }}
+                                {...params}
+                                inputProps={{
+                                  ...params.inputProps,
+                                  name: "bh4",
+                                }}
+                                label='h4 - Vertical distance btw plate & guy attachment point (ft)'
+                                margin='normal'
+                                variant='outlined'
+                              />
+                            )}
+                          />
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
-                    {/* bmu2: 0,Friction coefficient btw ballast & plate  25*/}
-                    {/* <Grid
-                      item
-                      xs={6}
-                      style={{
-                        display: ballastType.b ? "inherit" : "none",
-                      }}>
-                      <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
-                        interactive
-                        TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
-                        title={
-                          <React.Fragment>
-                            <Typography color='inherit'>
-                              Friction coefficient btw ballast & plate
-                            </Typography>
-                          </React.Fragment>
-                        }>
-                        <FormControl
-                          className={clsx(classes.textField)}
-                          variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            Friction coefficient btw ballast & plate
-                          </InputLabel>
-                          <Select
-                            native
-                            endAdornment={
-                              <InputAdornment position='end'>
-                                <EditRoundedIcon
-                                  onClick={() => {
-                                    handleCustomDialog(25);
-                                  }}
-                                />
-                              </InputAdornment>
-                            }
-                            //defaultValue={20}
-                            hidden={ballastType.b}
-                            label='Friction coefficient btw ballast & plate '
-                            value={values.bmu2}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "bmu2",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={10}>10</option>
-                            <option value={20}>20</option>
-                            <option value={30}>30</option>
-                            <option value={40}>40</option>
-                            <option value={50}>50</option>
-                            <option value={60}>60</option>
-                            <option value={70}>70</option>
-                            <option value={80}>80</option>
-                            <option value={90}>90</option>
-                            <option value={100}>100</option>
-                            <option value={110}>110</option>
-                            <option value={120}>120</option>
-                            <option value={130}>130</option>
-                            <option value={140}>140</option>
-                            <option value={150}>150</option>
-                          </Select>
-                        </FormControl>
-                      </HtmlTooltip>
-                    </Grid> */}
-                    {/* bmu3: 0,Friction coefficient btw plate & ground  26*/}
-                    {/* <Grid
-                      item
-                      xs={6}
-                      style={{
-                        display: ballastType.b ? "inherit" : "none",
-                      }}>
-                      <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
-                        interactive
-                        TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
-                        title={
-                          <React.Fragment>
-                            <Typography color='inherit'>
-                              Friction coefficient btw plate & ground
-                            </Typography>
-                          </React.Fragment>
-                        }>
-                        <FormControl
-                          className={clsx(classes.textField)}
-                          variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            Friction coefficient btw plate & ground
-                          </InputLabel>
-                          <Select
-                            native
-                            endAdornment={
-                              <InputAdornment position='end'>
-                                <EditRoundedIcon
-                                  onClick={() => {
-                                    handleCustomDialog(26);
-                                  }}
-                                />
-                              </InputAdornment>
-                            }
-                            //defaultValue={20}
-                            hidden={ballastType.b}
-                            label='Friction coefficient btw plate & ground '
-                            value={values.bmu3}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "bmu3",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={10}>10</option>
-                            <option value={20}>20</option>
-                            <option value={30}>30</option>
-                            <option value={40}>40</option>
-                            <option value={50}>50</option>
-                            <option value={60}>60</option>
-                            <option value={70}>70</option>
-                            <option value={80}>80</option>
-                            <option value={90}>90</option>
-                            <option value={100}>100</option>
-                            <option value={110}>110</option>
-                            <option value={120}>120</option>
-                            <option value={130}>130</option>
-                            <option value={140}>140</option>
-                            <option value={150}>150</option>
-                          </Select>
-                        </FormControl>
-                      </HtmlTooltip>
-                    </Grid> */}
+
                     {/* bwplate: 0,Weight of plate  27*/}
                     <Grid
                       item
@@ -3935,11 +3864,11 @@ const Tools = ({ intl }) => {
                         display: ballastType.b ? "inherit" : "none",
                       }}>
                       <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
+                        enterDelay={400}
+                        leaveDelay={300}
                         interactive
                         TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
+                        TransitionProps={{ timeout: 600 }}
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
@@ -3950,45 +3879,67 @@ const Tools = ({ intl }) => {
                         <FormControl
                           className={clsx(classes.textField)}
                           variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            Weight of plate (lbs)
-                          </InputLabel>
-                          <Select
-                            native
+                          <Autocomplete
+                            id='bwplate'
+                            getOptionLabel={(option) => {
+                              if (typeof option === "string") {
+                                return option;
+                              }
+                              // Add "xxx" option created dynamically
+                              if (option.inputValues) {
+                                return option.inputValues;
+                              }
+                              return option.toString();
+                            }}
+                            freeSolo
+                            autoSelect
+                            selectOnFocus
+                            clearOnBlur
+                            handleHomeEndKeys
+                            inputValue={inputValues["bwplate"]}
+                            onInputChange={(event, newInputValue) => {
+                              setInputValues({
+                                ...inputValues,
+                                bwplate: newInputValue,
+                              });
+                            }}
+                            //defaultValue={values.postsPerLength}
+                            value={values.bwplate}
                             // endAdornment={
                             //   <InputAdornment position='end'>
                             //     <EditRoundedIcon
                             //       onClick={() => {
-                            //         handleCustomDialog(27);
+                            //         handleCustomDialog(9);
                             //       }}
                             //     />
                             //   </InputAdornment>
                             // }
-                            //defaultValue={20}
-                            hidden={ballastType.b}
-                            label='Weight of plate  (lbs)'
-                            value={values.bwplate}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "bwplate",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={10}>10</option>
-                            <option value={20}>20</option>
-                            <option value={30}>30</option>
-                            <option value={40}>40</option>
-                            <option value={50}>50</option>
-                            <option value={60}>60</option>
-                            <option value={70}>70</option>
-                            <option value={80}>80</option>
-                            <option value={90}>90</option>
-                            <option value={100}>100</option>
-                            <option value={110}>110</option>
-                            <option value={120}>120</option>
-                            <option value={130}>130</option>
-                            <option value={140}>140</option>
-                            <option value={150}>150</option>
-                          </Select>
+                            onChange={(event, newValue) => {
+                              setValues({
+                                ...values,
+                                bwplate: newValue,
+                              });
+                            }}
+                            options={[
+                              10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120,
+                              130, 140, 150,
+                            ]}
+                            renderInput={(params) => (
+                              <TextField
+                                onKeyPress={(e) => {
+                                  e.key === "Enter" && e.preventDefault();
+                                }}
+                                {...params}
+                                inputProps={{
+                                  ...params.inputProps,
+                                  name: "bwplate",
+                                }}
+                                label='Weight of plate (lbs)'
+                                margin='normal'
+                                variant='outlined'
+                              />
+                            )}
+                          />
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
@@ -4003,11 +3954,11 @@ const Tools = ({ intl }) => {
                         display: ballastType.c ? "inherit" : "none",
                       }}>
                       <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
+                        enterDelay={400}
+                        leaveDelay={300}
                         interactive
                         TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
+                        TransitionProps={{ timeout: 600 }}
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
@@ -4018,34 +3969,64 @@ const Tools = ({ intl }) => {
                         <FormControl
                           className={clsx(classes.textField)}
                           variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            d1 - Distance btw center of ballast & upright (ft)
-                          </InputLabel>
-                          <Select
-                            native
+                          <Autocomplete
+                            id='cd1'
+                            getOptionLabel={(option) => {
+                              if (typeof option === "string") {
+                                return option;
+                              }
+                              // Add "xxx" option created dynamically
+                              if (option.inputValues) {
+                                return option.inputValues;
+                              }
+                              return option.toString();
+                            }}
+                            freeSolo
+                            autoSelect
+                            selectOnFocus
+                            clearOnBlur
+                            handleHomeEndKeys
+                            inputValue={inputValues["cd1"]}
+                            onInputChange={(event, newInputValue) => {
+                              setInputValues({
+                                ...inputValues,
+                                cd1: newInputValue,
+                              });
+                            }}
+                            //defaultValue={values.postsPerLength}
+                            value={values.cd1}
                             // endAdornment={
                             //   <InputAdornment position='end'>
                             //     <EditRoundedIcon
                             //       onClick={() => {
-                            //         handleCustomDialog(28);
+                            //         handleCustomDialog(9);
                             //       }}
                             //     />
                             //   </InputAdornment>
                             // }
-                            //defaultValue={20}
-                            hidden={ballastType.c}
-                            label='d1 - Distance btw center of ballast & upright (ft)'
-                            value={values.cd1}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "cd1",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={1}>1</option>
-                            <option value={2}>2</option>
-                            <option value={3}>3</option>
-                            <option value={4}>4</option>
-                          </Select>
+                            onChange={(event, newValue) => {
+                              setValues({
+                                ...values,
+                                cd1: newValue,
+                              });
+                            }}
+                            options={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+                            renderInput={(params) => (
+                              <TextField
+                                onKeyPress={(e) => {
+                                  e.key === "Enter" && e.preventDefault();
+                                }}
+                                {...params}
+                                inputProps={{
+                                  ...params.inputProps,
+                                  name: "cd1",
+                                }}
+                                label='d1 - Distance btw center of ballast & upright (ft)'
+                                margin='normal'
+                                variant='outlined'
+                              />
+                            )}
+                          />
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
@@ -4057,11 +4038,11 @@ const Tools = ({ intl }) => {
                         display: ballastType.c ? "inherit" : "none",
                       }}>
                       <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
+                        enterDelay={400}
+                        leaveDelay={300}
                         interactive
                         TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
+                        TransitionProps={{ timeout: 600 }}
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
@@ -4072,49 +4053,68 @@ const Tools = ({ intl }) => {
                         <FormControl
                           className={clsx(classes.textField)}
                           variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            d3 - Ballast effective width (ft)
-                          </InputLabel>
-                          <Select
-                            native
+                          <Autocomplete
+                            id='cd3'
+                            getOptionLabel={(option) => {
+                              if (typeof option === "string") {
+                                return option;
+                              }
+                              // Add "xxx" option created dynamically
+                              if (option.inputValues) {
+                                return option.inputValues;
+                              }
+                              return option.toString();
+                            }}
+                            freeSolo
+                            autoSelect
+                            selectOnFocus
+                            clearOnBlur
+                            handleHomeEndKeys
+                            inputValue={inputValues["cd3"]}
+                            onInputChange={(event, newInputValue) => {
+                              setInputValues({
+                                ...inputValues,
+                                cd3: newInputValue,
+                              });
+                            }}
+                            //defaultValue={values.postsPerLength}
+                            value={values.cd3}
                             // endAdornment={
                             //   <InputAdornment position='end'>
                             //     <EditRoundedIcon
                             //       onClick={() => {
-                            //         handleCustomDialog(29);
+                            //         handleCustomDialog(9);
                             //       }}
                             //     />
                             //   </InputAdornment>
                             // }
-                            //defaultValue={20}
-                            hidden={ballastType.c}
-                            label='d3 - Ballast effective width (ft)'
-                            value={values.cd3}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "cd3",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={10}>10</option>
-                            <option value={20}>20</option>
-                            <option value={30}>30</option>
-                            <option value={40}>40</option>
-                            <option value={50}>50</option>
-                            <option value={60}>60</option>
-                            <option value={70}>70</option>
-                            <option value={80}>80</option>
-                            <option value={90}>90</option>
-                            <option value={100}>100</option>
-                            <option value={110}>110</option>
-                            <option value={120}>120</option>
-                            <option value={130}>130</option>
-                            <option value={140}>140</option>
-                            <option value={150}>150</option>
-                          </Select>
+                            onChange={(event, newValue) => {
+                              setValues({
+                                ...values,
+                                cd3: newValue,
+                              });
+                            }}
+                            options={[1, 1.5, 2, 2.5, 3]}
+                            renderInput={(params) => (
+                              <TextField
+                                onKeyPress={(e) => {
+                                  e.key === "Enter" && e.preventDefault();
+                                }}
+                                {...params}
+                                inputProps={{
+                                  ...params.inputProps,
+                                  name: "cd3",
+                                }}
+                                label='d3 - Ballast effective width (ft)'
+                                margin='normal'
+                                variant='outlined'
+                              />
+                            )}
+                          />
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
-                    {/* cd4: 0,Horizontal distance btw ballast center & guy attachment point (ft) 30*/}
+                    {/* cd4: 0,Horizontal distance btw guy attachment point and upright (ft) 30*/}
                     <Grid
                       item
                       xs={6}
@@ -4122,66 +4122,85 @@ const Tools = ({ intl }) => {
                         display: ballastType.c ? "inherit" : "none",
                       }}>
                       <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
+                        enterDelay={400}
+                        leaveDelay={300}
                         interactive
                         TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
+                        TransitionProps={{ timeout: 600 }}
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              d4 - Horizontal distance btw ballast center & guy
-                              attachment point (ft)
+                              d4 - Horizontal distance btw guy attachment point
+                              and upright (ft)
                             </Typography>
                           </React.Fragment>
                         }>
                         <FormControl
                           className={clsx(classes.textField)}
                           variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            d4 - Horizontal distance btw ballast center & guy
-                            attachment point (ft)
-                          </InputLabel>
-                          <Select
-                            native
+                          <Autocomplete
+                            id='cd4'
+                            getOptionLabel={(option) => {
+                              if (typeof option === "string") {
+                                return option;
+                              }
+                              // Add "xxx" option created dynamically
+                              if (option.inputValues) {
+                                return option.inputValues;
+                              }
+                              return option.toString();
+                            }}
+                            freeSolo
+                            autoSelect
+                            selectOnFocus
+                            clearOnBlur
+                            handleHomeEndKeys
+                            inputValue={inputValues["cd4"]}
+                            onInputChange={(event, newInputValue) => {
+                              setInputValues({
+                                ...inputValues,
+                                cd4: newInputValue,
+                              });
+                            }}
+                            //defaultValue={values.postsPerLength}
+                            value={values.cd4}
                             // endAdornment={
                             //   <InputAdornment position='end'>
                             //     <EditRoundedIcon
                             //       onClick={() => {
-                            //         handleCustomDialog(30);
+                            //         handleCustomDialog(9);
                             //       }}
                             //     />
                             //   </InputAdornment>
                             // }
-                            //defaultValue={0}
-                            hidden={ballastType.c}
-                            label='d4 - Horizontal distance btw ballast center & guy attachment point (ft)'
-                            value={values.cd4}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "cd4",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={0}>0</option>
-                            <option value={20}>20</option>
-                            <option value={30}>30</option>
-                            <option value={40}>40</option>
-                            <option value={50}>50</option>
-                            <option value={60}>60</option>
-                            <option value={70}>70</option>
-                            <option value={80}>80</option>
-                            <option value={90}>90</option>
-                            <option value={100}>100</option>
-                            <option value={110}>110</option>
-                            <option value={120}>120</option>
-                            <option value={130}>130</option>
-                            <option value={140}>140</option>
-                            <option value={150}>150</option>
-                          </Select>
+                            onChange={(event, newValue) => {
+                              setValues({
+                                ...values,
+                                cd4: newValue,
+                              });
+                            }}
+                            options={[0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4]}
+                            renderInput={(params) => (
+                              <TextField
+                                onKeyPress={(e) => {
+                                  e.key === "Enter" && e.preventDefault();
+                                }}
+                                {...params}
+                                inputProps={{
+                                  ...params.inputProps,
+                                  name: "cd4",
+                                }}
+                                label='d4 - Horizontal distance btw guy attachment point
+                              and upright (ft)'
+                                margin='normal'
+                                variant='outlined'
+                              />
+                            )}
+                          />
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
-                    {/* ch4: 0,Vertical distance btw plate & guy attachment point
+                    {/* ch4:Vertical distance btw plate & guy attachment point
                 (ft) 31*/}
                     <Grid
                       item
@@ -4190,11 +4209,11 @@ const Tools = ({ intl }) => {
                         display: ballastType.c ? "inherit" : "none",
                       }}>
                       <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
+                        enterDelay={400}
+                        leaveDelay={300}
                         interactive
                         TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
+                        TransitionProps={{ timeout: 600 }}
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
@@ -4206,121 +4225,73 @@ const Tools = ({ intl }) => {
                         <FormControl
                           className={clsx(classes.textField)}
                           variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            h4 - Vertical distance btw plate & guy attachment
-                            point (ft)
-                          </InputLabel>
-                          <Select
-                            native
+                          <Autocomplete
+                            id='ch4'
+                            getOptionLabel={(option) => {
+                              if (typeof option === "string") {
+                                return option;
+                              }
+                              // Add "xxx" option created dynamically
+                              if (option.inputValues) {
+                                return option.inputValues;
+                              }
+                              return option.toString();
+                            }}
+                            freeSolo
+                            autoSelect
+                            selectOnFocus
+                            clearOnBlur
+                            handleHomeEndKeys
+                            inputValue={inputValues["ch4"]}
+                            onInputChange={(event, newInputValue) => {
+                              setInputValues({
+                                ...inputValues,
+                                ch4: newInputValue,
+                              });
+                            }}
+                            //defaultValue={values.postsPerLength}
+                            value={values.ch4}
                             // endAdornment={
                             //   <InputAdornment position='end'>
                             //     <EditRoundedIcon
                             //       onClick={() => {
-                            //         handleCustomDialog(31);
+                            //         handleCustomDialog(9);
                             //       }}
                             //     />
                             //   </InputAdornment>
                             // }
-                            //defaultValue={20}
-                            hidden={ballastType.c}
-                            label='h4 - Vertical distance btw plate & guy attachment point (ft)'
-                            value={values.ch4}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "ch4",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={10}>10</option>
-                            <option value={20}>20</option>
-                            <option value={30}>30</option>
-                            <option value={40}>40</option>
-                            <option value={50}>50</option>
-                            <option value={60}>60</option>
-                            <option value={70}>70</option>
-                            <option value={80}>80</option>
-                            <option value={90}>90</option>
-                            <option value={100}>100</option>
-                            <option value={110}>110</option>
-                            <option value={120}>120</option>
-                            <option value={130}>130</option>
-                            <option value={140}>140</option>
-                            <option value={150}>150</option>
-                          </Select>
+                            onChange={(event, newValue) => {
+                              setValues({
+                                ...values,
+                                ch4: newValue,
+                              });
+                            }}
+                            options={[0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0]}
+                            renderInput={(params) => (
+                              <TextField
+                                onKeyPress={(e) => {
+                                  e.key === "Enter" && e.preventDefault();
+                                }}
+                                {...params}
+                                inputProps={{
+                                  ...params.inputProps,
+                                  name: "ch4",
+                                }}
+                                label='h4 - Vertical distance btw plate & guy attachment point (ft)'
+                                margin='normal'
+                                variant='outlined'
+                              />
+                            )}
+                          />
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
-                    {/* cmu1: 0,Friction coefficient btw ballast & ground (if
-                applicable) 32*/}
-                    {/* <Grid
-                      item
-                      xs={6}
-                      style={{
-                        display: ballastType.c ? "inherit" : "none",
-                      }}>
-                      <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
-                        interactive
-                        TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
-                        title={
-                          <React.Fragment>
-                            <Typography color='inherit'>
-                              Friction coefficient btw ballast & ground (if
-                              applicable)
-                            </Typography>
-                          </React.Fragment>
-                        }>
-                        <FormControl
-                          className={clsx(classes.textField)}
-                          variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            Friction coefficient btw ballast & ground (if
-                            applicable) ({units.size[values.unit]})
-                          </InputLabel>
-                          <Select
-                            native
-                            endAdornment={
-                              <InputAdornment position='end'>
-                                <EditRoundedIcon
-                                  onClick={() => {
-                                    handleCustomDialog(32);
-                                  }}
-                                />
-                              </InputAdornment>
-                            }
-                            //defaultValue={20}
-                            hidden={ballastType.c}
-                            label='Friction coefficient btw ballast & ground (if applicable)'
-                            value={values.cmu1}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "cmu1",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={10}>10</option>
-                            <option value={20}>20</option>
-                            <option value={30}>30</option>
-                            <option value={40}>40</option>
-                            <option value={50}>50</option>
-                            <option value={60}>60</option>
-                            <option value={70}>70</option>
-                            <option value={80}>80</option>
-                            <option value={90}>90</option>
-                            <option value={100}>100</option>
-                            <option value={110}>110</option>
-                            <option value={120}>120</option>
-                            <option value={130}>130</option>
-                            <option value={140}>140</option>
-                            <option value={150}>150</option>
-                          </Select>
-                        </FormControl>
-                      </HtmlTooltip>
-                    </Grid> */}
+
                     {/* 
                 D SELECTION
                  */}
                     {/* dd2: 0,Distance btw far end of plate & upright (ft) 33*/}
+
                     <Grid
                       item
                       xs={6}
@@ -4328,66 +4299,83 @@ const Tools = ({ intl }) => {
                         display: ballastType.d ? "inherit" : "none",
                       }}>
                       <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
+                        enterDelay={400}
+                        leaveDelay={300}
                         interactive
                         TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
+                        TransitionProps={{ timeout: 600 }}
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              d2 - Distance btw far end of plate & upright -
-                              (ft)
+                              d2 - Distance btw far end of plate & upright (ft)
                             </Typography>
                           </React.Fragment>
                         }>
                         <FormControl
                           className={clsx(classes.textField)}
                           variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            d2 - Distance btw far end of plate & upright (ft)
-                          </InputLabel>
-                          <Select
-                            native
+                          <Autocomplete
+                            id='dd2'
+                            getOptionLabel={(option) => {
+                              if (typeof option === "string") {
+                                return option;
+                              }
+                              // Add "xxx" option created dynamically
+                              if (option.inputValues) {
+                                return option.inputValues;
+                              }
+                              return option.toString();
+                            }}
+                            freeSolo
+                            autoSelect
+                            selectOnFocus
+                            clearOnBlur
+                            handleHomeEndKeys
+                            inputValue={inputValues["dd2"]}
+                            onInputChange={(event, newInputValue) => {
+                              setInputValues({
+                                ...inputValues,
+                                dd2: newInputValue,
+                              });
+                            }}
+                            //defaultValue={values.postsPerLength}
+                            value={values.bd2}
                             // endAdornment={
                             //   <InputAdornment position='end'>
                             //     <EditRoundedIcon
                             //       onClick={() => {
-                            //         handleCustomDialog(33);
+                            //         handleCustomDialog(9);
                             //       }}
                             //     />
                             //   </InputAdornment>
                             // }
-                            //defaultValue={20}
-                            hidden={ballastType.d}
-                            label='d2 - Distance btw far end of plate & upright (ft)'
-                            value={values.dd2}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "dd2",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={10}>10</option>
-                            <option value={20}>20</option>
-                            <option value={30}>30</option>
-                            <option value={40}>40</option>
-                            <option value={50}>50</option>
-                            <option value={60}>60</option>
-                            <option value={70}>70</option>
-                            <option value={80}>80</option>
-                            <option value={90}>90</option>
-                            <option value={100}>100</option>
-                            <option value={110}>110</option>
-                            <option value={120}>120</option>
-                            <option value={130}>130</option>
-                            <option value={140}>140</option>
-                            <option value={150}>150</option>
-                          </Select>
+                            onChange={(event, newValue) => {
+                              setValues({
+                                ...values,
+                                dd2: newValue,
+                              });
+                            }}
+                            options={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+                            renderInput={(params) => (
+                              <TextField
+                                onKeyPress={(e) => {
+                                  e.key === "Enter" && e.preventDefault();
+                                }}
+                                {...params}
+                                inputProps={{
+                                  ...params.inputProps,
+                                  name: "dd2",
+                                }}
+                                label='d2 - Distance btw far end of plate & upright (ft)'
+                                margin='normal'
+                                variant='outlined'
+                              />
+                            )}
+                          />
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
-                    {/* dd4: 0,Horizontal distance btw ballast center & guy
-                attachment point (ft) 34 */}
+                    {/* dd4: 0,Horizontal distance btw guy attachment point and upright (ft) 34 */}
                     <Grid
                       item
                       xs={6}
@@ -4395,82 +4383,15 @@ const Tools = ({ intl }) => {
                         display: ballastType.d ? "inherit" : "none",
                       }}>
                       <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
+                        enterDelay={400}
+                        leaveDelay={300}
                         interactive
                         TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
+                        TransitionProps={{ timeout: 600 }}
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              d4 - Horizontal distance btw ballast center & guy
-                              attachment point (ft)
-                            </Typography>
-                          </React.Fragment>
-                        }>
-                        <FormControl
-                          className={clsx(classes.textField)}
-                          variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            d4 - Horizontal distance btw ballast center & guy
-                            attachment point (ft)
-                          </InputLabel>
-                          <Select
-                            native
-                            // endAdornment={
-                            //   <InputAdornment position='end'>
-                            //     <EditRoundedIcon
-                            //       onClick={() => {
-                            //         handleCustomDialog(34);
-                            //       }}
-                            //     />
-                            //   </InputAdornment>
-                            // }
-                            //defaultValue={20}
-                            hidden={ballastType.d}
-                            label='d4 - Horizontal distance btw ballast center & guy attachment point (ft)'
-                            value={values.dd4}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "dd4",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={10}>10</option>
-                            <option value={20}>20</option>
-                            <option value={30}>30</option>
-                            <option value={40}>40</option>
-                            <option value={50}>50</option>
-                            <option value={60}>60</option>
-                            <option value={70}>70</option>
-                            <option value={80}>80</option>
-                            <option value={90}>90</option>
-                            <option value={100}>100</option>
-                            <option value={110}>110</option>
-                            <option value={120}>120</option>
-                            <option value={130}>130</option>
-                            <option value={140}>140</option>
-                            <option value={150}>150</option>
-                          </Select>
-                        </FormControl>
-                      </HtmlTooltip>
-                    </Grid>
-                    {/* dd5: 0,Horizontal distance btw guy attachment point and upright (ft)  35*/}
-                    <Grid
-                      item
-                      xs={6}
-                      style={{
-                        display: ballastType.d ? "inherit" : "none",
-                      }}>
-                      <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
-                        interactive
-                        TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
-                        title={
-                          <React.Fragment>
-                            <Typography color='inherit'>
-                              d5 - Horizontal distance btw guy attachment point
+                              d4 - Horizontal distance btw guy attachment point
                               and upright (ft)
                             </Typography>
                           </React.Fragment>
@@ -4478,114 +4399,154 @@ const Tools = ({ intl }) => {
                         <FormControl
                           className={clsx(classes.textField)}
                           variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            d5 - Horizontal distance btw guy attachment point
-                            and upright (ft)
-                          </InputLabel>
-                          <Select
-                            native
+                          <Autocomplete
+                            id='dd4'
+                            getOptionLabel={(option) => {
+                              if (typeof option === "string") {
+                                return option;
+                              }
+                              // Add "xxx" option created dynamically
+                              if (option.inputValues) {
+                                return option.inputValues;
+                              }
+                              return option.toString();
+                            }}
+                            freeSolo
+                            autoSelect
+                            selectOnFocus
+                            clearOnBlur
+                            handleHomeEndKeys
+                            inputValue={inputValues["dd4"]}
+                            onInputChange={(event, newInputValue) => {
+                              setInputValues({
+                                ...inputValues,
+                                dd4: newInputValue,
+                              });
+                            }}
+                            //defaultValue={values.postsPerLength}
+                            value={values.dd4}
                             // endAdornment={
                             //   <InputAdornment position='end'>
                             //     <EditRoundedIcon
                             //       onClick={() => {
-                            //         handleCustomDialog(1);
+                            //         handleCustomDialog(9);
                             //       }}
                             //     />
                             //   </InputAdornment>
                             // }
-                            //defaultValue={20}
-                            hidden={ballastType.d}
-                            label='d5 - Horizontal distance btw guy attachment point and upright (ft)'
-                            value={values.dd5}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "dd5",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={10}>10</option>
-                            <option value={20}>20</option>
-                            <option value={30}>30</option>
-                            <option value={40}>40</option>
-                            <option value={50}>50</option>
-                            <option value={60}>60</option>
-                            <option value={70}>70</option>
-                            <option value={80}>80</option>
-                            <option value={90}>90</option>
-                            <option value={100}>100</option>
-                            <option value={110}>110</option>
-                            <option value={120}>120</option>
-                            <option value={130}>130</option>
-                            <option value={140}>140</option>
-                            <option value={150}>150</option>
-                          </Select>
+                            onChange={(event, newValue) => {
+                              setValues({
+                                ...values,
+                                dd4: newValue,
+                              });
+                            }}
+                            options={[0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4]}
+                            renderInput={(params) => (
+                              <TextField
+                                onKeyPress={(e) => {
+                                  e.key === "Enter" && e.preventDefault();
+                                }}
+                                {...params}
+                                inputProps={{
+                                  ...params.inputProps,
+                                  name: "dd4",
+                                }}
+                                label='d4 - Horizontal distance btw guy attachment point
+                              and upright (ft)'
+                                margin='normal'
+                                variant='outlined'
+                              />
+                            )}
+                          />
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
-                    {/* dmu3: 0,Friction coefficient btw plate & ground  36*/}
-                    {/* <Grid
+                    {/* dd5: 0,Horizontal distance btw ballast center & guy attachment point (ft) (ft)Horizontal distance btw guy attachment point and upright (ft)  35*/}
+                    <Grid
                       item
                       xs={6}
                       style={{
                         display: ballastType.d ? "inherit" : "none",
                       }}>
                       <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
+                        enterDelay={400}
+                        leaveDelay={300}
                         interactive
                         TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
+                        TransitionProps={{ timeout: 600 }}
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              Friction coefficient btw plate & ground
+                              d5 - Horizontal distance btw ballast center & guy
+                              attachment point (ft)
                             </Typography>
                           </React.Fragment>
                         }>
                         <FormControl
                           className={clsx(classes.textField)}
                           variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            Friction coefficient btw plate & ground
-                          </InputLabel>
-                          <Select
-                            native
-                            endAdornment={
-                              <InputAdornment position='end'>
-                                <EditRoundedIcon
-                                  onClick={() => {
-                                    handleCustomDialog(1);
-                                  }}
-                                />
-                              </InputAdornment>
-                            }
-                            //defaultValue={20}
-                            hidden={ballastType.d}
-                            label='Friction coefficient btw plate & ground  '
-                            value={values.dmu3}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "dmu3",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={10}>10</option>
-                            <option value={20}>20</option>
-                            <option value={30}>30</option>
-                            <option value={40}>40</option>
-                            <option value={50}>50</option>
-                            <option value={60}>60</option>
-                            <option value={70}>70</option>
-                            <option value={80}>80</option>
-                            <option value={90}>90</option>
-                            <option value={100}>100</option>
-                            <option value={110}>110</option>
-                            <option value={120}>120</option>
-                            <option value={130}>130</option>
-                            <option value={140}>140</option>
-                            <option value={150}>150</option>
-                          </Select>
+                          <Autocomplete
+                            id='dd5'
+                            getOptionLabel={(option) => {
+                              if (typeof option === "string") {
+                                return option;
+                              }
+                              // Add "xxx" option created dynamically
+                              if (option.inputValues) {
+                                return option.inputValues;
+                              }
+                              return option.toString();
+                            }}
+                            freeSolo
+                            autoSelect
+                            selectOnFocus
+                            clearOnBlur
+                            handleHomeEndKeys
+                            inputValue={inputValues["dd5"]}
+                            onInputChange={(event, newInputValue) => {
+                              setInputValues({
+                                ...inputValues,
+                                dd5: newInputValue,
+                              });
+                            }}
+                            //defaultValue={values.postsPerLength}
+                            value={values.dd5}
+                            // endAdornment={
+                            //   <InputAdornment position='end'>
+                            //     <EditRoundedIcon
+                            //       onClick={() => {
+                            //         handleCustomDialog(9);
+                            //       }}
+                            //     />
+                            //   </InputAdornment>
+                            // }
+                            onChange={(event, newValue) => {
+                              setValues({
+                                ...values,
+                                dd5: newValue,
+                              });
+                            }}
+                            options={[0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4]}
+                            renderInput={(params) => (
+                              <TextField
+                                onKeyPress={(e) => {
+                                  e.key === "Enter" && e.preventDefault();
+                                }}
+                                {...params}
+                                inputProps={{
+                                  ...params.inputProps,
+                                  name: "dd5",
+                                }}
+                                label='d5 - Horizontal distance btw ballast center & guy attachment point (ft)'
+                                margin='normal'
+                                variant='outlined'
+                              />
+                            )}
+                          />
                         </FormControl>
                       </HtmlTooltip>
-                    </Grid> */}
+                    </Grid>
+
                     {/* dwplate: 0,Weight of plate  37*/}
                     <Grid
                       item
@@ -4594,11 +4555,11 @@ const Tools = ({ intl }) => {
                         display: ballastType.d ? "inherit" : "none",
                       }}>
                       <HtmlTooltip
-                        enterDelay={200}
-                        leaveDelay={150}
+                        enterDelay={400}
+                        leaveDelay={300}
                         interactive
                         TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
+                        TransitionProps={{ timeout: 600 }}
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
@@ -4609,45 +4570,67 @@ const Tools = ({ intl }) => {
                         <FormControl
                           className={clsx(classes.textField)}
                           variant='outlined'>
-                          <InputLabel htmlFor='outlined-age-native-simple'>
-                            Weight of plate (lbs)
-                          </InputLabel>
-                          <Select
-                            native
+                          <Autocomplete
+                            id='dwplate'
+                            getOptionLabel={(option) => {
+                              if (typeof option === "string") {
+                                return option;
+                              }
+                              // Add "xxx" option created dynamically
+                              if (option.inputValues) {
+                                return option.inputValues;
+                              }
+                              return option.toString();
+                            }}
+                            freeSolo
+                            autoSelect
+                            selectOnFocus
+                            clearOnBlur
+                            handleHomeEndKeys
+                            inputValue={inputValues["dwplate"]}
+                            onInputChange={(event, newInputValue) => {
+                              setInputValues({
+                                ...inputValues,
+                                dwplate: newInputValue,
+                              });
+                            }}
+                            //defaultValue={values.postsPerLength}
+                            value={values.dwplate}
                             // endAdornment={
                             //   <InputAdornment position='end'>
                             //     <EditRoundedIcon
                             //       onClick={() => {
-                            //         handleCustomDialog(1);
+                            //         handleCustomDialog(9);
                             //       }}
                             //     />
                             //   </InputAdornment>
                             // }
-                            //defaultValue={20}
-                            hidden={ballastType.d}
-                            label='Weight of plate  (lbs)'
-                            value={values.dwplate}
-                            onChange={handleSelectChange}
-                            inputProps={{
-                              name: "dwplate",
-                              id: "outlined-age-native-simple",
-                            }}>
-                            <option value={10}>10</option>
-                            <option value={20}>20</option>
-                            <option value={30}>30</option>
-                            <option value={40}>40</option>
-                            <option value={50}>50</option>
-                            <option value={60}>60</option>
-                            <option value={70}>70</option>
-                            <option value={80}>80</option>
-                            <option value={90}>90</option>
-                            <option value={100}>100</option>
-                            <option value={110}>110</option>
-                            <option value={120}>120</option>
-                            <option value={130}>130</option>
-                            <option value={140}>140</option>
-                            <option value={150}>150</option>
-                          </Select>
+                            onChange={(event, newValue) => {
+                              setValues({
+                                ...values,
+                                dwplate: newValue,
+                              });
+                            }}
+                            options={[
+                              10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120,
+                              130, 140, 150,
+                            ]}
+                            renderInput={(params) => (
+                              <TextField
+                                onKeyPress={(e) => {
+                                  e.key === "Enter" && e.preventDefault();
+                                }}
+                                {...params}
+                                inputProps={{
+                                  ...params.inputProps,
+                                  name: "dwplate",
+                                }}
+                                label='Weight of plate (lbs)'
+                                margin='normal'
+                                variant='outlined'
+                              />
+                            )}
+                          />
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
