@@ -804,7 +804,11 @@ const Tools = ({ intl }) => {
 
     ReactDOM.render(
       <Container className={classes.cardGrid} hidden={calculationDataOpen}>
-        <div style={{ height: 220 }}>
+        <div style={{ height: 220, width: "80vw" }}>
+          {/* SETUP
+            VARIABLE NAME -- INPUT -- OUTPUT (Open) -- OUTPUT (ENCLOSED)
+            name  -- (isInput) otherwise put (--)
+         */}
           <DataGrid
             columns={[
               { field: "id", hide: true },
@@ -2759,11 +2763,11 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Clear - unobstructed wind flow with no blockage (e.g.,
-                          plain, grass land, beach). This is the worst case
-                          scenario. \n Obstructed - objects below roof
-                          inhibiting wind flow with >50% blockage (e.g., urban
-                          environment, high dense vegetation, high cliff)
+                          Fully Exposed: wide-open space, rural environment, no
+                          trees --- Partially Exposed: urban and suburban
+                          environment, some trees --- Sheltered: urban
+                          environment with large buildings nearby and dense
+                          trees
                         </Typography>
                       </React.Fragment>
                     }>
@@ -2771,12 +2775,12 @@ const Tools = ({ intl }) => {
                       variant='outlined'
                       className={classes.textField}>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        Wind Flow
+                        Wind Exposure
                       </InputLabel>
                       <Select
                         native
                         defaultValue={1}
-                        label='Wind Flow'
+                        label='Wind Exposure'
                         // endAdornment={
                         //   <InputAdornment position='end'>
                         //     <EditRoundedIcon
@@ -2794,8 +2798,9 @@ const Tools = ({ intl }) => {
                           name: "windFlow",
                           id: "outlined-age-native-simple",
                         }}>
-                        <option value={1}>Clear</option>
-                        <option value={3}>Obstructed</option>
+                        <option value={1}>Fully Exposed</option>
+                        <option value={2}>Partially Exposed</option>
+                        <option value={3}>Sheltered</option>
                       </Select>
                     </FormControl>
                   </HtmlTooltip>
@@ -3243,7 +3248,7 @@ const Tools = ({ intl }) => {
                                 ad1: newValue,
                               });
                             }}
-                            options={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+                            options={[0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4]}
                             renderInput={(params) => (
                               <TextField
                                 onKeyPress={(e) => {
@@ -3327,7 +3332,7 @@ const Tools = ({ intl }) => {
                                 ad2: newValue,
                               });
                             }}
-                            options={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+                            options={[2, 2.5, 3, 3.5, 4, 4.5, 5]}
                             renderInput={(params) => (
                               <TextField
                                 onKeyPress={(e) => {
@@ -3490,7 +3495,7 @@ const Tools = ({ intl }) => {
                                 bd1: newValue,
                               });
                             }}
-                            options={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+                            options={[0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4]}
                             renderInput={(params) => (
                               <TextField
                                 onKeyPress={(e) => {
@@ -3576,7 +3581,7 @@ const Tools = ({ intl }) => {
                                 bd2: newValue,
                               });
                             }}
-                            options={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+                            options={[2, 2.5, 3, 3.5, 4, 4.5, 5]}
                             renderInput={(params) => (
                               <TextField
                                 onKeyPress={(e) => {
@@ -4010,7 +4015,7 @@ const Tools = ({ intl }) => {
                                 cd1: newValue,
                               });
                             }}
-                            options={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+                            options={[0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4]}
                             renderInput={(params) => (
                               <TextField
                                 onKeyPress={(e) => {
@@ -4355,7 +4360,7 @@ const Tools = ({ intl }) => {
                                 dd2: newValue,
                               });
                             }}
-                            options={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
+                            options={[2, 2.5, 3, 3.5, 4, 4.5, 5]}
                             renderInput={(params) => (
                               <TextField
                                 onKeyPress={(e) => {
@@ -4646,13 +4651,15 @@ const Tools = ({ intl }) => {
             </Container>
           </Grid>
 
-          <Grid
-            item
-            xs={12}
+          <div
             style={{
               display: { calculationDataOpen } ? "inherit" : "none",
-            }}
-            id='calculationDataTable'></Grid>
+            }}>
+            <Grid item xs={12} id='calculationDataTable'></Grid>
+            {/* <React.Fragment>
+              <Typography color='inherit'>Download results</Typography>
+            </React.Fragment> */}
+          </div>
 
           <Grid item ref={calculateRef} xs={12}>
             <Divider />
