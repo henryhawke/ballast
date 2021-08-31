@@ -48,10 +48,7 @@ export default functions
       return;
     }
 
-    const file = admin
-      .storage()
-      .bucket()
-      .file("storage/aug.22.21-main40.1.xlsx");
+    const file = admin.storage().bucket().file("storage/aug30-main40.2.xlsx");
     return file.download().then((data) => {
       // import your calc functions lib
       XLSX_CALC.import_functions(formulajs);
@@ -89,6 +86,19 @@ export default functions
 
       //worksheet["D7"] = { t: "n", v: toNumber(payload.ridgeLength) };
       //worksheet["D5"] = { t: "n", v: toNumber(payload.bandHeight) };
+      if (payload.groundSurface === 1) {
+        worksheet["G68"] = { t: "n", v: 0.44 };
+      } else if (payload.groundSurface === 2) {
+        worksheet["G68"] = { t: "n", v: 0.53 };
+      } else if (payload.groundSurface === 3) {
+        worksheet["G68"] = { t: "n", v: 0.48 };
+      } else if (payload.groundSurface === 4) {
+        worksheet["G68"] = { t: "n", v: 0.51 };
+      } else if (payload.groundSurface === 5) {
+        worksheet["G68"] = { t: "n", v: 0.58 };
+      } else if (payload.groundSurface === 6) {
+        worksheet["G68"] = { t: "n", v: 0.61 };
+      }
 
       //ft / m
       worksheet["D9"] = { t: "n", v: toNumber(payload.roofHeight) };
@@ -316,7 +326,7 @@ export default functions
       var encOML = worksheet["K13"] ? worksheet["K13"].v : 0;
       var encOMW = worksheet["K14"] ? worksheet["K14"].v : 0;
 
-      // var totalBallasts = worksheet["K19"] ? worksheet["K19"].v : 0;
+      var totalBallasts = worksheet["D23"] ? worksheet["D23"].v : 0;
 
       // Weights of each ballast  K23, L23, and M23.
       var openBallastWeight = worksheet["J19"] ? worksheet["J19"].v : 0;
@@ -386,7 +396,7 @@ export default functions
       // console.log(encOMW);
 
       if (payload.title === "") {
-        payload.title = "Calculation";
+        payload.title = "Calculation" + payload.projectDate;
       }
 
       const returnData = {
@@ -421,6 +431,7 @@ export default functions
         advOpenBallastWeight: Math.floor(toNumber(advOpenBallastWeight)),
         advEncBallastWeight: Math.floor(toNumber(advEncBallastWeight)),
         valenceHeight: Math.floor(toNumber(payload.valenceHeight)),
+        totalBallasts: toNumber(totalBallasts),
         title: payload.title,
         time: admin.firestore.Timestamp.now(),
         share: payload.share,

@@ -9,6 +9,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 import ReactDOM from "react-dom";
 import { useHistory } from "react-router-dom";
+import ReactToPdf from "react-to-pdf";
 import Calculations from "../../algorithms/Calculations";
 
 import Zoom from "react-medium-image-zoom";
@@ -88,6 +89,8 @@ import FormGroup from "@material-ui/core/FormGroup";
 import Radio from "@material-ui/core/Radio";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Draggable from "react-draggable";
+
+import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
 
 import Backdrop from "@material-ui/core/Backdrop";
 
@@ -522,7 +525,11 @@ const Tools = ({ intl }) => {
 
   const [values, setValues] = useState({
     companyName: "",
-    project: "",
+    project:
+      "Data_" +
+      todaysDate.toISOString().substr(0, 10) +
+      "_" +
+      todaysDate.toTimeString().split(" ")[0],
     location: "",
     projectDate: todaysDate.toISOString().substr(0, 10),
     unit: 0,
@@ -555,7 +562,17 @@ const Tools = ({ intl }) => {
     openBallastWeight: 0,
     encBallastWeight: 0,
     calcID: uuidv4(),
-    title: "",
+    title:
+      "Data_" +
+      todaysDate.toISOString().substr(0, 10) +
+      "_" +
+      todaysDate.toTimeString().split(" ")[0],
+    pdfTitle:
+      "Data_" +
+      todaysDate.toISOString().substr(0, 10) +
+      "_" +
+      todaysDate.toTimeString().split(" ")[0] +
+      ".pdf",
     time: 0,
     share: {},
     notes: "",
@@ -802,79 +819,439 @@ const Tools = ({ intl }) => {
       roofTypeName = "Pyramid";
     }
 
+    const refPDF = React.createRef();
+    const pdfTitle = values.pdfTitle;
+
     ReactDOM.render(
       <Container className={classes.cardGrid} hidden={calculationDataOpen}>
         <div style={{ height: 220, width: "80vw" }}>
+          <ReactToPdf targetRef={refPDF} filename='calculation.pdf'>
+            {({ toPdf }) => (
+              <Button
+                variant='contained'
+                color='primary'
+                onClick={toPdf}
+                className={classes.button}
+                endIcon={<CloudDownloadIcon>Download PDF</CloudDownloadIcon>}>
+                Download PDF
+              </Button>
+            )}
+          </ReactToPdf>
+
           {/* SETUP
-            VARIABLE NAME -- INPUT -- OUTPUT (Open) -- OUTPUT (ENCLOSED)
-            name  -- (isInput) otherwise put (--)
+            VARIABLE NAME  INPUT  OUTPUT (Open)  OUTPUT (ENCLOSED)
+            name   (isInput) otherwise put ()
          */}
           <DataGrid
+            ref={refPDF}
             columns={[
               { field: "id", hide: true },
               {
-                field: "Enclosure",
-                headerName: "Enclosure",
+                field: "description",
+                headerName: "Description",
+                type: "string",
+                width: 300,
+              },
+              {
+                field: "input",
+                headerName: "Input Value",
+                type: "string",
+                width: 200,
+              },
+              {
+                field: "outputOpen",
+                headerName: "Ouput for 'Open'",
                 type: "string",
                 width: 120,
               },
               {
-                field: "ballastWeight",
-                headerName: "Weight of each ballast including plate (lbs)",
-                type: "number",
-                width: 150,
+                field: "outputClosed",
+                headerName: "Ouput for 'Closed'",
+                type: "string",
+                width: 120,
               },
-              {
-                field: "overturnMomentLength",
-                headerName: "Overturn moment about length (lbs.ft)",
-                type: "number",
-                width: 150,
-              },
-              {
-                field: "overturnMomentWidth",
-                headerName: "Overturn moment about width (lbs.ft)",
-                type: "number",
-                width: 150,
-              },
-              {
-                field: "FX",
-                headerName: "Horizontal Force in Length (lbs)",
-                type: "number",
-                width: 150,
-              },
-              {
-                field: "FY",
-                headerName: "Horizontal Force in Width (lbs)",
-                type: "number",
-                width: 150,
-              },
-              {
-                field: "FZ",
-                headerName: "Vertical Uplift Force (lbs)",
-                type: "number",
-                width: 150,
-              },
+              // {
+              //   field: "Enclosure",
+              //   headerName: "Enclosure",
+              //   type: "string",
+              //   width: 120,
+              // },
+              // {
+              //   field: "ballastWeight",
+              //   headerName: "Weight of each ballast including plate (lbs)",
+              //   type: "number",
+              //   width: 150,
+              // },
+              // {
+              //   field: "overturnMomentLength",
+              //   headerName: "Overturn moment about length (lbs.ft)",
+              //   type: "number",
+              //   width: 150,
+              // },
+              // {
+              //   field: "overturnMomentWidth",
+              //   headerName: "Overturn moment about width (lbs.ft)",
+              //   type: "number",
+              //   width: 150,
+              // },
+              // {
+              //   field: "FX",
+              //   headerName: "Horizontal Force in Length (lbs)",
+              //   type: "number",
+              //   width: 150,
+              // },
+              // {
+              //   field: "FY",
+              //   headerName: "Horizontal Force in Width (lbs)",
+              //   type: "number",
+              //   width: 150,
+              // },
+              // {
+              //   field: "FZ",
+              //   headerName: "Vertical Uplift Force (lbs)",
+              //   type: "number",
+              //   width: 150,
+              // },
             ]}
+            //             Company
+
+            // Project
+
+            // Location
+
+            // Date
+
+            // Tent type
+
+            // Tent width
+
+            // Tent length
+
+            // Roof type
+
+            // Ridge length
+
+            // Eave height
+
+            // Roof height
+
+            // Valence height
+
+            // # intermediate posts in length
+
+            // # intermediate posts in width
+
+            // # ballasts per corner post
+
+            // Wind speed
+
+            // Wind exposure
+
+            // Ballast configuration
+
+            // Ballast type
+
+            // Ground surface
+
+            // d1
+
+            // d2
+
+            // d3
+
+            // d4
+
+            // h4
+
+            // d5
+
+            // Weight of steel plate
             rows={[
               {
+                id: 99,
+                description:
+                  "For configuration Fixed-to-plate, A, B, D, the recommended weight includes the weight of the plate.",
+                input: "",
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
+                id: 28,
+                description: "RESULTS",
+                input: "",
+                outputOpen: "",
+                outputClosed: "",
+              },
+              // {
+              //   id: 2,
+              //   Enclosure: encEnclosureVal,
+              //   ballastWeight: encBallastWeight,
+              //   overturnMomentLength: encOverturnMomentLength,
+              //   overturnMomentWidth: vals.encOMW,
+              //   FX: vals.encFX,
+              //   FY: vals.encFY,
+              //   FZ: vals.encFZ,
+              // },
+              {
+                id: 29,
+                description: "Total number of ballasts",
+                input: values.totalBallasts,
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
+                id: 30,
+                description: "Weight of each ballast including plate (lbs)",
+                input: "",
+                outputOpen: openBallastWeight,
+                outputClosed: encBallastWeight,
+              },
+              {
+                id: 31,
+                description: "Horizontal force in length (lbs)",
+                input: "",
+                outputOpen: openFX,
+                outputClosed: encFX,
+              },
+
+              {
+                id: 32,
+                description: "Horizontal force in width (lbs)",
+                input: "",
+                outputOpen: openFY,
+                outputClosed: encFY,
+              },
+              {
+                id: 33,
+                description: "Vertical uplift force (lbs)",
+                input: "",
+                outputOpen: openFZ,
+                outputClosed: encFZ,
+              },
+              {
+                id: 34,
+                description: "Overturn moment about length (lbs.ft)",
+                input: "",
+                outputOpen: openOverturnMomentLength,
+                outputClosed: encOverturnMomentLength,
+              },
+
+              {
+                id: 35,
+                description: "Overturn moment about width (lbs.ft)",
+                input: "",
+                outputOpen: openOverturnMomentWidth,
+                outputClosed: encOverturnMomentWidth,
+              },
+              {
+                id: 98,
+                description: "",
+                input: "",
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
+                id: 100,
+                description: "INPUT VALUES",
+                input: "",
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
                 id: 1,
-                Enclosure: openEnclosureVal,
-                ballastWeight: openBallastWeight,
-                overturnMomentLength: openOverturnMomentLength,
-                overturnMomentWidth: openOverturnMomentWidth,
-                FX: openFX,
-                FY: openFY,
-                FZ: openFZ,
+                description: "Company",
+                input: values.companyName,
+                outputOpen: "",
+                outputClosed: "",
               },
               {
                 id: 2,
-                Enclosure: encEnclosureVal,
-                ballastWeight: encBallastWeight,
-                overturnMomentLength: encOverturnMomentLength,
-                overturnMomentWidth: vals.encOMW,
-                FX: vals.encFX,
-                FY: vals.encFY,
-                FZ: vals.encFZ,
+                description: "Project Name",
+                input: values.project,
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
+                id: 3,
+                description: "Location",
+                input: values.location,
+                outputOpen: "",
+                outputClosed: "",
+              },
+
+              {
+                id: 4,
+                description: "Date",
+                input: values.projectDate,
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
+                id: 5,
+                description: "Tent Type",
+                input: values.tentType,
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
+                id: 6,
+                description: "Tent Width (ft)",
+                input: values.tentWidth,
+                outputOpen: "",
+                outputClosed: "",
+              },
+
+              {
+                id: 7,
+                description: "Tent Length (ft)",
+                input: values.tentLength,
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
+                id: 8,
+                description: "Roof Type",
+                input: values.roofType,
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
+                id: 9,
+                description: "Ridge Length (ft)",
+                input: values.ridgeLength,
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
+                id: 10,
+                description: "Eave Height (ft)",
+                input: values.eaveHeight,
+                outputOpen: "",
+                outputClosed: "",
+              },
+
+              {
+                id: 11,
+                description: "Roof Height (ft)",
+                input: values.roofHeight,
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
+                id: 12,
+                description: "Valence Height (ft)",
+                input: values.valenceHeight,
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
+                id: 13,
+                description: "# intermediate posts in length",
+                input: values.postsPerLength,
+                outputOpen: "",
+                outputClosed: "",
+              },
+
+              {
+                id: 14,
+                description: "# intermediate posts in width",
+                input: values.postsPerWidth,
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
+                id: 15,
+                description: "# ballasts per corner post",
+                input: values.ballastsPerCornerPost,
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
+                id: 16,
+                description: "Wind Speed (mph)",
+                input: values.windSpeed,
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
+                id: 17,
+                description: "Wind Exposure",
+                input: values.windFlow,
+                outputOpen: "",
+                outputClosed: "",
+              },
+
+              {
+                id: 18,
+                description: "Ballast Configuration",
+                input: values.ballastType,
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
+                id: 19,
+                description: "Ballast Type",
+                input: values.ballastMaterial,
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
+                id: 20,
+                description: "Ground Surface",
+                input: values.groundSurface,
+                outputOpen: "",
+                outputClosed: "",
+              },
+
+              {
+                id: 21,
+                description: "D1",
+                input: "",
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
+                id: 22,
+                description: "D2",
+                input: "",
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
+                id: 23,
+                description: "D3",
+                input: "",
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
+                id: 24,
+                description: "D4",
+                input: "",
+                outputOpen: "",
+                outputClosed: "",
+              },
+
+              {
+                id: 25,
+                description: "H4",
+                input: "",
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
+                id: 26,
+                description: "D5",
+                input: "",
+                outputOpen: "",
+                outputClosed: "",
+              },
+              {
+                id: 27,
+                description: "Weight of Steel Plate (lbs)",
+                input: "",
+                outputOpen: "",
+                outputClosed: "",
               },
             ]}
             components={{
@@ -882,7 +1259,7 @@ const Tools = ({ intl }) => {
             }}
             autoHeight={true}
             hideFooter={true}
-            headerHeight={100}
+            headerHeight={50}
             alignItems='center'
             disableColumnSelector={true}
             disableColumnFilter={true}
@@ -1566,7 +1943,9 @@ const Tools = ({ intl }) => {
                   <FormControl
                     className={clsx(classes.textField)}
                     variant='outlined'>
-                    <InputLabel htmlFor='outlined-age-native-simple'>
+                    <InputLabel
+                      shrink={true}
+                      htmlFor='outlined-age-native-simple'>
                       Project
                     </InputLabel>
                     <OutlinedInput
@@ -1775,7 +2154,7 @@ const Tools = ({ intl }) => {
                         defaultValue={1}
                         value={values.tentType}
                         onChange={handleSelectChange}
-                        helperText='Frame Tent, Hybrid Tent, Pole Tent'
+                        helperText='Frame Tent, Pole Tent'
                         // endAdornment={
                         //   <InputAdornment position='end'>
                         //     <EditRoundedIcon
@@ -1791,7 +2170,7 @@ const Tools = ({ intl }) => {
                           id: "outlined-age-native-simple",
                         }}>
                         <option value={1}>Frame Tent</option>
-                        <option value={2}>Hybrid Tent</option>
+                        {/* <option value={2}>Hybrid Tent</option> */}
                         <option value={3}>Pole Tent</option>
                       </Select>
                     </FormControl>
@@ -2764,8 +3143,8 @@ const Tools = ({ intl }) => {
                       <React.Fragment>
                         <Typography color='inherit'>
                           Fully Exposed: wide-open space, rural environment, no
-                          trees --- Partially Exposed: urban and suburban
-                          environment, some trees --- Sheltered: urban
+                          trees ~~ Partially Exposed: urban and suburban
+                          environment, some trees ~~ Sheltered: urban
                           environment with large buildings nearby and dense
                           trees
                         </Typography>
@@ -4662,7 +5041,7 @@ const Tools = ({ intl }) => {
           </div>
 
           <Grid item ref={calculateRef} xs={12}>
-            <Divider />
+            {/* <Divider /> */}
           </Grid>
         </div>
       </div>
