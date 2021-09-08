@@ -4,8 +4,8 @@ import admin from "firebase-admin";
 // https://oss.sheetjs.com/sheetjs/
 // for sheet conversion
 const runtimeOpts = {
-  timeoutSeconds: 540,
-  memory: "4GB",
+  timeoutSeconds: 60,
+  memory: "1GB",
 };
 
 const XLSX = require("xlsx");

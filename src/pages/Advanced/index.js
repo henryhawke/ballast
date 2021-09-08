@@ -3187,7 +3187,7 @@ const Tools = ({ intl }) => {
 
                 {/* Advanced Button Toggle */}
 
-                <Grid item xs={1} md={1}>
+                <Grid item xs={6} md={6}>
                   <FormGroup row>
                     <FormControlLabel
                       control={
@@ -3201,6 +3201,12 @@ const Tools = ({ intl }) => {
                       label='Advanced'
                     />
                   </FormGroup>
+                  <Typography variant='h8' component='h8'>
+                    without the advanced feature, the tool assumes the ballast
+                    configuration “Fixed-to-pole” with plastic barrel on the
+                    smooth concrete.
+                  </Typography>
+
                   {/* <ButtonGroup
                       row
                       className={clsx(classes.calculateButton)}
