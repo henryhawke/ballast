@@ -969,8 +969,7 @@ const Tools = ({ intl }) => {
             rows={[
               {
                 id: 99,
-                description:
-                  "For configuration Fixed-to-plate, A, B, D, the recommended weight includes the weight of the plate.",
+                description: "* -> including plate if applicable",
                 input: "",
                 outputOpen: "",
                 outputClosed: "",
@@ -1001,10 +1000,10 @@ const Tools = ({ intl }) => {
               },
               {
                 id: 30,
-                description: "Weight of each ballast including plate (lbs)",
+                description: "Weight of each ballast * (lbs)",
                 input: "",
-                outputOpen: openBallastWeight,
-                outputClosed: encBallastWeight,
+                outputOpen: vals.advOpenBallastWeight,
+                outputClosed: vals.advEncBallastWeight,
               },
               {
                 id: 31,

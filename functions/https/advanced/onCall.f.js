@@ -78,6 +78,8 @@ export default functions
 
       worksheet["D6"] = { t: "n", v: toNumber(payload.roofType) };
 
+      worksheet["D2"] = { t: "n", v: toNumber(payload.tentType) };
+
       // ft / m
 
       if (payload.roofType === "2") {
@@ -127,8 +129,6 @@ export default functions
         v: toNumber(payload.ballastsPerCornerPost),
       };
 
-      worksheet["I59"] = { t: "n", v: toNumber(payload.groundSurface) };
-
       var groundSurface = toNumber(payload.groundSurface);
       var ballastMaterial = toNumber(payload.ballastMaterial);
 
@@ -137,7 +137,7 @@ export default functions
       var mu3 = 0.26;
 
       if (payload.advanced) {
-        worksheet["D2"] = { t: "n", v: toNumber(payload.tentType) };
+        worksheet["I59"] = { t: "n", v: toNumber(payload.groundSurface) };
 
         if (ballastMaterial === 1) {
           mu2 = 0.2;

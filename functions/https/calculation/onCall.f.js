@@ -30,7 +30,7 @@ export default functions
       return;
     }
 
-    const file = admin.storage().bucket().file("storage/feb242021.xlsx");
+    const file = admin.storage().bucket().file("storage/aug30-main40.2.xlsx");
     return file.download().then((data) => {
       // import your calc functions lib
       XLSX_CALC.import_functions(formulajs);
