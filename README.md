@@ -1,6 +1,6 @@
-#BALLAST TOOL
+<b>BALLAST TOOL</b>
 
-#https://ballast.web.app/
+https://ballast.web.app/
 
 Easily Add Custom URL (i.e. https://tents.ifai.com/tool for example using https://firebase.google.com/docs/hosting)
 
