@@ -1,7 +1,8 @@
 #BALLAST TOOL
 
-##https://ballast.web.app/
-    Easily Add Custom URL (i.e. https://tents.ifai.com/tool for example using https://firebase.google.com/docs/hosting)
+#https://ballast.web.app/
+
+Easily Add Custom URL (i.e. https://tents.ifai.com/tool for example using https://firebase.google.com/docs/hosting)
 
 Application is written entirely in React JS. I have currently focused on it as a Web app, but is extensible to Android, iOS, and as a Windows or macOS app.
 https://reactjs.org/
