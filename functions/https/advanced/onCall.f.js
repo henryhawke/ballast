@@ -1,11 +1,12 @@
 import * as functions from "firebase-functions";
 import admin from "firebase-admin";
 
+// Test
 // https://oss.sheetjs.com/sheetjs/
 // for sheet conversion
 const runtimeOpts = {
   timeoutSeconds: 60,
-  memory: "1GB",
+  memory: "2GB",
 };
 
 const XLSX = require("xlsx");
@@ -29,6 +30,23 @@ function toNumber(value) {
   }
   return value;
 }
+
+// d2 - Type of tent (1 = Frame, 2 = Hybrid, 3 = Pole)
+// d3 - Length
+// d4 - Width
+// d5 - Eave height
+// d6 - Roof type (1 = G, 2 = H, 3 = P)
+// d7 - Ridge length if Hip roof
+// //d7 - Ridge length if any roof
+// d9 - Roof height
+
+// d12 - Wind speed
+// d13 - Wind exposure (1 = Fully exposd, 2 = Partially exposed, 3 = Sheltered)
+// d14 - Valence height
+
+// d20 - Number of intermediate posts in length
+// d21 - Number of intermediate posts in width
+// d22 - Number of ballasts per corner post
 
 export default functions
   .region("us-central1")
@@ -67,20 +85,36 @@ export default functions
 
       // change some cell value
       // workbook.Sheets["Main"].A1.v = 42;
+
+      // type of tent (1- frame, 2, hybrid, 3=pole)
+      worksheet["D2"] = {
+        t: "n",
+        v: toNumber(payload.tentType),
+      };
+
+      //height
       worksheet["D3"] = {
         t: "n",
         v: toNumber(payload.tentLength),
       };
-      worksheet["D4"] = { t: "n", v: toNumber(payload.tentWidth) }; // ft/m
 
-      // ft / m
-      worksheet["D5"] = { t: "n", v: toNumber(payload.eaveHeight) };
+      // width
+      worksheet["D4"] = {
+        t: "n",
+        v: toNumber(payload.tentWidth),
+      }; // ft/m
 
-      worksheet["D6"] = { t: "n", v: toNumber(payload.roofType) };
+      // eave height
+      worksheet["D5"] = {
+        t: "n",
+        v: toNumber(payload.eaveHeight),
+      };
 
-      worksheet["D2"] = { t: "n", v: toNumber(payload.tentType) };
-
-      // ft / m
+      // roof type (1 = Gable, 2 = Hip, 3 = Pyramid)
+      worksheet["D6"] = {
+        t: "n",
+        v: toNumber(payload.roofType),
+      };
 
       if (payload.roofType === "2") {
         worksheet["D7"] = { t: "n", v: toNumber(payload.ridgeLength) };
@@ -102,28 +136,25 @@ export default functions
         worksheet["G68"] = { t: "n", v: 0.61 };
       }
 
-      //ft / m
+      //Roof Height
       worksheet["D9"] = { t: "n", v: toNumber(payload.roofHeight) };
 
-      //worksheet["D9"] = { t: "s", v: "X" };
-
-      // mph / km/h
+      // Wind Speed
       worksheet["D12"] = { t: "n", v: toNumber(payload.windSpeed) };
 
-      // mph / km/h
+      // Wind exposure (1 = Fully exposd, 2 = Partially exposed, 3 = Sheltered)
       worksheet["D13"] = { t: "n", v: toNumber(payload.windFlow) };
 
       // valance height
       worksheet["D14"] = { t: "n", v: toNumber(payload.valenceHeight) };
 
-      // Number of intermediate posts in length D13
-
+      // Number of intermediate posts in length D20
       worksheet["D20"] = { t: "n", v: toNumber(payload.postsPerLength) };
 
-      // Number of intermediate posts in width D14
+      // Number of intermediate posts in width D21
       worksheet["D21"] = { t: "n", v: toNumber(payload.postsPerWidth) };
 
-      // Number of Number of ballasts per corner post D15
+      // Number of Number of ballasts per corner post D22
       worksheet["D22"] = {
         t: "n",
         v: toNumber(payload.ballastsPerCornerPost),
@@ -136,7 +167,11 @@ export default functions
       var mu2 = 0.2;
       var mu3 = 0.26;
 
+      // console.log("PAYLOAD:");
+      // console.log(payload);
+
       if (payload.advanced) {
+        console.log("ADVANCED TURNED ON");
         worksheet["I59"] = { t: "n", v: toNumber(payload.groundSurface) };
 
         if (ballastMaterial === 1) {
@@ -314,6 +349,12 @@ export default functions
       // CALCULATION OF THE SPREADSHEET
       XLSX_CALC(workbook);
 
+      var totalBallasts = worksheet["D23"]
+        ? worksheet["D23"].v
+        : 2 * (payload.postsPerLength + payload.postsPerWidth) +
+          4 * payload.ballastsPerCornerPost;
+      console.log("the total number of ballasts is " + totalBallasts);
+
       var openFX = worksheet["J10"] ? worksheet["J10"].v : 0;
       var openFY = worksheet["J11"] ? worksheet["J11"].v : 0;
       var openFZ = worksheet["J12"] ? worksheet["J12"].v : 0;
@@ -325,8 +366,6 @@ export default functions
       var encFZ = worksheet["K12"] ? worksheet["K12"].v : 0;
       var encOML = worksheet["K13"] ? worksheet["K13"].v : 0;
       var encOMW = worksheet["K14"] ? worksheet["K14"].v : 0;
-
-      var totalBallasts = worksheet["D23"] ? worksheet["D23"].v : 0;
 
       // Weights of each ballast  K23, L23, and M23.
       var openBallastWeight = worksheet["J19"] ? worksheet["J19"].v : 0;
@@ -402,6 +441,11 @@ export default functions
       const returnData = {
         calcID: payload.calcID,
         owner: context.auth.uid,
+        projectDate: payload.projectDate,
+        title: payload.title,
+        time: admin.firestore.Timestamp.now(),
+        share: payload.share,
+        notes: payload.notes,
         openFX: Math.floor(toNumber(openFX)),
         openFY: Math.floor(toNumber(openFY)),
         openFZ: Math.floor(toNumber(openFZ)),
@@ -432,10 +476,7 @@ export default functions
         advEncBallastWeight: Math.floor(toNumber(advEncBallastWeight)),
         valenceHeight: Math.floor(toNumber(payload.valenceHeight)),
         totalBallasts: toNumber(totalBallasts),
-        title: payload.title,
-        time: admin.firestore.Timestamp.now(),
-        share: payload.share,
-        notes: payload.notes,
+
         b2mu3: toNumber(b2mu3),
         b2wplate: toNumber(b2wplate),
         b2open: Math.floor(toNumber(b2open)),
@@ -474,9 +515,32 @@ export default functions
         dopen: Math.floor(toNumber(dopen)),
         denclosed: Math.floor(toNumber(denclosed)),
       };
+      console.log("totalBallasts:" + totalBallasts);
+      console.log(
+        "OPEN OML, OMW, FX, FY, FZ: " +
+          openOML +
+          " | " +
+          openOMW +
+          " | " +
+          openFX +
+          " | " +
+          openFY +
+          " | " +
+          openFZ
+      );
+      console.log(
+        "ENC OML, OMW, FX, FY, FZ: " +
+          encOML +
+          " | " +
+          encOMW +
+          " | " +
+          encFX +
+          " | " +
+          encFY +
+          " | " +
+          encFZ
+      );
       console.log(returnData);
-      console.log(openOML);
-      console.log(openOML);
       admin
         .database()
         .ref(`/tasks/${context.auth.uid}/${payload.calcID}`)

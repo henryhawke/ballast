@@ -632,6 +632,7 @@ const Tools = ({ intl }) => {
     );
 
     setAdvancedBtnDisabled(event.target.checked);
+    console.log("advanced set to" + event.target.checked);
     setValues({ ...values, advanced: event.target.checked });
 
     calculateRef.current.scrollIntoView();
@@ -967,13 +968,13 @@ const Tools = ({ intl }) => {
 
             // Weight of steel plate
             rows={[
-              {
-                id: 99,
-                description: "* -> including plate if applicable",
-                input: "",
-                outputOpen: "",
-                outputClosed: "",
-              },
+              // {
+              //   id: 99,
+              //   description: "* -> including plate if applicable",
+              //   input: "",
+              //   outputOpen: "",
+              //   outputClosed: "",
+              // },
               {
                 id: 28,
                 description: "RESULTS",
@@ -994,9 +995,9 @@ const Tools = ({ intl }) => {
               {
                 id: 29,
                 description: "Total number of ballasts",
-                input: values.totalBallasts,
-                outputOpen: "",
-                outputClosed: "",
+                input: "",
+                outputOpen: vals.totalBallasts,
+                outputClosed: vals.totalBallasts,
               },
               {
                 id: 30,
@@ -1059,14 +1060,14 @@ const Tools = ({ intl }) => {
               {
                 id: 1,
                 description: "Company",
-                input: values.companyName,
+                input: vals.companyName,
                 outputOpen: "",
                 outputClosed: "",
               },
               {
                 id: 2,
                 description: "Project Name",
-                input: values.project,
+                input: vals.title,
                 outputOpen: "",
                 outputClosed: "",
               },
