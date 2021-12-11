@@ -50,6 +50,7 @@ import {
   GridToolbarContainer,
   GridToolbarExport,
 } from "@material-ui/data-grid";
+// changed to yarn add @mui/material @emotion/react @emotion/styled
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import { v4 as uuidv4 } from "uuid";
