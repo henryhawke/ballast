@@ -616,8 +616,8 @@ const Tools = ({ intl }) => {
     dopen: 0,
     denclosed: 0,
     advanced: false,
-    groundSurface: 1,
-    ballastMaterial: 1,
+    groundSurface: 3,
+    ballastMaterial: 3,
   });
 
   const handleChange = (prop) => (event) => {
@@ -784,31 +784,31 @@ const Tools = ({ intl }) => {
 
     if (vals.ballastType === 2) {
       ballastName = "Fixed-To-Pole";
-      encBallastWeight = vals.c2enclosed;
-      openBallastWeight = vals.c2open;
+      // encBallastWeight = vals.c2enclosed;
+      // openBallastWeight = vals.c2open;
     } else if (values.ballastType === 3) {
       ballastName = "A";
-      encBallastWeight = vals.aenclosed;
-      openBallastWeight = vals.aopen;
+      // encBallastWeight = vals.aenclosed;
+      // openBallastWeight = vals.aopen;
     } else if (values.ballastType === 3) {
       ballastName = "B";
-      encBallastWeight = vals.benclosed;
-      openBallastWeight = vals.bopen;
+      // encBallastWeight = vals.benclosed;
+      // openBallastWeight = vals.bopen;
       // ballastWeight = enclosed ? vals.benclosed : vals.bopen;
     } else if (values.ballastType === 3) {
       ballastName = "C";
-      encBallastWeight = vals.cenclosed;
-      openBallastWeight = vals.copen;
+      // encBallastWeight = vals.cenclosed;
+      // openBallastWeight = vals.copen;
       //ballastWeight = enclosed ? vals.cenclosed : vals.copen;
     } else if (values.ballastType === 3) {
       ballastName = "D";
-      encBallastWeight = vals.denclosed;
-      openBallastWeight = vals.dopen;
+      // encBallastWeight = vals.denclosed;
+      // openBallastWeight = vals.dopen;
       // ballastWeight = enclosed ? vals.denclosed : vals.dopen;
     } else {
       ballastName = "Fixed-To-Plate";
-      encBallastWeight = vals.b2enclosed;
-      openBallastWeight = vals.b2open;
+      // encBallastWeight = vals.b2enclosed;
+      // openBallastWeight = vals.b2open;
       //ballastWeight = enclosed ? vals.b2enclosed : vals.b2open;
     }
 
@@ -969,20 +969,20 @@ const Tools = ({ intl }) => {
 
             // Weight of steel plate
             rows={[
-              // {
-              //   id: 99,
-              //   description: "* -> including plate if applicable",
-              //   input: "",
-              //   outputOpen: "",
-              //   outputClosed: "",
-              // },
               {
-                id: 28,
-                description: "RESULTS",
+                id: 99,
+                description: "* -> including plate if applicable",
                 input: "",
                 outputOpen: "",
                 outputClosed: "",
               },
+              // {
+              //   id: 28,
+              //   description: "RESULTS",
+              //   input: "",
+              //   outputOpen: "",
+              //   outputClosed: "",
+              // },
               // {
               //   id: 2,
               //   Enclosure: encEnclosureVal,
@@ -1002,47 +1002,47 @@ const Tools = ({ intl }) => {
               },
               {
                 id: 30,
-                description: "Weight of each ballast * (lbs)",
+                description: "Weight of each ballast  (lbs)",
                 input: "",
-                outputOpen: vals.advOpenBallastWeight,
-                outputClosed: vals.advEncBallastWeight,
+                outputOpen: vals.openBallastWeight,
+                outputClosed: vals.encBallastWeight,
               },
               {
                 id: 31,
                 description: "Horizontal force in length (lbs)",
                 input: "",
-                outputOpen: openFX,
-                outputClosed: encFX,
+                outputOpen: vals.openFX,
+                outputClosed: vals.encFX,
               },
 
               {
                 id: 32,
                 description: "Horizontal force in width (lbs)",
                 input: "",
-                outputOpen: openFY,
-                outputClosed: encFY,
+                outputOpen: vals.openFY,
+                outputClosed: vals.encFY,
               },
               {
                 id: 33,
                 description: "Vertical uplift force (lbs)",
                 input: "",
-                outputOpen: openFZ,
-                outputClosed: encFZ,
+                outputOpen: vals.openFZ,
+                outputClosed: vals.encFZ,
               },
               {
                 id: 34,
                 description: "Overturn moment about length (lbs.ft)",
                 input: "",
-                outputOpen: openOverturnMomentLength,
-                outputClosed: encOverturnMomentLength,
+                outputOpen: vals.openOML,
+                outputClosed: vals.encOML,
               },
 
               {
                 id: 35,
                 description: "Overturn moment about width (lbs.ft)",
                 input: "",
-                outputOpen: openOverturnMomentWidth,
-                outputClosed: encOverturnMomentWidth,
+                outputOpen: vals.openOMW,
+                outputClosed: vals.encOMW,
               },
               {
                 id: 98,
@@ -1204,56 +1204,56 @@ const Tools = ({ intl }) => {
                 outputClosed: "",
               },
 
-              {
-                id: 21,
-                description: "D1",
-                input: "",
-                outputOpen: "",
-                outputClosed: "",
-              },
-              {
-                id: 22,
-                description: "D2",
-                input: "",
-                outputOpen: "",
-                outputClosed: "",
-              },
-              {
-                id: 23,
-                description: "D3",
-                input: "",
-                outputOpen: "",
-                outputClosed: "",
-              },
-              {
-                id: 24,
-                description: "D4",
-                input: "",
-                outputOpen: "",
-                outputClosed: "",
-              },
+              // {
+              //   id: 21,
+              //   description: "D1",
+              //   input: "",
+              //   outputOpen: "",
+              //   outputClosed: "",
+              // },
+              // {
+              //   id: 22,
+              //   description: "D2",
+              //   input: "",
+              //   outputOpen: "",
+              //   outputClosed: "",
+              // },
+              // {
+              //   id: 23,
+              //   description: "D3",
+              //   input: "",
+              //   outputOpen: "",
+              //   outputClosed: "",
+              // },
+              // {
+              //   id: 24,
+              //   description: "D4",
+              //   input: "",
+              //   outputOpen: "",
+              //   outputClosed: "",
+              // },
 
-              {
-                id: 25,
-                description: "H4",
-                input: "",
-                outputOpen: "",
-                outputClosed: "",
-              },
-              {
-                id: 26,
-                description: "D5",
-                input: "",
-                outputOpen: "",
-                outputClosed: "",
-              },
-              {
-                id: 27,
-                description: "Weight of Steel Plate (lbs)",
-                input: "",
-                outputOpen: "",
-                outputClosed: "",
-              },
+              // {
+              //   id: 25,
+              //   description: "H4",
+              //   input: "",
+              //   outputOpen: "",
+              //   outputClosed: "",
+              // },
+              // {
+              //   id: 26,
+              //   description: "D5",
+              //   input: "",
+              //   outputOpen: "",
+              //   outputClosed: "",
+              // },
+              // {
+              //   id: 27,
+              //   description: "Weight of Steel Plate (lbs)",
+              //   input: "",
+              //   outputOpen: "",
+              //   outputClosed: "",
+              // },
             ]}
             components={{
               Toolbar: CustomToolbar,
@@ -1381,8 +1381,8 @@ const Tools = ({ intl }) => {
   const [infoImages, setInfoImages] = React.useState({
     type: gable,
     ballast: ConfigurationB2,
-    groundSurface: smoothConcrete,
-    ballastMaterial: plasticBarrel,
+    groundSurface: asphalt,
+    ballastMaterial: concreteBlock,
   });
 
   const [ballastType, setBallastType] = React.useState({
@@ -1658,23 +1658,6 @@ const Tools = ({ intl }) => {
         }
         showResults(result);
         calculateRef.current.scrollIntoView();
-        // firebaseApp
-        //   .firestore()
-        //   .collection("members")
-        //   .doc(firebaseApp.auth().currentUser.uid)
-        //   .collection("saved")
-        //   .doc(values.calcID)
-        //   .onSnapshot(
-        //     function (snapshot) {
-        //       console.log(snapshot.data());
-        //       // showResults(snapshot.data());
-        //       return snapshot.data();
-        //     },
-        //     function (error) {
-        //       console.log(error);
-        //       return;
-        //     }
-        //   );
       })
       .catch((error) => {
         // Getting the Error details.
@@ -1689,62 +1672,6 @@ const Tools = ({ intl }) => {
 
   const [resultValuesGrid, setValuesGrid] = React.useState([]);
 
-  const tileData = [
-    {
-      img: ConfigurationA,
-      title: "", //"Ballast Type A",
-      author: "",
-      featured: true,
-    },
-    {
-      img: ConfigurationB,
-      title: "", //"Ballast Type B",
-      author: "",
-      featured: true,
-    },
-    {
-      img: ConfigurationB2,
-      title: "", //"Ballast Type B2",
-      author: "",
-      featured: true,
-    },
-    {
-      img: ConfigurationC,
-      title: "", //"Ballast Type C",
-      author: "",
-      featured: true,
-    },
-    {
-      img: ConfigurationC2,
-      title: "", //"Ballast Type C2",
-      author: "",
-      featured: true,
-    },
-    {
-      img: ConfigurationD,
-      title: "", //"Ballast Type D",
-      author: "",
-      featured: true,
-    },
-    {
-      img: pyramid,
-      title: "", //"Pyramid Roof",
-      author: "",
-      featured: true,
-    },
-    {
-      img: hip,
-      title: "", //"Hip Roof",
-      author: "",
-      featured: true,
-    },
-    {
-      img: gable,
-      title: "", //"Gable Roof",
-      author: "",
-      featured: true,
-    },
-  ];
   const { auth } = useAuth();
   // console.log(auth);
   // console.log(isGranted(auth, "member"));
@@ -1834,95 +1761,7 @@ const Tools = ({ intl }) => {
               Results for {values.title}
             </DialogTitle>
             <DialogContent>
-              <div style={{ height: "200", width: "100%" }}>
-                {/* <DataGrid
-                  columns={[
-                    { field: "id", hide: true },
-                    {
-                      field: "Enclosure",
-                      type: "string",
-                      width: 200,
-                      resizable: true,
-                    },
-                    {
-                      field: "overturnMoment",
-                      type: "number",
-                      width: 200,
-                      resizable: true,
-                    },
-                    {
-                      field: "ballastWeight",
-                      type: "number",
-                      width: 200,
-                      resizable: true,
-                    },
-                    { field: "FX", type: "number", resizable: true },
-                    { field: "FY", type: "number", resizable: true },
-                    { field: "FZ", type: "number", resizable: true },
-                    // { field: "Wind Speed" },
-                    // { field: "Wind Flow" },
-                    // { field: "Tent Width" },
-                    // { field: "Tent Length" },
-                    // { field: "Eave Height" },
-                    // { field: "Eave Height" },
-                    // { field: "Band Height" },
-                    // { field: "Ridge Length" },
-                    // { field: "Roof Height" },
-                    // { field: "Posts Per Width" },
-                    // { field: "Posts Per Length" },
-                    // { field: "Ballasts Per Intermediate Post" },
-                    // { field: "Ballasts Per Corner Post" },
-                  ]}
-                  rows={[
-                    {
-                      id: 1,
-                      Enclosure: "Open",
-                      overturnMoment: values.openOM,
-                      FX: values.openFX,
-                      FY: values.openFY,
-                      FZ: values.openFZ,
-                      ballastWeight: values.openBallastWeight,
-                    },
-                    {
-                      id: 2,
-                      Enclosure: "Partially Enclosed",
-                      overturnMoment: values.partOM,
-                      FX: values.partFX,
-                      FY: values.partFY,
-                      FZ: values.partFZ,
-                      ballastWeight: values.partBallastWeight,
-                    },
-                    {
-                      id: 3,
-                      Enclosure: "Enclosed",
-                      overturnMoment: values.encOM,
-                      FX: values.encFX,
-                      FY: values.encFY,
-                      FZ: values.encFZ,
-                      ballastWeight: values.encBallastWeight,
-                    },
-                  ]}
-                  disableColumnMenu={false}
-                /> */}
-              </div>
-              {/* <Typography variant='h4' gutterBottom>
-                Overturn moment = {results.overturnMoment} lbs.{units.size[values.unit]}
-              </Typography>
-              <Typography variant='h4' gutterBottom>
-                Vertical uplift force per guy = {results.verticalUpliftForce}{" "}
-                lbs
-              </Typography> */}
-
-              {/* <Typography gutterBottom>
-                Praesent commodo cursus magna, vel scelerisque nisl consectetur
-                et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus
-                dolor auctor.
-              </Typography>
-              <Typography gutterBottom>
-                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo
-                cursus magna, vel scelerisque nisl consectetur et. Donec sed
-                odio dui. Donec ullamcorper nulla non metus auctor fringilla.
-              </Typography> */}
+              <div style={{ height: "200", width: "100%" }}></div>
             </DialogContent>
             <DialogActions>
               <Button autoFocus onClick={handleClose} color='primary'>
@@ -2012,6 +1851,7 @@ const Tools = ({ intl }) => {
                     /> */}
                   </FormControl>
                 </Grid>
+
                 {/* Project Date */}
                 <Grid item xs={6}>
                   {/* Project Date */}
@@ -2051,34 +1891,6 @@ const Tools = ({ intl }) => {
                       />
                     </Zoom>
                   </Paper>
-                  {/* <div className={classes.gridRoot}>
-                      <ImageList
-                        className={classes.imageList}
-                        rowHeight={350}
-                        cols={2}>
-                        {tileData.map((item) => (
-                          <ImageListItem key={item.img}>
-                            <img
-                              src={item.img}
-                              alt={item.title}
-                              className={classes.imgFullHeight}
-                            />
-                            <ImageListItemBar
-                              title={item.title}
-                              classes={{
-                                root: classes.titleBar,
-                                title: classes.title,
-                              }}
-                              // actionIcon={
-                              //   <IconButton aria-label={`star ${item.title}`}>
-                              //     <StarBorderIcon className={classes.title} />
-                              //   </IconButton>
-                              // }
-                            />
-                          </ImageListItem>
-                        ))}
-                      </ImageList>
-                    </div> */}
                 </Grid>
 
                 <Grid item xs={6} md={5}>
@@ -3203,9 +3015,9 @@ const Tools = ({ intl }) => {
                     />
                   </FormGroup>
                   <Typography variant='h8' component='h8'>
-                    without the advanced feature, the tool assumes the ballast
-                    configuration “Fixed-to-pole” with plastic barrel on the
-                    smooth concrete.
+                    Without the advanced feature, the tool assumes the ballast
+                    configuration “Fixed-to-pole” with concrete block on the
+                    asphalt.
                   </Typography>
 
                   {/* <ButtonGroup
@@ -3353,7 +3165,7 @@ const Tools = ({ intl }) => {
                             native
                             InputLabelProps={{ shrink: true }}
                             label='Ballast Type'
-                            defaultValue={1}
+                            defaultValue={3}
                             value={values.ballastMaterial}
                             onChange={handleBallastMaterialSelectChange}
                             // endAdornment={
@@ -3404,7 +3216,7 @@ const Tools = ({ intl }) => {
                           <Select
                             native
                             label='Ground Surface'
-                            defaultValue={1}
+                            defaultValue={3}
                             value={values.groundSurface}
                             onChange={handleGroundSurfaceSelectChange}
                             // endAdornment={
@@ -3654,6 +3466,7 @@ const Tools = ({ intl }) => {
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
+
                     {/* ad2:0, Distance btw far end of plate & upright (ft)  17*/}
                     <Grid
                       item

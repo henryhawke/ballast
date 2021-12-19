@@ -163,9 +163,9 @@ export default functions
       var groundSurface = toNumber(payload.groundSurface);
       var ballastMaterial = toNumber(payload.ballastMaterial);
 
-      var mu1 = 0.26;
+      var mu1 = 0.79;
       var mu2 = 0.2;
-      var mu3 = 0.26;
+      var mu3 = 0.79;
 
       // console.log("PAYLOAD:");
       // console.log(payload);
@@ -368,10 +368,47 @@ export default functions
       var encOMW = worksheet["K14"] ? worksheet["K14"].v : 0;
 
       // Weights of each ballast  K23, L23, and M23.
-      var openBallastWeight = worksheet["J19"] ? worksheet["J19"].v : 0;
-      var encBallastWeight = worksheet["K19"] ? worksheet["K19"].v : 0;
-      var advOpenBallastWeight = worksheet["J19"] ? worksheet["J19"].v : 0;
-      var advEncBallastWeight = worksheet["K19"] ? worksheet["K19"].v : 0;
+
+      var openBallastWeight;
+      var encBallastWeight;
+
+      console.log("BALLAST TYPE" + payload.ballastType);
+      var ballastType = toNumber(payload.ballastType);
+
+      if (payload.advanced) {
+        if (ballastType === 1) {
+          // Fixed-To-Plate
+          openBallastWeight = worksheet["E58"] ? worksheet["E58"].v : 0;
+          encBallastWeight = worksheet["F58"] ? worksheet["F48"].v : 0;
+        } else if (ballastType === 2) {
+          // Fixed-To-Pole
+          openBallastWeight = worksheet["G58"] ? worksheet["G58"].v : 0;
+          encBallastWeight = worksheet["H58"] ? worksheet["H48"].v : 0;
+        } else if (ballastType === 3) {
+          // A
+          openBallastWeight = worksheet["I58"] ? worksheet["I58"].v : 0;
+          encBallastWeight = worksheet["J58"] ? worksheet["J48"].v : 0;
+        } else if (ballastType === 4) {
+          // B assuming A
+          openBallastWeight = worksheet["K58"] ? worksheet["K58"].v : 0;
+          encBallastWeight = worksheet["L58"] ? worksheet["L48"].v : 0;
+          // } else if (payload.ballastType === 5) {
+          //   // B assuming C
+          //   openBallastWeight = worksheet["K58"] ? worksheet["K58"].v : 0;
+          //   encBallastWeight = worksheet["L58"] ? worksheet["L48"].v : 0;
+        } else if (ballastType === 5) {
+          // C
+          openBallastWeight = worksheet["O58"] ? worksheet["O58"].v : 0;
+          encBallastWeight = worksheet["P58"] ? worksheet["P48"].v : 0;
+        } else if (ballastType === 6) {
+          //D
+          openBallastWeight = worksheet["Q58"] ? worksheet["Q58"].v : 0;
+          encBallastWeight = worksheet["R58"] ? worksheet["R48"].v : 0;
+        }
+      } else {
+        openBallastWeight = worksheet["J19"] ? worksheet["J19"].v : 0;
+        encBallastWeight = worksheet["K19"] ? worksheet["K19"].v : 0;
+      }
 
       // Fixed-to-plate
 
@@ -443,6 +480,7 @@ export default functions
         owner: context.auth.uid,
         projectDate: payload.projectDate,
         title: payload.title,
+
         time: admin.firestore.Timestamp.now(),
         share: payload.share,
         notes: payload.notes,
@@ -472,8 +510,8 @@ export default functions
         ballastsPerCornerPost: toNumber(payload.ballastsPerCornerPost),
         openBallastWeight: Math.floor(toNumber(openBallastWeight)),
         encBallastWeight: Math.floor(toNumber(encBallastWeight)),
-        advOpenBallastWeight: Math.floor(toNumber(advOpenBallastWeight)),
-        advEncBallastWeight: Math.floor(toNumber(advEncBallastWeight)),
+        // advOpenBallastWeight: Math.floor(toNumber(advOpenBallastWeight)),
+        // advEncBallastWeight: Math.floor(toNumber(advEncBallastWeight)),
         valenceHeight: Math.floor(toNumber(payload.valenceHeight)),
         totalBallasts: toNumber(totalBallasts),
 
@@ -513,9 +551,13 @@ export default functions
         dmu3: toNumber(dmu3),
         dwplate: toNumber(dwplate),
         dopen: Math.floor(toNumber(dopen)),
+        advanced: payload.advanced,
         denclosed: Math.floor(toNumber(denclosed)),
+        ballastType: toNumber(payload.ballastType),
+        ballastMaterial: payload.ballastMaterial,
       };
       console.log("totalBallasts:" + totalBallasts);
+      console.log(openBallastWeight + " enc: " + encBallastWeight);
       console.log(
         "OPEN OML, OMW, FX, FY, FZ: " +
           openOML +
@@ -540,7 +582,7 @@ export default functions
           " | " +
           encFZ
       );
-      console.log(returnData);
+      //console.log(returnData);
       admin
         .database()
         .ref(`/tasks/${context.auth.uid}/${payload.calcID}`)
