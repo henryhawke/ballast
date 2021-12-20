@@ -784,32 +784,16 @@ const Tools = ({ intl }) => {
 
     if (vals.ballastType === 2) {
       ballastName = "Fixed-To-Pole";
-      // encBallastWeight = vals.c2enclosed;
-      // openBallastWeight = vals.c2open;
     } else if (values.ballastType === 3) {
       ballastName = "A";
-      // encBallastWeight = vals.aenclosed;
-      // openBallastWeight = vals.aopen;
-    } else if (values.ballastType === 3) {
+    } else if (values.ballastType === 4) {
       ballastName = "B";
-      // encBallastWeight = vals.benclosed;
-      // openBallastWeight = vals.bopen;
-      // ballastWeight = enclosed ? vals.benclosed : vals.bopen;
-    } else if (values.ballastType === 3) {
+    } else if (values.ballastType === 5) {
       ballastName = "C";
-      // encBallastWeight = vals.cenclosed;
-      // openBallastWeight = vals.copen;
-      //ballastWeight = enclosed ? vals.cenclosed : vals.copen;
-    } else if (values.ballastType === 3) {
+    } else if (values.ballastType === 6) {
       ballastName = "D";
-      // encBallastWeight = vals.denclosed;
-      // openBallastWeight = vals.dopen;
-      // ballastWeight = enclosed ? vals.denclosed : vals.dopen;
     } else {
       ballastName = "Fixed-To-Plate";
-      // encBallastWeight = vals.b2enclosed;
-      // openBallastWeight = vals.b2open;
-      //ballastWeight = enclosed ? vals.b2enclosed : vals.b2open;
     }
 
     var roofTypeName = "Gable";
@@ -1130,7 +1114,6 @@ const Tools = ({ intl }) => {
                 outputOpen: "",
                 outputClosed: "",
               },
-
               {
                 id: 11,
                 description: "Roof Height (ft)",
@@ -1185,13 +1168,13 @@ const Tools = ({ intl }) => {
               {
                 id: 18,
                 description: "Ballast Configuration",
-                input: values.ballastType,
+                input: ballastName,
                 outputOpen: "",
                 outputClosed: "",
               },
               {
                 id: 19,
-                description: "Ballast Type",
+                description: "Ballast Material",
                 input: values.ballastMaterial,
                 outputOpen: "",
                 outputClosed: "",

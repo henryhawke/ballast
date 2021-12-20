@@ -66,7 +66,7 @@ export default functions
       return;
     }
 
-    const file = admin.storage().bucket().file("storage/aug30-main40.2.xlsx");
+    const file = admin.storage().bucket().file("storage/main40.6.xlsx");
     return file.download().then((data) => {
       // import your calc functions lib
       XLSX_CALC.import_functions(formulajs);
@@ -82,9 +82,6 @@ export default functions
       }
 
       /* Get the value */
-
-      // change some cell value
-      // workbook.Sheets["Main"].A1.v = 42;
 
       // type of tent (1- frame, 2, hybrid, 3=pole)
       worksheet["D2"] = {
@@ -116,24 +113,9 @@ export default functions
         v: toNumber(payload.roofType),
       };
 
+      // Ridge Length
       if (payload.roofType === "2") {
         worksheet["D7"] = { t: "n", v: toNumber(payload.ridgeLength) };
-      }
-
-      //worksheet["D7"] = { t: "n", v: toNumber(payload.ridgeLength) };
-      //worksheet["D5"] = { t: "n", v: toNumber(payload.bandHeight) };
-      if (payload.groundSurface === 1) {
-        worksheet["G68"] = { t: "n", v: 0.44 };
-      } else if (payload.groundSurface === 2) {
-        worksheet["G68"] = { t: "n", v: 0.53 };
-      } else if (payload.groundSurface === 3) {
-        worksheet["G68"] = { t: "n", v: 0.48 };
-      } else if (payload.groundSurface === 4) {
-        worksheet["G68"] = { t: "n", v: 0.51 };
-      } else if (payload.groundSurface === 5) {
-        worksheet["G68"] = { t: "n", v: 0.58 };
-      } else if (payload.groundSurface === 6) {
-        worksheet["G68"] = { t: "n", v: 0.61 };
       }
 
       //Roof Height
@@ -163,99 +145,102 @@ export default functions
       var groundSurface = toNumber(payload.groundSurface);
       var ballastMaterial = toNumber(payload.ballastMaterial);
 
-      var mu1 = 0.79;
-      var mu2 = 0.2;
-      var mu3 = 0.79;
+      // var mu1 = 0.79;
+      // var mu2 = 0.2;
+      // var mu3 = 0.79;
 
-      // console.log("PAYLOAD:");
-      // console.log(payload);
+      // GROUND SURFACE INPUT VARIABLE
+      worksheet["H17"] = { t: "n", v: groundSurface };
+
+      // BALLAST MATERIAL INPUT VARIABLE
+      worksheet["H18"] = { t: "n", v: ballastMaterial };
 
       if (payload.advanced) {
         console.log("ADVANCED TURNED ON");
-        worksheet["I59"] = { t: "n", v: toNumber(payload.groundSurface) };
 
-        if (ballastMaterial === 1) {
-          mu2 = 0.2;
-        } else if (ballastMaterial === 2) {
-          mu2 = 0.5;
-        } else if (ballastMaterial === 3) {
-          mu2 = 0.44;
-        }
+        //   if (ballastMaterial === 1) {
+        //     mu2 = 0.2;
+        //   } else if (ballastMaterial === 2) {
+        //     mu2 = 0.5;
+        //   } else if (ballastMaterial === 3) {
+        //     mu2 = 0.44;
+        //   }
 
-        if (groundSurface === 1) {
-          // smoothConcrete
-          if (ballastMaterial === 1) {
-            mu1 = 0.26;
-          } else if (ballastMaterial === 2) {
-            mu1 = 0.3;
-          } else if (ballastMaterial === 3) {
-            mu1 = 0.38;
-          }
-          mu3 = 0.44;
-        } else if (groundSurface === 2) {
-          // roughConcrete
-          if (ballastMaterial === 1) {
-            mu1 = 0.4;
-          } else if (ballastMaterial === 2) {
-            mu1 = 0.74;
-          } else if (ballastMaterial === 3) {
-            mu1 = 0.77;
-          }
-          mu3 = 0.53;
-        } else if (groundSurface === 3) {
-          if (ballastMaterial === 1) {
-            mu1 = 0.43;
-          } else if (ballastMaterial === 2) {
-            mu1 = 0.86;
-          } else if (ballastMaterial === 3) {
-            mu1 = 0.79;
-          }
-          // Asphalt
-          mu3 = 0.48;
-        } else if (groundSurface === 4) {
-          // Gravel
-          if (ballastMaterial === 1) {
-            mu1 = 0.39;
-          } else if (ballastMaterial === 2) {
-            mu1 = 0.45;
-          } else if (ballastMaterial === 3) {
-            mu1 = 0.52;
-          }
-          mu3 = 0.51;
-        } else if (groundSurface === 5) {
-          // Dirt
-          if (ballastMaterial === 1) {
-            mu1 = 0.42;
-          } else if (ballastMaterial === 2) {
-            mu1 = 0.43;
-          } else if (ballastMaterial === 3) {
-            mu1 = 0.37;
-          }
-          mu3 = 0.58;
-        } else if (groundSurface === 6) {
-          // Grass
-          if (ballastMaterial === 1) {
-            mu1 = 0.46;
-          } else if (ballastMaterial === 2) {
-            mu1 = 0.81;
-          } else if (ballastMaterial === 3) {
-            mu1 = 0.69;
-          }
-          mu3 = 0.61;
-        }
+        //   if (groundSurface === 1) {
+        //     // smoothConcrete
+        //     if (ballastMaterial === 1) {
+        //       mu1 = 0.26;
+        //     } else if (ballastMaterial === 2) {
+        //       mu1 = 0.3;
+        //     } else if (ballastMaterial === 3) {
+        //       mu1 = 0.38;
+        //     }
+        //     mu3 = 0.44;
+        //   } else if (groundSurface === 2) {
+        //     // roughConcrete
+        //     if (ballastMaterial === 1) {
+        //       mu1 = 0.4;
+        //     } else if (ballastMaterial === 2) {
+        //       mu1 = 0.74;
+        //     } else if (ballastMaterial === 3) {
+        //       mu1 = 0.77;
+        //     }
+        //     mu3 = 0.53;
+        //   } else if (groundSurface === 3) {
+        //     if (ballastMaterial === 1) {
+        //       mu1 = 0.43;
+        //     } else if (ballastMaterial === 2) {
+        //       mu1 = 0.86;
+        //     } else if (ballastMaterial === 3) {
+        //       mu1 = 0.79;
+        //     }
+        //     // Asphalt
+        //     mu3 = 0.48;
+        //   } else if (groundSurface === 4) {
+        //     // Gravel
+        //     if (ballastMaterial === 1) {
+        //       mu1 = 0.39;
+        //     } else if (ballastMaterial === 2) {
+        //       mu1 = 0.45;
+        //     } else if (ballastMaterial === 3) {
+        //       mu1 = 0.52;
+        //     }
+        //     mu3 = 0.51;
+        //   } else if (groundSurface === 5) {
+        //     // Dirt
+        //     if (ballastMaterial === 1) {
+        //       mu1 = 0.42;
+        //     } else if (ballastMaterial === 2) {
+        //       mu1 = 0.43;
+        //     } else if (ballastMaterial === 3) {
+        //       mu1 = 0.37;
+        //     }
+        //     mu3 = 0.58;
+        //   } else if (groundSurface === 6) {
+        //     // Grass
+        //     if (ballastMaterial === 1) {
+        //       mu1 = 0.46;
+        //     } else if (ballastMaterial === 2) {
+        //       mu1 = 0.81;
+        //     } else if (ballastMaterial === 3) {
+        //       mu1 = 0.69;
+        //     }
+        //     mu3 = 0.61;
+        //   }
+        // }
 
-        worksheet["E42"] = {
-          t: "n",
-          v: mu3,
-        };
+        // worksheet["E42"] = {
+        //   t: "n",
+        //   v: mu3,
+        // };
         worksheet["E43"] = {
           t: "n",
           v: toNumber(payload.b2wplate),
         };
-        worksheet["G40"] = {
-          t: "n",
-          v: mu1,
-        };
+        // worksheet["J20"] = {
+        //   t: "n",
+        //   v: mu1,
+        // };
         worksheet["I34"] = {
           t: "n",
           v: toNumber(payload.ad1),
@@ -264,10 +249,10 @@ export default functions
           t: "n",
           v: toNumber(payload.ad2),
         };
-        worksheet["I42"] = {
-          t: "n",
-          v: mu3,
-        };
+        // worksheet["I42"] = {
+        //   t: "n",
+        //   v: mu3,
+        // };
         worksheet["I43"] = {
           t: "n",
           v: toNumber(payload.awplate),
@@ -292,14 +277,14 @@ export default functions
           t: "n",
           v: toNumber(payload.bh4),
         };
-        worksheet["K41"] = {
-          t: "n",
-          v: mu2,
-        };
-        worksheet["K42"] = {
-          t: "n",
-          v: mu3,
-        };
+        // worksheet["K41"] = {
+        //   t: "n",
+        //   v: mu2,
+        // };
+        // worksheet["K42"] = {
+        //   t: "n",
+        //   v: mu3,
+        // };
         worksheet["K43"] = {
           t: "n",
           v: toNumber(payload.bwplate),
@@ -320,10 +305,10 @@ export default functions
           t: "n",
           v: toNumber(payload.ch4),
         };
-        worksheet["O40"] = {
-          t: "n",
-          v: mu1,
-        };
+        // worksheet["O40"] = {
+        //   t: "n",
+        //   v: mu1,
+        // };
         worksheet["Q35"] = {
           t: "n",
           v: toNumber(payload.dd2),
@@ -336,10 +321,10 @@ export default functions
           t: "n",
           v: toNumber(payload.dd5),
         };
-        worksheet["Q42"] = {
-          t: "n",
-          v: mu3,
-        };
+        // worksheet["Q42"] = {
+        //   t: "n",
+        //   v: mu3,
+        // };
         worksheet["Q43"] = {
           t: "n",
           v: toNumber(payload.dwplate),
@@ -378,36 +363,36 @@ export default functions
       if (payload.advanced) {
         if (ballastType === 1) {
           // Fixed-To-Plate
-          openBallastWeight = worksheet["E58"] ? worksheet["E58"].v : 0;
-          encBallastWeight = worksheet["F58"] ? worksheet["F48"].v : 0;
+          openBallastWeight = worksheet["E56"] ? worksheet["E56"].v : 0;
+          encBallastWeight = worksheet["F56"] ? worksheet["F56"].v : 0;
         } else if (ballastType === 2) {
           // Fixed-To-Pole
-          openBallastWeight = worksheet["G58"] ? worksheet["G58"].v : 0;
-          encBallastWeight = worksheet["H58"] ? worksheet["H48"].v : 0;
+          openBallastWeight = worksheet["G56"] ? worksheet["G56"].v : 0;
+          encBallastWeight = worksheet["H56"] ? worksheet["H56"].v : 0;
         } else if (ballastType === 3) {
           // A
-          openBallastWeight = worksheet["I58"] ? worksheet["I58"].v : 0;
-          encBallastWeight = worksheet["J58"] ? worksheet["J48"].v : 0;
+          openBallastWeight = worksheet["I56"] ? worksheet["I56"].v : 0;
+          encBallastWeight = worksheet["J56"] ? worksheet["J56"].v : 0;
         } else if (ballastType === 4) {
           // B assuming A
-          openBallastWeight = worksheet["K58"] ? worksheet["K58"].v : 0;
-          encBallastWeight = worksheet["L58"] ? worksheet["L48"].v : 0;
+          openBallastWeight = worksheet["K56"] ? worksheet["K56"].v : 0;
+          encBallastWeight = worksheet["L56"] ? worksheet["L56"].v : 0;
           // } else if (payload.ballastType === 5) {
           //   // B assuming C
           //   openBallastWeight = worksheet["K58"] ? worksheet["K58"].v : 0;
           //   encBallastWeight = worksheet["L58"] ? worksheet["L48"].v : 0;
         } else if (ballastType === 5) {
           // C
-          openBallastWeight = worksheet["O58"] ? worksheet["O58"].v : 0;
-          encBallastWeight = worksheet["P58"] ? worksheet["P48"].v : 0;
+          openBallastWeight = worksheet["O56"] ? worksheet["O56"].v : 0;
+          encBallastWeight = worksheet["P56"] ? worksheet["P56"].v : 0;
         } else if (ballastType === 6) {
           //D
-          openBallastWeight = worksheet["Q58"] ? worksheet["Q58"].v : 0;
-          encBallastWeight = worksheet["R58"] ? worksheet["R48"].v : 0;
+          openBallastWeight = worksheet["Q56"] ? worksheet["Q56"].v : 0;
+          encBallastWeight = worksheet["R56"] ? worksheet["R56"].v : 0;
         }
       } else {
-        openBallastWeight = worksheet["J19"] ? worksheet["J19"].v : 0;
-        encBallastWeight = worksheet["K19"] ? worksheet["K19"].v : 0;
+        openBallastWeight = worksheet["G56"] ? worksheet["G56"].v : 0;
+        encBallastWeight = worksheet["H56"] ? worksheet["H56"].v : 0;
       }
 
       // Fixed-to-plate
@@ -555,6 +540,7 @@ export default functions
         denclosed: Math.floor(toNumber(denclosed)),
         ballastType: toNumber(payload.ballastType),
         ballastMaterial: payload.ballastMaterial,
+        groundSurface: payload.groundSurface,
       };
       console.log("totalBallasts:" + totalBallasts);
       console.log(openBallastWeight + " enc: " + encBallastWeight);
