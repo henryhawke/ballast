@@ -145,10 +145,6 @@ export default functions
       var groundSurface = toNumber(payload.groundSurface);
       var ballastMaterial = toNumber(payload.ballastMaterial);
 
-      // var mu1 = 0.79;
-      // var mu2 = 0.2;
-      // var mu3 = 0.79;
-
       // GROUND SURFACE INPUT VARIABLE
       worksheet["H17"] = { t: "n", v: groundSurface };
 
@@ -158,81 +154,6 @@ export default functions
       if (payload.advanced) {
         console.log("ADVANCED TURNED ON");
 
-        //   if (ballastMaterial === 1) {
-        //     mu2 = 0.2;
-        //   } else if (ballastMaterial === 2) {
-        //     mu2 = 0.5;
-        //   } else if (ballastMaterial === 3) {
-        //     mu2 = 0.44;
-        //   }
-
-        //   if (groundSurface === 1) {
-        //     // smoothConcrete
-        //     if (ballastMaterial === 1) {
-        //       mu1 = 0.26;
-        //     } else if (ballastMaterial === 2) {
-        //       mu1 = 0.3;
-        //     } else if (ballastMaterial === 3) {
-        //       mu1 = 0.38;
-        //     }
-        //     mu3 = 0.44;
-        //   } else if (groundSurface === 2) {
-        //     // roughConcrete
-        //     if (ballastMaterial === 1) {
-        //       mu1 = 0.4;
-        //     } else if (ballastMaterial === 2) {
-        //       mu1 = 0.74;
-        //     } else if (ballastMaterial === 3) {
-        //       mu1 = 0.77;
-        //     }
-        //     mu3 = 0.53;
-        //   } else if (groundSurface === 3) {
-        //     if (ballastMaterial === 1) {
-        //       mu1 = 0.43;
-        //     } else if (ballastMaterial === 2) {
-        //       mu1 = 0.86;
-        //     } else if (ballastMaterial === 3) {
-        //       mu1 = 0.79;
-        //     }
-        //     // Asphalt
-        //     mu3 = 0.48;
-        //   } else if (groundSurface === 4) {
-        //     // Gravel
-        //     if (ballastMaterial === 1) {
-        //       mu1 = 0.39;
-        //     } else if (ballastMaterial === 2) {
-        //       mu1 = 0.45;
-        //     } else if (ballastMaterial === 3) {
-        //       mu1 = 0.52;
-        //     }
-        //     mu3 = 0.51;
-        //   } else if (groundSurface === 5) {
-        //     // Dirt
-        //     if (ballastMaterial === 1) {
-        //       mu1 = 0.42;
-        //     } else if (ballastMaterial === 2) {
-        //       mu1 = 0.43;
-        //     } else if (ballastMaterial === 3) {
-        //       mu1 = 0.37;
-        //     }
-        //     mu3 = 0.58;
-        //   } else if (groundSurface === 6) {
-        //     // Grass
-        //     if (ballastMaterial === 1) {
-        //       mu1 = 0.46;
-        //     } else if (ballastMaterial === 2) {
-        //       mu1 = 0.81;
-        //     } else if (ballastMaterial === 3) {
-        //       mu1 = 0.69;
-        //     }
-        //     mu3 = 0.61;
-        //   }
-        // }
-
-        // worksheet["E42"] = {
-        //   t: "n",
-        //   v: mu3,
-        // };
         worksheet["E43"] = {
           t: "n",
           v: toNumber(payload.b2wplate),
@@ -360,7 +281,9 @@ export default functions
       console.log("BALLAST TYPE" + payload.ballastType);
       var ballastType = toNumber(payload.ballastType);
 
-      if (payload.advanced) {
+      var isAdvanced = payload.advanced ? payload.advanced : false;
+
+      if (isAdvanced) {
         if (ballastType === 1) {
           // Fixed-To-Plate
           openBallastWeight = worksheet["E56"] ? worksheet["E56"].v : 0;
@@ -391,8 +314,19 @@ export default functions
           encBallastWeight = worksheet["R56"] ? worksheet["R56"].v : 0;
         }
       } else {
-        openBallastWeight = worksheet["G56"] ? worksheet["G56"].v : 0;
-        encBallastWeight = worksheet["H56"] ? worksheet["H56"].v : 0;
+        console.log(payload.tentType);
+
+        if (toNumber(payload.tentType) === 3) {
+          console.log("WE MADE IT");
+
+          openBallastWeight = worksheet["E56"] ? worksheet["E56"].v : 0;
+          console.log(openBallastWeight);
+          encBallastWeight = worksheet["F56"] ? worksheet["F56"].v : 0;
+          console.log(openBallastWeight);
+        } else {
+          openBallastWeight = worksheet["G56"] ? worksheet["G56"].v : 0;
+          encBallastWeight = worksheet["H56"] ? worksheet["H56"].v : 0;
+        }
       }
 
       // Fixed-to-plate
@@ -469,16 +403,16 @@ export default functions
         time: admin.firestore.Timestamp.now(),
         share: payload.share,
         notes: payload.notes,
-        openFX: Math.floor(toNumber(openFX)),
-        openFY: Math.floor(toNumber(openFY)),
-        openFZ: Math.floor(toNumber(openFZ)),
-        openOML: Math.floor(toNumber(openOML)),
-        openOMW: Math.floor(toNumber(openOMW)),
-        encFX: Math.floor(toNumber(encFX)),
-        encFY: Math.floor(toNumber(encFY)),
-        encFZ: Math.floor(toNumber(encFZ)),
-        encOML: Math.floor(toNumber(encOML)),
-        encOMW: Math.floor(toNumber(encOMW)),
+        openFX: Math.ceil(toNumber(openFX)),
+        openFY: Math.ceil(toNumber(openFY)),
+        openFZ: Math.ceil(toNumber(openFZ)),
+        openOML: Math.ceil(toNumber(openOML)),
+        openOMW: Math.ceil(toNumber(openOMW)),
+        encFX: Math.ceil(toNumber(encFX)),
+        encFY: Math.ceil(toNumber(encFY)),
+        encFZ: Math.ceil(toNumber(encFZ)),
+        encOML: Math.ceil(toNumber(encOML)),
+        encOMW: Math.ceil(toNumber(encOMW)),
         windSpeed: toNumber(payload.windSpeed),
         windFlow: toNumber(payload.windFlow),
         tentWidth: toNumber(payload.tentWidth),
@@ -493,26 +427,26 @@ export default functions
         postsPerLength: toNumber(payload.postsPerLength),
         ballastsPerIntermediate: toNumber(payload.ballastsPerIntermediate),
         ballastsPerCornerPost: toNumber(payload.ballastsPerCornerPost),
-        openBallastWeight: Math.floor(toNumber(openBallastWeight)),
-        encBallastWeight: Math.floor(toNumber(encBallastWeight)),
-        // advOpenBallastWeight: Math.floor(toNumber(advOpenBallastWeight)),
-        // advEncBallastWeight: Math.floor(toNumber(advEncBallastWeight)),
-        valenceHeight: Math.floor(toNumber(payload.valenceHeight)),
+        openBallastWeight: Math.ceil(toNumber(openBallastWeight)),
+        encBallastWeight: Math.ceil(toNumber(encBallastWeight)),
+        // advOpenBallastWeight: Math.ceil(toNumber(advOpenBallastWeight)),
+        // advEncBallastWeight: Math.ceil(toNumber(advEncBallastWeight)),
+        valenceHeight: Math.ceil(toNumber(payload.valenceHeight)),
         totalBallasts: toNumber(totalBallasts),
 
         b2mu3: toNumber(b2mu3),
         b2wplate: toNumber(b2wplate),
-        b2open: Math.floor(toNumber(b2open)),
-        b2enclosed: Math.floor(toNumber(b2enclosed)),
+        b2open: Math.ceil(toNumber(b2open)),
+        b2enclosed: Math.ceil(toNumber(b2enclosed)),
         c2mu1: toNumber(c2mu1),
-        c2open: Math.floor(toNumber(c2open)),
-        c2enclosed: Math.floor(toNumber(c2enclosed)),
+        c2open: Math.ceil(toNumber(c2open)),
+        c2enclosed: Math.ceil(toNumber(c2enclosed)),
         ad1: toNumber(ad1),
         ad2: toNumber(ad2),
         amu3: toNumber(amu3),
         awplate: toNumber(awplate),
-        aopen: Math.floor(toNumber(aopen)),
-        aenclosed: Math.floor(toNumber(aenclosed)),
+        aopen: Math.ceil(toNumber(aopen)),
+        aenclosed: Math.ceil(toNumber(aenclosed)),
         bd1: toNumber(bd1),
         bd2: toNumber(bd2),
         bd3: toNumber(bd3),
@@ -521,23 +455,23 @@ export default functions
         bmu2: toNumber(bmu2),
         bmu3: toNumber(bmu3),
         bwplate: toNumber(bwplate),
-        bopen: Math.floor(toNumber(bopen)),
-        benclosed: Math.floor(toNumber(benclosed)),
+        bopen: Math.ceil(toNumber(bopen)),
+        benclosed: Math.ceil(toNumber(benclosed)),
         cd1: toNumber(cd1),
         cd3: toNumber(cd3),
         cd4: toNumber(cd4),
         ch4: toNumber(ch4),
         cmu1: toNumber(cmu1),
-        copen: Math.floor(toNumber(copen)),
-        cenclosed: Math.floor(toNumber(cenclosed)),
+        copen: Math.ceil(toNumber(copen)),
+        cenclosed: Math.ceil(toNumber(cenclosed)),
         dd2: toNumber(dd2),
         dd4: toNumber(dd4),
         dd5: toNumber(dd5),
         dmu3: toNumber(dmu3),
         dwplate: toNumber(dwplate),
-        dopen: Math.floor(toNumber(dopen)),
+        dopen: Math.ceil(toNumber(dopen)),
         advanced: payload.advanced,
-        denclosed: Math.floor(toNumber(denclosed)),
+        denclosed: Math.ceil(toNumber(denclosed)),
         ballastType: toNumber(payload.ballastType),
         ballastMaterial: payload.ballastMaterial,
         groundSurface: payload.groundSurface,

@@ -79,6 +79,11 @@ export default (theme) => ({
     "& .MuiDataGrid-root .MuiDataGrid-cellRight": {
       textAlign: "center",
     },
+    "& .MuiDataGrid-cell": {
+      display: "block",
+      position: "relative",
+      textAlign: "center",
+    },
   },
   icon: {
     color: theme.palette.text.secondary,

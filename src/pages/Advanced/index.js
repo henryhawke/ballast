@@ -780,33 +780,33 @@ const Tools = ({ intl }) => {
     //   enclosedEnclosed = true;
     // }
 
-    var ballastName = "Fixed-To-Plate";
+    var ballastName = "Fixed-to-plate";
 
     if (vals.ballastType === 2) {
-      ballastName = "Fixed-To-Pole";
-    } else if (values.ballastType === 3) {
+      ballastName = "Fixed-to-pole";
+    } else if (vals.ballastType === 3) {
       ballastName = "A";
-    } else if (values.ballastType === 4) {
+    } else if (vals.ballastType === 4) {
       ballastName = "B";
-    } else if (values.ballastType === 5) {
+    } else if (vals.ballastType === 5) {
       ballastName = "C";
-    } else if (values.ballastType === 6) {
+    } else if (vals.ballastType === 6) {
       ballastName = "D";
     } else {
-      ballastName = "Fixed-To-Plate";
+      ballastName = "Fixed-to-plate";
     }
 
     var roofTypeName = "Gable";
-    if (values.roofType === 1) {
+    if (vals.roofType === 1) {
       roofTypeName = "Gable";
-    } else if (values.roofType === 2) {
+    } else if (vals.roofType === 2) {
       roofTypeName = "Hip";
-    } else if (values.roofType === 3) {
+    } else if (vals.roofType === 3) {
       roofTypeName = "Pyramid";
     }
 
     const refPDF = React.createRef();
-    const pdfTitle = values.pdfTitle;
+    const pdfTitle = vals.pdfTitle;
 
     ReactDOM.render(
       <Container className={classes.cardGrid} hidden={calculationDataOpen}>
@@ -852,7 +852,7 @@ const Tools = ({ intl }) => {
               },
               {
                 field: "outputClosed",
-                headerName: "Ouput for 'Closed'",
+                headerName: "Ouput for 'Enclosed'",
                 type: "string",
                 width: 120,
               },
@@ -953,13 +953,6 @@ const Tools = ({ intl }) => {
 
             // Weight of steel plate
             rows={[
-              {
-                id: 99,
-                description: "* -> including plate if applicable",
-                input: "",
-                outputOpen: "",
-                outputClosed: "",
-              },
               // {
               //   id: 28,
               //   description: "RESULTS",
@@ -986,7 +979,7 @@ const Tools = ({ intl }) => {
               },
               {
                 id: 30,
-                description: "Weight of each ballast  (lbs)",
+                description: "Weight of each ballast (& plate if any) (lbs)",
                 input: "",
                 outputOpen: vals.openBallastWeight,
                 outputClosed: vals.encBallastWeight,
@@ -1059,7 +1052,7 @@ const Tools = ({ intl }) => {
               {
                 id: 3,
                 description: "Location",
-                input: values.location,
+                input: vals.location,
                 outputOpen: "",
                 outputClosed: "",
               },
@@ -1067,7 +1060,7 @@ const Tools = ({ intl }) => {
               {
                 id: 4,
                 description: "Date",
-                input: values.projectDate,
+                input: vals.projectDate,
                 outputOpen: "",
                 outputClosed: "",
               },
@@ -1316,24 +1309,24 @@ const Tools = ({ intl }) => {
       if (event.target.value === "1") {
         //setInfoImages({ ...infoImages, type: gable });
         //console.log("is gable");
-        setBallastTypeText(
-          "Ballast configurations for frame tents: Fixed-to-plate, Fixed-to-pole, A, B, C, D"
-        );
+        // setBallastTypeText(
+        //   "Ballast configurations for frame tents: Fixed-to-plate, Fixed-to-pole, A, B, C, D"
+        // );
         setIsPoleTent(false);
       } else if (event.target.value === "2") {
         //setBtnDisabled(false);
         //console.log("is hip");
         // setInfoImages({ ...infoImages, type: hip });
-        setBallastTypeText(
-          "Ballast configurations for hybrid tents: Fixed-to-plate, Fixed-to-pole, A, B, C, D"
-        );
+        // setBallastTypeText(
+        //   "Ballast configurations for hybrid tents: Fixed-to-plate, Fixed-to-pole, A, B, C, D"
+        // );
         setIsPoleTent(false);
       } else {
         //setInfoImages({ ...infoImages, type: pyramid });
         //console.log("is pyramid");
-        setBallastTypeText(
-          "Ballast configurations for pole tents: Fixed-to-plate, B, D, C"
-        );
+        // setBallastTypeText(
+        //   "Ballast configurations for pole tents: Fixed-to-plate, B, D, C"
+        // );
         setIsPoleTent(true);
       }
     }
@@ -1398,10 +1391,9 @@ const Tools = ({ intl }) => {
           c: false,
           d: false,
         });
-        console.log("Fixed-To-Plate");
       } else if (event.target.value === "2") {
         setInfoImages({ ...infoImages, ballast: ConfigurationC2 });
-        console.log("Fixed-To-Pole");
+
         setBallastType({
           ...ballastType,
           fixedToPlate: false,
@@ -1640,6 +1632,7 @@ const Tools = ({ intl }) => {
           });
         }
         showResults(result);
+        // SCROLL
         calculateRef.current.scrollIntoView();
       })
       .catch((error) => {
@@ -2005,9 +1998,7 @@ const Tools = ({ intl }) => {
                           return option.toString();
                         }}
                         freeSolo
-                        autoSelect
                         selectOnFocus
-                        clearOnBlur
                         handleHomeEndKeys
                         inputValue={inputValues["tentWidth"]}
                         onInputChange={(event, newInputValue) => {
@@ -2086,9 +2077,7 @@ const Tools = ({ intl }) => {
                           return option.toString();
                         }}
                         freeSolo
-                        autoSelect
                         selectOnFocus
-                        clearOnBlur
                         handleHomeEndKeys
                         inputValue={inputValues["tentLength"]}
                         onInputChange={(event, newInputValue) => {
@@ -2218,9 +2207,7 @@ const Tools = ({ intl }) => {
                           return option.toString();
                         }}
                         freeSolo
-                        autoSelect
                         selectOnFocus
-                        clearOnBlur
                         handleHomeEndKeys
                         inputValue={inputValues["ridgeLength"]}
                         onInputChange={(event, newInputValue) => {
@@ -2302,9 +2289,7 @@ const Tools = ({ intl }) => {
                           return option.toString();
                         }}
                         freeSolo
-                        autoSelect
                         selectOnFocus
-                        clearOnBlur
                         handleHomeEndKeys
                         inputValue={inputValues["eaveHeight"]}
                         onInputChange={(event, newInputValue) => {
@@ -2380,9 +2365,7 @@ const Tools = ({ intl }) => {
                           return option.toString();
                         }}
                         freeSolo
-                        autoSelect
                         selectOnFocus
-                        clearOnBlur
                         handleHomeEndKeys
                         inputValue={inputValues["roofHeight"]}
                         onInputChange={(event, newInputValue) => {
@@ -2497,9 +2480,7 @@ const Tools = ({ intl }) => {
                           return option.toString();
                         }}
                         freeSolo
-                        autoSelect
                         selectOnFocus
-                        clearOnBlur
                         handleHomeEndKeys
                         inputValue={inputValues["valenceHeight"]}
                         onInputChange={(event, newInputValue) => {
@@ -2618,9 +2599,7 @@ const Tools = ({ intl }) => {
                           return option.toString();
                         }}
                         freeSolo
-                        autoSelect
                         selectOnFocus
-                        clearOnBlur
                         handleHomeEndKeys
                         inputValue={inputValues["postsPerLength"]}
                         onInputChange={(event, newInputValue) => {
@@ -2699,9 +2678,7 @@ const Tools = ({ intl }) => {
                           return option.toString();
                         }}
                         freeSolo
-                        autoSelect
                         selectOnFocus
-                        clearOnBlur
                         handleHomeEndKeys
                         inputValue={inputValues["postsPerWidth"]}
                         onInputChange={(event, newInputValue) => {
@@ -2831,9 +2808,7 @@ const Tools = ({ intl }) => {
                           return option.toString();
                         }}
                         freeSolo
-                        autoSelect
                         selectOnFocus
-                        clearOnBlur
                         handleHomeEndKeys
                         inputValue={inputValues["windSpeed"]}
                         onInputChange={(event, newInputValue) => {
@@ -2997,10 +2972,10 @@ const Tools = ({ intl }) => {
                       label='Advanced'
                     />
                   </FormGroup>
-                  <Typography variant='h8' component='h8'>
-                    Without the advanced feature, the tool assumes the ballast
-                    configuration “Fixed-to-pole” with concrete block on the
-                    asphalt.
+                  <Typography variant='h6' component='h6'>
+                    Without the advanced feature, the tool assumes concrete
+                    block on asphalt with "Fixed-to-pole" for frame tents, and
+                    "Fixed-to-plate" for pole tents.
                   </Typography>
 
                   {/* <ButtonGroup
@@ -3107,9 +3082,9 @@ const Tools = ({ intl }) => {
                               name: "ballastType",
                               id: "outlined-age-native-simple",
                             }}>
-                            <option value={1}>Fixed-To-Plate</option>
+                            <option value={1}>Fixed-to-plate</option>
                             <option disabled={isPoleTent} value={2}>
-                              Fixed-To-Pole
+                              Fixed-to-pole
                             </option>
                             <option disabled={isPoleTent} value={3}>
                               A
@@ -3314,9 +3289,7 @@ const Tools = ({ intl }) => {
                               return option.toString();
                             }}
                             freeSolo
-                            autoSelect
                             selectOnFocus
-                            clearOnBlur
                             handleHomeEndKeys
                             inputValue={inputValues["b2wplate"]}
                             onInputChange={(event, newInputValue) => {
@@ -3401,9 +3374,7 @@ const Tools = ({ intl }) => {
                               return option.toString();
                             }}
                             freeSolo
-                            autoSelect
                             selectOnFocus
-                            clearOnBlur
                             handleHomeEndKeys
                             inputValue={inputValues["ad1"]}
                             onInputChange={(event, newInputValue) => {
@@ -3486,9 +3457,7 @@ const Tools = ({ intl }) => {
                               return option.toString();
                             }}
                             freeSolo
-                            autoSelect
                             selectOnFocus
-                            clearOnBlur
                             handleHomeEndKeys
                             inputValue={inputValues["ad2"]}
                             onInputChange={(event, newInputValue) => {
@@ -3570,9 +3539,7 @@ const Tools = ({ intl }) => {
                               return option.toString();
                             }}
                             freeSolo
-                            autoSelect
                             selectOnFocus
-                            clearOnBlur
                             handleHomeEndKeys
                             inputValue={inputValues["awplate"]}
                             onInputChange={(event, newInputValue) => {
@@ -3649,9 +3616,7 @@ const Tools = ({ intl }) => {
                               return option.toString();
                             }}
                             freeSolo
-                            autoSelect
                             selectOnFocus
-                            clearOnBlur
                             handleHomeEndKeys
                             inputValue={inputValues["bd1"]}
                             onInputChange={(event, newInputValue) => {
@@ -3735,9 +3700,7 @@ const Tools = ({ intl }) => {
                               return option.toString();
                             }}
                             freeSolo
-                            autoSelect
                             selectOnFocus
-                            clearOnBlur
                             handleHomeEndKeys
                             inputValue={inputValues["bd2"]}
                             onInputChange={(event, newInputValue) => {
@@ -3821,9 +3784,7 @@ const Tools = ({ intl }) => {
                               return option.toString();
                             }}
                             freeSolo
-                            autoSelect
                             selectOnFocus
-                            clearOnBlur
                             handleHomeEndKeys
                             inputValue={inputValues["bd3"]}
                             onInputChange={(event, newInputValue) => {
@@ -3907,9 +3868,7 @@ const Tools = ({ intl }) => {
                               return option.toString();
                             }}
                             freeSolo
-                            autoSelect
                             selectOnFocus
-                            clearOnBlur
                             handleHomeEndKeys
                             inputValue={inputValues["bd4"]}
                             onInputChange={(event, newInputValue) => {
@@ -3994,9 +3953,7 @@ const Tools = ({ intl }) => {
                               return option.toString();
                             }}
                             freeSolo
-                            autoSelect
                             selectOnFocus
-                            clearOnBlur
                             handleHomeEndKeys
                             inputValue={inputValues["bh4"]}
                             onInputChange={(event, newInputValue) => {
@@ -4079,9 +4036,7 @@ const Tools = ({ intl }) => {
                               return option.toString();
                             }}
                             freeSolo
-                            autoSelect
                             selectOnFocus
-                            clearOnBlur
                             handleHomeEndKeys
                             inputValue={inputValues["bwplate"]}
                             onInputChange={(event, newInputValue) => {
@@ -4169,9 +4124,7 @@ const Tools = ({ intl }) => {
                               return option.toString();
                             }}
                             freeSolo
-                            autoSelect
                             selectOnFocus
-                            clearOnBlur
                             handleHomeEndKeys
                             inputValue={inputValues["cd1"]}
                             onInputChange={(event, newInputValue) => {
@@ -4253,9 +4206,7 @@ const Tools = ({ intl }) => {
                               return option.toString();
                             }}
                             freeSolo
-                            autoSelect
                             selectOnFocus
-                            clearOnBlur
                             handleHomeEndKeys
                             inputValue={inputValues["cd3"]}
                             onInputChange={(event, newInputValue) => {
@@ -4338,9 +4289,7 @@ const Tools = ({ intl }) => {
                               return option.toString();
                             }}
                             freeSolo
-                            autoSelect
                             selectOnFocus
-                            clearOnBlur
                             handleHomeEndKeys
                             inputValue={inputValues["cd4"]}
                             onInputChange={(event, newInputValue) => {
@@ -4425,9 +4374,7 @@ const Tools = ({ intl }) => {
                               return option.toString();
                             }}
                             freeSolo
-                            autoSelect
                             selectOnFocus
-                            clearOnBlur
                             handleHomeEndKeys
                             inputValue={inputValues["ch4"]}
                             onInputChange={(event, newInputValue) => {
@@ -4514,9 +4461,7 @@ const Tools = ({ intl }) => {
                               return option.toString();
                             }}
                             freeSolo
-                            autoSelect
                             selectOnFocus
-                            clearOnBlur
                             handleHomeEndKeys
                             inputValue={inputValues["dd2"]}
                             onInputChange={(event, newInputValue) => {
@@ -4599,9 +4544,7 @@ const Tools = ({ intl }) => {
                               return option.toString();
                             }}
                             freeSolo
-                            autoSelect
                             selectOnFocus
-                            clearOnBlur
                             handleHomeEndKeys
                             inputValue={inputValues["dd4"]}
                             onInputChange={(event, newInputValue) => {
@@ -4685,9 +4628,7 @@ const Tools = ({ intl }) => {
                               return option.toString();
                             }}
                             freeSolo
-                            autoSelect
                             selectOnFocus
-                            clearOnBlur
                             handleHomeEndKeys
                             inputValue={inputValues["dd5"]}
                             onInputChange={(event, newInputValue) => {
@@ -4770,9 +4711,7 @@ const Tools = ({ intl }) => {
                               return option.toString();
                             }}
                             freeSolo
-                            autoSelect
                             selectOnFocus
-                            clearOnBlur
                             handleHomeEndKeys
                             inputValue={inputValues["dwplate"]}
                             onInputChange={(event, newInputValue) => {
@@ -4834,6 +4773,7 @@ const Tools = ({ intl }) => {
           </Grid>
 
           <div
+            ref={calculateRef}
             style={{
               display: { calculationDataOpen } ? "inherit" : "none",
             }}>
@@ -4843,7 +4783,7 @@ const Tools = ({ intl }) => {
             </React.Fragment> */}
           </div>
 
-          <Grid item ref={calculateRef} xs={12}>
+          <Grid item xs={12}>
             {/* <Divider /> */}
           </Grid>
         </div>
