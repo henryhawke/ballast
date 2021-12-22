@@ -137,15 +137,15 @@ const getMenuItems = (props) => {
     //   }),
     //   leftIcon: <AssessmentIcon />,
     // },
-    {
-      value: "/tasks",
-      visible: isGranted(auth, "member"),
-      primaryText: intl.formatMessage({
-        id: "tasks",
-        defaultMessage: "My Data",
-      }),
-      leftIcon: <Assignment />,
-    },
+    // {
+    //   value: "/tasks",
+    //   visible: isGranted(auth, "member"),
+    //   primaryText: intl.formatMessage({
+    //     id: "tasks",
+    //     defaultMessage: "My Data",
+    //   }),
+    //   leftIcon: <Assignment />,
+    // },
     // {
     //   value: "/",
     //   visible: isAuthorised,

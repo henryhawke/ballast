@@ -211,6 +211,11 @@ function CustomToolbar() {
   );
 }
 
+/*
+
+  THIS IS WHERE THE TOOL FUNCTION ACTUALLY STARTS
+
+ */
 const Tools = ({ intl }) => {
   const classes = useStyles();
   const history = useHistory();
@@ -524,6 +529,7 @@ const Tools = ({ intl }) => {
 
   const todaysDate = new Date();
 
+  // DEFAULT VALUES FOR OPERATION OF THE TOOL
   const [values, setValues] = useState({
     companyName: "",
     project:
@@ -552,11 +558,11 @@ const Tools = ({ intl }) => {
     bandHeight: 1,
     tentType: 1,
     roofType: 1,
-    ridgeLength: 6,
+    ridgeLength: 20,
     valenceHeight: 1,
     roofHeight: 6,
     postsPerWidth: 1,
-    postsPerLength: 1,
+    postsPerLength: 3,
     ballastsPerIntermediate: 1,
     ballastsPerCornerPost: 1,
     totalBallasts: 0,
@@ -577,7 +583,7 @@ const Tools = ({ intl }) => {
     time: 0,
     share: {},
     notes: "",
-    ballastType: 1,
+    ballastType: 2,
     b2mu3: 0.5,
     b2wplate: 50,
     b2open: 0,
@@ -615,7 +621,7 @@ const Tools = ({ intl }) => {
     dwplate: 50,
     dopen: 0,
     denclosed: 0,
-    advanced: false,
+    advanced: true,
     groundSurface: 3,
     ballastMaterial: 3,
   });
@@ -796,6 +802,32 @@ const Tools = ({ intl }) => {
       ballastName = "Fixed-to-plate";
     }
 
+    var ballastMaterial = "Concrete Block";
+
+    if (vals.ballastMaterial === 1) {
+      ballastMaterial = "Plastic Barrel";
+    } else if (vals.ballastMaterial === 2) {
+      ballastMaterial = "Steel Drum";
+    } else if (vals.ballastMaterial === 3) {
+      ballastMaterial = "Concrete Block";
+    }
+
+    var groundSurface = "Asphalt";
+
+    if (vals.groundSurface === 1) {
+      groundSurface = "Smooth Concrete";
+    } else if (vals.groundSurface === 2) {
+      groundSurface = "Rough Concrete";
+    } else if (vals.groundSurface === 3) {
+      groundSurface = "Asphalt";
+    } else if (vals.groundSurface === 4) {
+      groundSurface = "Gravel";
+    } else if (vals.groundSurface === 5) {
+      groundSurface = "Grass";
+    } else if (vals.groundSurface === 6) {
+      groundSurface = "Dirt";
+    }
+
     var roofTypeName = "Gable";
     if (vals.roofType === 1) {
       roofTypeName = "Gable";
@@ -806,12 +838,12 @@ const Tools = ({ intl }) => {
     }
 
     const refPDF = React.createRef();
-    const pdfTitle = vals.pdfTitle;
+    const pdfTitle = vals.title + ".pdf";
 
     ReactDOM.render(
       <Container className={classes.cardGrid} hidden={calculationDataOpen}>
         <div style={{ height: 220, width: "80vw" }}>
-          <ReactToPdf targetRef={refPDF} filename='calculation.pdf'>
+          <ReactToPdf targetRef={refPDF} filename={pdfTitle}>
             {({ toPdf }) => (
               <Button
                 variant='contained'
@@ -1131,14 +1163,14 @@ const Tools = ({ intl }) => {
 
               {
                 id: 14,
-                description: "# intermediate posts in width",
+                description: "# Intermediate Posts In Width",
                 input: values.postsPerWidth,
                 outputOpen: "",
                 outputClosed: "",
               },
               {
                 id: 15,
-                description: "# ballasts per corner post",
+                description: "# Ballasts Per Corner Post",
                 input: values.ballastsPerCornerPost,
                 outputOpen: "",
                 outputClosed: "",
@@ -1168,14 +1200,14 @@ const Tools = ({ intl }) => {
               {
                 id: 19,
                 description: "Ballast Material",
-                input: values.ballastMaterial,
+                input: ballastMaterial,
                 outputOpen: "",
                 outputClosed: "",
               },
               {
                 id: 20,
                 description: "Ground Surface",
-                input: values.groundSurface,
+                input: groundSurface,
                 outputOpen: "",
                 outputClosed: "",
               },
@@ -1298,6 +1330,14 @@ const Tools = ({ intl }) => {
     "Ballast configurations for frame tents: Fixed-to-plate, Fixed-to-pole, A, B, C, D"
   );
 
+  function changeBallast(ballastNumber) {
+    setValues({
+      ...values,
+      ballastType: ballastNumber,
+    });
+
+    console.log(values.ballastType);
+  }
   const handleSelectChange = (event) => {
     const name = event.target.name;
     const id = event.target;
@@ -1312,22 +1352,58 @@ const Tools = ({ intl }) => {
         // setBallastTypeText(
         //   "Ballast configurations for frame tents: Fixed-to-plate, Fixed-to-pole, A, B, C, D"
         // );
+        console.log("setting values for fixed-to-pole");
+
+        setSelectBallastType(2);
+        setInfoImages({
+          ...infoImages,
+          ballast: ConfigurationC2,
+        });
+        setBallastType({
+          ...ballastType,
+          fixedToPlate: false,
+          fixedToPole: true,
+          a: false,
+          b: false,
+          c: false,
+          d: false,
+        });
         setIsPoleTent(false);
+        changeBallast(2);
       } else if (event.target.value === "2") {
         //setBtnDisabled(false);
         //console.log("is hip");
         // setInfoImages({ ...infoImages, type: hip });
+
         // setBallastTypeText(
         //   "Ballast configurations for hybrid tents: Fixed-to-plate, Fixed-to-pole, A, B, C, D"
         // );
         setIsPoleTent(false);
       } else {
+        console.log("setting values for fixed to plate.");
         //setInfoImages({ ...infoImages, type: pyramid });
         //console.log("is pyramid");
         // setBallastTypeText(
         //   "Ballast configurations for pole tents: Fixed-to-plate, B, D, C"
         // );
+
+        setSelectBallastType(1);
+        setInfoImages({
+          ...infoImages,
+          ballast: ConfigurationB2,
+        });
+        setBallastType({
+          ...ballastType,
+          fixedToPlate: true,
+          fixedToPole: false,
+          a: false,
+          b: false,
+          c: false,
+          d: false,
+        });
         setIsPoleTent(true);
+        changeBallast(1);
+        console.log("HERE IS NEW VALUE " + values.ballastType);
       }
     }
     if (name === "roofType") {
@@ -1356,14 +1432,14 @@ const Tools = ({ intl }) => {
 
   const [infoImages, setInfoImages] = React.useState({
     type: gable,
-    ballast: ConfigurationB2,
+    ballast: ConfigurationC2,
     groundSurface: asphalt,
     ballastMaterial: concreteBlock,
   });
 
   const [ballastType, setBallastType] = React.useState({
-    fixedToPlate: true,
-    fixedToPole: false,
+    fixedToPlate: false,
+    fixedToPole: true,
     a: false,
     b: false,
     c: false,
@@ -1371,6 +1447,8 @@ const Tools = ({ intl }) => {
   });
 
   const filter = createFilterOptions();
+
+  const [selectBallastType, setSelectBallastType] = React.useState(2);
 
   const handleBallastSelectChange = (event) => {
     const name = event.target.name;
@@ -1381,6 +1459,7 @@ const Tools = ({ intl }) => {
       console.log(event.target.value);
       console.log(ballastType);
       if (event.target.value === "1") {
+        setSelectBallastType(1);
         setInfoImages({ ...infoImages, ballast: ConfigurationB2 });
         setBallastType({
           ...ballastType,
@@ -1393,7 +1472,7 @@ const Tools = ({ intl }) => {
         });
       } else if (event.target.value === "2") {
         setInfoImages({ ...infoImages, ballast: ConfigurationC2 });
-
+        setSelectBallastType(2);
         setBallastType({
           ...ballastType,
           fixedToPlate: false,
@@ -1404,6 +1483,7 @@ const Tools = ({ intl }) => {
           d: false,
         });
       } else if (event.target.value === "3") {
+        setSelectBallastType(3);
         setInfoImages({ ...infoImages, ballast: ConfigurationA });
         console.log("A");
         setBallastType({
@@ -1416,6 +1496,7 @@ const Tools = ({ intl }) => {
           d: false,
         });
       } else if (event.target.value === "4") {
+        setSelectBallastType(4);
         setInfoImages({ ...infoImages, ballast: ConfigurationB });
         console.log("B");
         setBallastType({
@@ -1428,6 +1509,7 @@ const Tools = ({ intl }) => {
           d: false,
         });
       } else if (event.target.value === "5") {
+        setSelectBallastType(5);
         setInfoImages({ ...infoImages, ballast: ConfigurationC });
         console.log("C");
         setBallastType({
@@ -1440,6 +1522,7 @@ const Tools = ({ intl }) => {
           d: false,
         });
       } else if (event.target.value === "6") {
+        setSelectBallastType(6);
         setInfoImages({ ...infoImages, ballast: ConfigurationD });
         console.log("D");
         setBallastType({
@@ -1470,7 +1553,7 @@ const Tools = ({ intl }) => {
       if (event.target.value === "1") {
         setInfoImages({ ...infoImages, ballastMaterial: plasticBarrel });
 
-        console.log("Plastic");
+        console.log("Plastic Barrel");
       } else if (event.target.value === "2") {
         setInfoImages({ ...infoImages, ballastMaterial: steel });
         console.log("Steel Drum");
@@ -2006,6 +2089,10 @@ const Tools = ({ intl }) => {
                             ...inputValues,
                             tentWidth: newInputValue,
                           });
+                          setValues({
+                            ...values,
+                            tentWidth: newInputValue,
+                          });
                         }}
                         //defaultValue={values.tentWidth}
                         value={values.tentWidth}
@@ -2083,6 +2170,10 @@ const Tools = ({ intl }) => {
                         onInputChange={(event, newInputValue) => {
                           setInputValues({
                             ...inputValues,
+                            tentLength: newInputValue,
+                          });
+                          setValues({
+                            ...values,
                             tentLength: newInputValue,
                           });
                         }}
@@ -2215,6 +2306,10 @@ const Tools = ({ intl }) => {
                             ...inputValues,
                             ridgeLength: newInputValue,
                           });
+                          setValues({
+                            ...values,
+                            ridgeLength: newInputValue,
+                          });
                         }}
                         //defaultValue={values.roofHeight}
                         value={values.ridgeLength}
@@ -2267,8 +2362,8 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Vertical distance btw the ground of the lowest part of
-                          the roof. The band is neglected.
+                          Vertical distance between the ground of the lowest
+                          part of the roof.
                         </Typography>
                       </React.Fragment>
                     }>
@@ -2295,6 +2390,10 @@ const Tools = ({ intl }) => {
                         onInputChange={(event, newInputValue) => {
                           setInputValues({
                             ...inputValues,
+                            eaveHeight: newInputValue,
+                          });
+                          setValues({
+                            ...values,
                             eaveHeight: newInputValue,
                           });
                         }}
@@ -2371,6 +2470,10 @@ const Tools = ({ intl }) => {
                         onInputChange={(event, newInputValue) => {
                           setInputValues({
                             ...inputValues,
+                            roofHeight: newInputValue,
+                          });
+                          setValues({
+                            ...values,
                             roofHeight: newInputValue,
                           });
                         }}
@@ -2486,7 +2589,11 @@ const Tools = ({ intl }) => {
                         onInputChange={(event, newInputValue) => {
                           setInputValues({
                             ...inputValues,
-                            roofHeight: newInputValue,
+                            valenceHeight: newInputValue,
+                          });
+                          setValues({
+                            ...values,
+                            valenceHeight: newInputValue,
                           });
                         }}
                         //defaultValue={values.roofHeight}
@@ -2503,7 +2610,7 @@ const Tools = ({ intl }) => {
                         onChange={(event, newValue) => {
                           setValues({
                             ...values,
-                            roofHeight: newValue,
+                            valenceHeight: newValue,
                           });
                         }}
                         options={[0.5, 1, 1.5, 2]}
@@ -2607,6 +2714,10 @@ const Tools = ({ intl }) => {
                             ...inputValues,
                             postsPerLength: newInputValue,
                           });
+                          setValues({
+                            ...values,
+                            postsPerLength: newInputValue,
+                          });
                         }}
                         //defaultValue={values.postsPerLength}
                         value={values.postsPerLength}
@@ -2686,6 +2797,10 @@ const Tools = ({ intl }) => {
                             ...inputValues,
                             postsPerWidth: newInputValue,
                           });
+                          setValues({
+                            ...values,
+                            postsPerWidth: newInputValue,
+                          });
                         }}
                         //defaultValue={values.postsPerLength}
                         value={values.postsPerWidth}
@@ -2747,7 +2862,7 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.textField)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        # Ballasts per corner post
+                        # Ballasts Per Corner Post
                       </InputLabel>
                       <Select
                         native
@@ -2787,8 +2902,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Maximum Wind Speed expected while tent is setup (
-                          {units.speed[values.unit]})
+                          Maximum Wind Speed expected while tent is setup (mph)
                         </Typography>
                       </React.Fragment>
                     }>
@@ -2814,6 +2928,10 @@ const Tools = ({ intl }) => {
                         onInputChange={(event, newInputValue) => {
                           setInputValues({
                             ...inputValues,
+                            windSpeed: newInputValue,
+                          });
+                          setValues({
+                            ...values,
                             windSpeed: newInputValue,
                           });
                         }}
@@ -2958,50 +3076,6 @@ const Tools = ({ intl }) => {
 
                 {/* Advanced Button Toggle */}
 
-                <Grid item xs={6} md={6}>
-                  <FormGroup row>
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={btnAdvancedDisabled}
-                          onChange={handleSwitchChange}
-                          name='advanced'
-                          color='primary'
-                        />
-                      }
-                      label='Advanced'
-                    />
-                  </FormGroup>
-                  <Typography variant='h6' component='h6'>
-                    Without the advanced feature, the tool assumes concrete
-                    block on asphalt with "Fixed-to-pole" for frame tents, and
-                    "Fixed-to-plate" for pole tents.
-                  </Typography>
-
-                  {/* <ButtonGroup
-                      row
-                      className={clsx(classes.calculateButton)}
-                      variant='contained'
-                      color='primary'
-                      fullWidth={true}
-                      aria-label='contained primary button group'>
-                      <Button
-                        onClick={async () => {
-                          // const handleClickOpen = () => {
-                          //   setOpen(true);
-                          // };
-
-                          startCloudFunc();
-
-                          // setLoading(true);
-                          history.push("/about");
-                        }}>
-                        Help
-                      </Button>
-                      //<Button>Save</Button>
-                    </ButtonGroup> */}
-                </Grid>
-
                 <Grid item xs={12}>
                   <Divider />
                 </Grid>
@@ -3027,7 +3101,7 @@ const Tools = ({ intl }) => {
                   </FormControl>
                 </Grid> */}
                 {/* Ballast Type - 12*/}
-                <Grid item hidden={!btnAdvancedDisabled} xs={12}>
+                <Grid item xs={12}>
                   <Grid
                     container
                     direction='row'
@@ -3035,9 +3109,9 @@ const Tools = ({ intl }) => {
                     alignItems='center'
                     spacing={1}>
                     <Grid item xs={12} md={3}>
-                      <Typography variant='subtitle2' gutterBottom>
+                      {/* <Typography variant='subtitle2' gutterBottom>
                         {ballastTypeText}
-                      </Typography>
+                      </Typography> */}
 
                       <HtmlTooltip
                         enterDelay={200}
@@ -3065,8 +3139,8 @@ const Tools = ({ intl }) => {
                             InputLabelProps={{ shrink: true }}
                             native
                             label='Ballast Configuration'
-                            defaultValue={1}
-                            value={values.ballastType}
+                            defaultValue={2}
+                            value={selectBallastType}
                             onChange={handleBallastSelectChange}
                             // endAdornment={
                             //   <InputAdornment position='end'>
@@ -3107,7 +3181,7 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              Plastic barrel, Steel drum, Concrete block
+                              Plastic Barrel, Steel Drum, Concrete Block
                             </Typography>
                           </React.Fragment>
                         }>
@@ -3140,7 +3214,7 @@ const Tools = ({ intl }) => {
                               name: "ballastMaterial",
                               id: "outlined-age-native-simple",
                             }}>
-                            <option value={1}>Plastic</option>
+                            <option value={1}>Plastic Barrel</option>
                             <option value={2}>Steel Drum</option>
                             <option value={3}>Concrete Block</option>
                           </Select>
@@ -3297,6 +3371,10 @@ const Tools = ({ intl }) => {
                                 ...inputValues,
                                 b2wplate: newInputValue,
                               });
+                              setValues({
+                                ...values,
+                                b2wplate: newInputValue,
+                              });
                             }}
                             //defaultValue={values.postsPerLength}
                             value={values.b2wplate}
@@ -3382,6 +3460,10 @@ const Tools = ({ intl }) => {
                                 ...inputValues,
                                 ad1: newInputValue,
                               });
+                              setValues({
+                                ...values,
+                                ad1: newInputValue,
+                              });
                             }}
                             //defaultValue={values.postsPerLength}
                             value={values.ad1}
@@ -3463,6 +3545,10 @@ const Tools = ({ intl }) => {
                             onInputChange={(event, newInputValue) => {
                               setInputValues({
                                 ...inputValues,
+                                ad2: newInputValue,
+                              });
+                              setValues({
+                                ...values,
                                 ad2: newInputValue,
                               });
                             }}
@@ -3547,6 +3633,10 @@ const Tools = ({ intl }) => {
                                 ...inputValues,
                                 awplate: newInputValue,
                               });
+                              setValues({
+                                ...values,
+                                awplate: newInputValue,
+                              });
                             }}
                             value={values.awplate}
                             onChange={(event, newValue) => {
@@ -3622,6 +3712,10 @@ const Tools = ({ intl }) => {
                             onInputChange={(event, newInputValue) => {
                               setInputValues({
                                 ...inputValues,
+                                bd1: newInputValue,
+                              });
+                              setValues({
+                                ...values,
                                 bd1: newInputValue,
                               });
                             }}
@@ -3708,6 +3802,10 @@ const Tools = ({ intl }) => {
                                 ...inputValues,
                                 bd2: newInputValue,
                               });
+                              setValues({
+                                ...values,
+                                bd2: newInputValue,
+                              });
                             }}
                             //defaultValue={values.postsPerLength}
                             value={values.bd2}
@@ -3792,6 +3890,10 @@ const Tools = ({ intl }) => {
                                 ...inputValues,
                                 bd3: newInputValue,
                               });
+                              setValues({
+                                ...values,
+                                bd3: newInputValue,
+                              });
                             }}
                             //defaultValue={values.postsPerLength}
                             value={values.bd3}
@@ -3874,6 +3976,10 @@ const Tools = ({ intl }) => {
                             onInputChange={(event, newInputValue) => {
                               setInputValues({
                                 ...inputValues,
+                                bd4: newInputValue,
+                              });
+                              setValues({
+                                ...values,
                                 bd4: newInputValue,
                               });
                             }}
@@ -3961,6 +4067,10 @@ const Tools = ({ intl }) => {
                                 ...inputValues,
                                 bh4: newInputValue,
                               });
+                              setValues({
+                                ...values,
+                                bh4: newInputValue,
+                              });
                             }}
                             //defaultValue={values.postsPerLength}
                             value={values.bh4}
@@ -4042,6 +4152,10 @@ const Tools = ({ intl }) => {
                             onInputChange={(event, newInputValue) => {
                               setInputValues({
                                 ...inputValues,
+                                bwplate: newInputValue,
+                              });
+                              setValues({
+                                ...values,
                                 bwplate: newInputValue,
                               });
                             }}
@@ -4132,6 +4246,10 @@ const Tools = ({ intl }) => {
                                 ...inputValues,
                                 cd1: newInputValue,
                               });
+                              setValues({
+                                ...values,
+                                cd1: newInputValue,
+                              });
                             }}
                             //defaultValue={values.postsPerLength}
                             value={values.cd1}
@@ -4212,6 +4330,10 @@ const Tools = ({ intl }) => {
                             onInputChange={(event, newInputValue) => {
                               setInputValues({
                                 ...inputValues,
+                                cd3: newInputValue,
+                              });
+                              setValues({
+                                ...values,
                                 cd3: newInputValue,
                               });
                             }}
@@ -4297,6 +4419,10 @@ const Tools = ({ intl }) => {
                                 ...inputValues,
                                 cd4: newInputValue,
                               });
+                              setValues({
+                                ...values,
+                                cd4: newInputValue,
+                              });
                             }}
                             //defaultValue={values.postsPerLength}
                             value={values.cd4}
@@ -4380,6 +4506,10 @@ const Tools = ({ intl }) => {
                             onInputChange={(event, newInputValue) => {
                               setInputValues({
                                 ...inputValues,
+                                ch4: newInputValue,
+                              });
+                              setValues({
+                                ...values,
                                 ch4: newInputValue,
                               });
                             }}
@@ -4469,6 +4599,10 @@ const Tools = ({ intl }) => {
                                 ...inputValues,
                                 dd2: newInputValue,
                               });
+                              setValues({
+                                ...values,
+                                dd2: newInputValue,
+                              });
                             }}
                             //defaultValue={values.postsPerLength}
                             value={values.bd2}
@@ -4550,6 +4684,10 @@ const Tools = ({ intl }) => {
                             onInputChange={(event, newInputValue) => {
                               setInputValues({
                                 ...inputValues,
+                                dd4: newInputValue,
+                              });
+                              setValues({
+                                ...values,
                                 dd4: newInputValue,
                               });
                             }}
@@ -4636,6 +4774,10 @@ const Tools = ({ intl }) => {
                                 ...inputValues,
                                 dd5: newInputValue,
                               });
+                              setValues({
+                                ...values,
+                                dd5: newInputValue,
+                              });
                             }}
                             //defaultValue={values.postsPerLength}
                             value={values.dd5}
@@ -4717,6 +4859,10 @@ const Tools = ({ intl }) => {
                             onInputChange={(event, newInputValue) => {
                               setInputValues({
                                 ...inputValues,
+                                dwplate: newInputValue,
+                              });
+                              setValues({
+                                ...values,
                                 dwplate: newInputValue,
                               });
                             }}

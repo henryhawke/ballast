@@ -275,59 +275,62 @@ export default functions
 
       // Weights of each ballast  K23, L23, and M23.
 
+      // functions -> https -> advanced -> onCall.f.js
       var openBallastWeight;
       var encBallastWeight;
 
       console.log("BALLAST TYPE" + payload.ballastType);
       var ballastType = toNumber(payload.ballastType);
 
-      var isAdvanced = payload.advanced ? payload.advanced : false;
-
-      if (isAdvanced) {
-        if (ballastType === 1) {
-          // Fixed-To-Plate
-          openBallastWeight = worksheet["E56"] ? worksheet["E56"].v : 0;
-          encBallastWeight = worksheet["F56"] ? worksheet["F56"].v : 0;
-        } else if (ballastType === 2) {
-          // Fixed-To-Pole
-          openBallastWeight = worksheet["G56"] ? worksheet["G56"].v : 0;
-          encBallastWeight = worksheet["H56"] ? worksheet["H56"].v : 0;
-        } else if (ballastType === 3) {
-          // A
-          openBallastWeight = worksheet["I56"] ? worksheet["I56"].v : 0;
-          encBallastWeight = worksheet["J56"] ? worksheet["J56"].v : 0;
-        } else if (ballastType === 4) {
-          // B assuming A
-          openBallastWeight = worksheet["K56"] ? worksheet["K56"].v : 0;
-          encBallastWeight = worksheet["L56"] ? worksheet["L56"].v : 0;
-          // } else if (payload.ballastType === 5) {
-          //   // B assuming C
-          //   openBallastWeight = worksheet["K58"] ? worksheet["K58"].v : 0;
-          //   encBallastWeight = worksheet["L58"] ? worksheet["L48"].v : 0;
-        } else if (ballastType === 5) {
-          // C
-          openBallastWeight = worksheet["O56"] ? worksheet["O56"].v : 0;
-          encBallastWeight = worksheet["P56"] ? worksheet["P56"].v : 0;
-        } else if (ballastType === 6) {
-          //D
-          openBallastWeight = worksheet["Q56"] ? worksheet["Q56"].v : 0;
-          encBallastWeight = worksheet["R56"] ? worksheet["R56"].v : 0;
-        }
-      } else {
-        console.log(payload.tentType);
-
-        if (toNumber(payload.tentType) === 3) {
-          console.log("WE MADE IT");
-
-          openBallastWeight = worksheet["E56"] ? worksheet["E56"].v : 0;
-          console.log(openBallastWeight);
-          encBallastWeight = worksheet["F56"] ? worksheet["F56"].v : 0;
-          console.log(openBallastWeight);
-        } else {
-          openBallastWeight = worksheet["G56"] ? worksheet["G56"].v : 0;
-          encBallastWeight = worksheet["H56"] ? worksheet["H56"].v : 0;
+      if (toNumber(payload.tentType) === 3) {
+        if (ballastType === 2) {
+          ballastType = 1;
         }
       }
+      if (ballastType === 1) {
+        // Fixed-To-Plate
+        openBallastWeight = worksheet["E56"] ? worksheet["E56"].v : 0;
+        encBallastWeight = worksheet["F56"] ? worksheet["F56"].v : 0;
+      } else if (ballastType === 2) {
+        // Fixed-To-Pole
+        openBallastWeight = worksheet["G56"] ? worksheet["G56"].v : 0;
+        encBallastWeight = worksheet["H56"] ? worksheet["H56"].v : 0;
+      } else if (ballastType === 3) {
+        // A
+        openBallastWeight = worksheet["I56"] ? worksheet["I56"].v : 0;
+        encBallastWeight = worksheet["J56"] ? worksheet["J56"].v : 0;
+      } else if (ballastType === 4) {
+        // B assuming A
+        openBallastWeight = worksheet["K56"] ? worksheet["K56"].v : 0;
+        encBallastWeight = worksheet["L56"] ? worksheet["L56"].v : 0;
+        // } else if (payload.ballastType === 5) {
+        //   // B assuming C
+        //   openBallastWeight = worksheet["K58"] ? worksheet["K58"].v : 0;
+        //   encBallastWeight = worksheet["L58"] ? worksheet["L48"].v : 0;
+      } else if (ballastType === 5) {
+        // C
+        openBallastWeight = worksheet["O56"] ? worksheet["O56"].v : 0;
+        encBallastWeight = worksheet["P56"] ? worksheet["P56"].v : 0;
+      } else if (ballastType === 6) {
+        //D
+        openBallastWeight = worksheet["Q56"] ? worksheet["Q56"].v : 0;
+        encBallastWeight = worksheet["R56"] ? worksheet["R56"].v : 0;
+      }
+      // } else {
+      //   console.log(payload.tentType);
+
+      //   if (toNumber(payload.tentType) === 3) {
+      //     console.log("WE MADE IT");
+
+      //     openBallastWeight = worksheet["E56"] ? worksheet["E56"].v : 0;
+      //     console.log(openBallastWeight);
+      //     encBallastWeight = worksheet["F56"] ? worksheet["F56"].v : 0;
+      //     console.log(openBallastWeight);
+      //   } else {
+      //     openBallastWeight = worksheet["G56"] ? worksheet["G56"].v : 0;
+      //     encBallastWeight = worksheet["H56"] ? worksheet["H56"].v : 0;
+      //   }
+      // }
 
       // Fixed-to-plate
 
