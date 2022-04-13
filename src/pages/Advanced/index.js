@@ -370,12 +370,12 @@ const Tools = ({ intl }) => {
     },
     {
       id: 9,
-      title: "# intermediate posts in length",
+      title: "# intermediate Posts in length",
       content: "postsPerLength",
     },
     {
       id: 10,
-      title: "# intermediate posts in width",
+      title: "# intermediate Posts in width",
       content: "postsPerWidth",
     },
     {
@@ -395,7 +395,7 @@ const Tools = ({ intl }) => {
     },
     {
       id: 14,
-      title: "Weight of plate ",
+      title: "Weight of steel plate ",
       content: "b2wplate",
     },
     {
@@ -405,12 +405,12 @@ const Tools = ({ intl }) => {
     },
     {
       id: 16,
-      title: "d1 - Distance btw center of ballast & upright ",
+      title: "d1 - Distance between center of ballast & upright ",
       content: "ad1",
     },
     {
       id: 17,
-      title: "Distance btw far end of plate & upright",
+      title: "Distance between far end of plate & upright",
       content: "ad2",
     },
     {
@@ -420,17 +420,17 @@ const Tools = ({ intl }) => {
     },
     {
       id: 19,
-      title: "Weight of plate ",
+      title: "Weight of steel plate ",
       content: "awplate",
     },
     {
       id: 20,
-      title: "d1 - Distance btw center of ballast & upright ",
+      title: "d1 - Distance between center of ballast & upright ",
       content: "bd1",
     },
     {
       id: 21,
-      title: "Distance btw far end of plate & upright ",
+      title: "Distance between far end of plate & upright ",
       content: "bd2",
     },
     {
@@ -440,12 +440,13 @@ const Tools = ({ intl }) => {
     },
     {
       id: 23,
-      title: "Horizontal distance btw ballast center & guy attachment point",
+      title:
+        "Horizontal Distance between ballast center & guy attachment point",
       content: "bd4",
     },
     {
       id: 24,
-      title: "Vertical distance btw plate & guy attachment point",
+      title: "Vertical Distance between plate & guy attachment point",
       content: "bh4",
     },
     {
@@ -460,12 +461,12 @@ const Tools = ({ intl }) => {
     },
     {
       id: 27,
-      title: "Weight of plate",
+      title: "Weight of steel plate",
       content: "bwplate",
     },
     {
       id: 28,
-      title: "d1 - Distance btw center of ballast & upright",
+      title: "d1 - Distance between center of ballast & upright",
       content: "cd1",
     },
     {
@@ -475,12 +476,13 @@ const Tools = ({ intl }) => {
     },
     {
       id: 30,
-      title: "Horizontal distance btw ballast center & guy attachment point ",
+      title:
+        "Horizontal Distance between ballast center & guy attachment point ",
       content: "cd4",
     },
     {
       id: 31,
-      title: "Vertical distance btw plate & guy attachment point",
+      title: "Vertical Distance between plate & guy attachment point",
       content: "ch4",
     },
     {
@@ -490,17 +492,18 @@ const Tools = ({ intl }) => {
     },
     {
       id: 33,
-      title: "Distance btw far end of plate & upright",
+      title: "Distance between far end of plate & upright",
       content: "dd2",
     },
     {
       id: 34,
-      title: "Horizontal distance btw ballast center & guy attachment point",
+      title:
+        "Horizontal Distance between ballast center & guy attachment point",
       content: "dd4",
     },
     {
       id: 35,
-      title: "Horizontal distance btw guy attachment point and upright",
+      title: "Horizontal Distance between guy attachment point and upright",
       content: "dd5",
     },
     {
@@ -510,7 +513,7 @@ const Tools = ({ intl }) => {
     },
     {
       id: 37,
-      title: "Weight of plate ",
+      title: "Weight of steel plate ",
       content: "dwplate",
     },
     // {
@@ -829,13 +832,31 @@ const Tools = ({ intl }) => {
       groundSurface = "Dirt";
     }
 
+    var tentType = "Frame Tent";
+
+    if (vals.tentType === 3) {
+      tentType = "Pole Tent";
+    }
+
     var roofTypeName = "Gable";
+    var ridgeLength = vals.ridgeLength;
+    var tentLength = vals.tentLength;
+
     if (vals.roofType === 1) {
       roofTypeName = "Gable";
+      ridgeLength = tentLength;
     } else if (vals.roofType === 2) {
       roofTypeName = "Hip";
     } else if (vals.roofType === 3) {
       roofTypeName = "Pyramid";
+      ridgeLength = 0;
+    }
+
+    var windExposure = "Fully Exposed";
+    if (vals.windFlow === 2) {
+      windExposure = "Partially Exposed";
+    } else if (vals.windFlow === 3) {
+      windExposure = "Sheltered";
     }
 
     const refPDF = React.createRef();
@@ -1100,7 +1121,7 @@ const Tools = ({ intl }) => {
               {
                 id: 5,
                 description: "Tent Type",
-                input: values.tentType,
+                input: tentType,
                 outputOpen: "",
                 outputClosed: "",
               },
@@ -1115,21 +1136,21 @@ const Tools = ({ intl }) => {
               {
                 id: 7,
                 description: "Tent Length (ft)",
-                input: values.tentLength,
+                input: tentLength,
                 outputOpen: "",
                 outputClosed: "",
               },
               {
                 id: 8,
                 description: "Roof Type",
-                input: values.roofType,
+                input: roofTypeName,
                 outputOpen: "",
                 outputClosed: "",
               },
               {
                 id: 9,
                 description: "Ridge Length (ft)",
-                input: values.ridgeLength,
+                input: ridgeLength,
                 outputOpen: "",
                 outputClosed: "",
               },
@@ -1156,7 +1177,7 @@ const Tools = ({ intl }) => {
               },
               {
                 id: 13,
-                description: "# intermediate posts in length",
+                description: "# Intermediate Posts in Length",
                 input: values.postsPerLength,
                 outputOpen: "",
                 outputClosed: "",
@@ -1186,11 +1207,10 @@ const Tools = ({ intl }) => {
               {
                 id: 17,
                 description: "Wind Exposure",
-                input: values.windFlow,
+                input: windExposure,
                 outputOpen: "",
                 outputClosed: "",
               },
-
               {
                 id: 18,
                 description: "Ballast Configuration",
@@ -1200,7 +1220,7 @@ const Tools = ({ intl }) => {
               },
               {
                 id: 19,
-                description: "Ballast Material",
+                description: "Ballast Type",
                 input: ballastMaterial,
                 outputOpen: "",
                 outputClosed: "",
@@ -1348,30 +1368,32 @@ const Tools = ({ intl }) => {
       console.log("is tent type change");
       console.log(event.target.value);
       if (event.target.value === "1") {
+        // FRAME TENT VERIFIED
         //setInfoImages({ ...infoImages, type: gable });
         //console.log("is gable");
         // setBallastTypeText(
         //   "Ballast configurations for frame tents: Fixed-to-plate, Fixed-to-pole, A, B, C, D"
         // );
         console.log("setting values for fixed-to-pole");
+        // setSelectBallastType(2);
+        // setInfoImages({
+        //   ...infoImages,
+        //   ballast: ConfigurationC2,
+        // });
+        // setBallastType({
+        //   ...ballastType,
+        //   fixedToPlate: false,
+        //   fixedToPole: true,
+        //   a: false,
+        //   b: false,
+        //   c: false,
+        //   d: false,
+        // });
 
-        setSelectBallastType(2);
-        setInfoImages({
-          ...infoImages,
-          ballast: ConfigurationC2,
-        });
-        setBallastType({
-          ...ballastType,
-          fixedToPlate: false,
-          fixedToPole: true,
-          a: false,
-          b: false,
-          c: false,
-          d: false,
-        });
+        // changeBallast(2);
         setIsPoleTent(false);
-        changeBallast(2);
       } else if (event.target.value === "2") {
+        // POLE TENT VERIFIED
         //setBtnDisabled(false);
         //console.log("is hip");
         // setInfoImages({ ...infoImages, type: hip });
@@ -1380,7 +1402,9 @@ const Tools = ({ intl }) => {
         //   "Ballast configurations for hybrid tents: Fixed-to-plate, Fixed-to-pole, A, B, C, D"
         // );
         setIsPoleTent(false);
+        console.log("POLE TENT?!");
       } else {
+        // SOMETHING ELSE?!?!
         console.log("setting values for fixed to plate.");
         //setInfoImages({ ...infoImages, type: pyramid });
         //console.log("is pyramid");
@@ -1388,23 +1412,26 @@ const Tools = ({ intl }) => {
         //   "Ballast configurations for pole tents: Fixed-to-plate, B, D, C"
         // );
 
-        setSelectBallastType(1);
-        setInfoImages({
-          ...infoImages,
-          ballast: ConfigurationB2,
-        });
-        setBallastType({
-          ...ballastType,
-          fixedToPlate: true,
-          fixedToPole: false,
-          a: false,
-          b: false,
-          c: false,
-          d: false,
-        });
+        if (ballastType.fixedToPole || ballastType.a) {
+          setSelectBallastType(1);
+          setInfoImages({
+            ...infoImages,
+            ballast: ConfigurationB2,
+          });
+          setBallastType({
+            ...ballastType,
+            fixedToPlate: true,
+            fixedToPole: false,
+            a: false,
+            b: false,
+            c: false,
+            d: false,
+          });
+
+          changeBallast(1);
+        }
+
         setIsPoleTent(true);
-        changeBallast(1);
-        console.log("HERE IS NEW VALUE " + values.ballastType);
       }
     }
     if (name === "roofType") {
@@ -2001,7 +2028,6 @@ const Tools = ({ intl }) => {
 
                 {/*Tent Type - 6*/}
                 <Grid item xs={6}>
-                  {/* Roof Type */}
                   <HtmlTooltip
                     enterDelay={200}
                     leaveDelay={150}
@@ -2011,7 +2037,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Three options: Gable, Hip, Pyramid
+                          Two options: Frame Tent, Pole Tent
                         </Typography>
                       </React.Fragment>
                     }>
@@ -2062,7 +2088,8 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Tent Width ({units.size[values.unit]})
+                          Dimension perpendicular to ridge. The width defines
+                          the Y-axis.
                         </Typography>
                       </React.Fragment>
                     }>
@@ -2144,8 +2171,8 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Dimension parallel to ridge. Also, the length defines
-                          the X-axis.
+                          Dimension parallel to ridge. The length defines the
+                          X-axis.
                         </Typography>
                       </React.Fragment>
                     }>
@@ -2363,7 +2390,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Vertical distance between the ground of the lowest
+                          Vertical Distance between the ground and the lowest
                           part of the roof.
                         </Typography>
                       </React.Fragment>
@@ -2686,8 +2713,8 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          # Intermediate Posts in length (Excluding corner
-                          posts)
+                          Number of intermediate posts in length (excluding
+                          corner posts)
                         </Typography>
                       </React.Fragment>
                     }>
@@ -2750,7 +2777,7 @@ const Tools = ({ intl }) => {
                               ...params.inputProps,
                               name: "postsPerLength",
                             }}
-                            label='# Intermediate posts in Length'
+                            label='# Intermediate Posts in Length'
                             margin='normal'
                             variant='outlined'
                           />
@@ -2770,7 +2797,8 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          # intermediate posts in width (Excluding corner posts)
+                          Number of intermediate posts in width (excluding
+                          corner posts)
                         </Typography>
                       </React.Fragment>
                     }>
@@ -2833,7 +2861,7 @@ const Tools = ({ intl }) => {
                               ...params.inputProps,
                               name: "postsPerWidth",
                             }}
-                            label='# Intermediate posts in Width'
+                            label='# Intermediate Posts in Width'
                             margin='normal'
                             variant='outlined'
                           />
@@ -2855,7 +2883,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          The total number of ballasts per corner post
+                          Number of ballasts per corner post
                         </Typography>
                       </React.Fragment>
                     }>
@@ -2903,7 +2931,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Maximum Wind Speed expected while tent is setup (mph)
+                          Maximum Wind Speed expected while tent is setup
                         </Typography>
                       </React.Fragment>
                     }>
@@ -3033,10 +3061,9 @@ const Tools = ({ intl }) => {
                       <React.Fragment>
                         <Typography color='inherit'>
                           Fully Exposed: wide-open space, rural environment, no
-                          trees ~~ Partially Exposed: urban and suburban
-                          environment, some trees ~~ Sheltered: urban
-                          environment with large buildings nearby and dense
-                          trees
+                          trees | Partially Exposed: urban and suburban
+                          environment, some trees | Sheltered: urban environment
+                          with large buildings nearby and dense trees
                         </Typography>
                       </React.Fragment>
                     }>
@@ -3123,8 +3150,9 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              Six options: Fixed-to-plate, Fixed-to-pole, A, B,
-                              C, D
+                              Six options for Frame Tents: Fixed-to-plate,
+                              Fixed-to-pole, A, B, C, D | Four options for Pole
+                              Tents: Fixed-to-plate, B, C, D
                             </Typography>
                           </React.Fragment>
                         }>
@@ -3182,7 +3210,8 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              Plastic Barrel, Steel Drum, Concrete Block
+                              Three options: Plastic Barrel, Steel Drum,
+                              Concrete Block
                             </Typography>
                           </React.Fragment>
                         }>
@@ -3233,8 +3262,8 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              Smooth concrete, Rough concrete, Asphalt, Gravel,
-                              Dirt, Grass
+                              Six options: Smooth Concrete, Rough Concrete,
+                              Asphalt, Gravel, Dirt, Grass
                             </Typography>
                           </React.Fragment>
                         }>
@@ -3328,7 +3357,7 @@ const Tools = ({ intl }) => {
                       <Divider />
                     </Grid>
 
-                    {/* b2wplate: 0,Weight of plate  14*/}
+                    {/* b2wplate: 0,Weight of steel plate  14*/}
                     <Grid
                       item
                       xs={6}
@@ -3344,7 +3373,7 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              Weight of plate (lbs)
+                              Weight of steel plate (lbs)
                             </Typography>
                           </React.Fragment>
                         }>
@@ -3405,7 +3434,7 @@ const Tools = ({ intl }) => {
                                   ...params.inputProps,
                                   name: "b2wplate",
                                 }}
-                                label='Weight of plate (lbs)'
+                                label='Weight of steel plate (lbs)'
                                 margin='normal'
                                 variant='outlined'
                               />
@@ -3416,7 +3445,7 @@ const Tools = ({ intl }) => {
                     </Grid>
 
                     {/* A SELECTION */}
-                    {/* ad1: 0, d1 - Distance btw center of ballast & upright (ft)  16*/}
+                    {/* ad1: 0, d1 - Distance between center of ballast & upright (ft)  16*/}
 
                     <Grid
                       item
@@ -3433,7 +3462,8 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              d1 - Distance btw center of ballast & upright (ft)
+                              d1 - Distance between center of ballast & upright
+                              (ft)
                             </Typography>
                           </React.Fragment>
                         }>
@@ -3494,7 +3524,7 @@ const Tools = ({ intl }) => {
                                   ...params.inputProps,
                                   name: "ad1",
                                 }}
-                                label='d1 - Distance btw center of ballast & upright (ft)'
+                                label='d1 - Distance between center of ballast & upright (ft)'
                                 margin='normal'
                                 variant='outlined'
                               />
@@ -3504,7 +3534,7 @@ const Tools = ({ intl }) => {
                       </HtmlTooltip>
                     </Grid>
 
-                    {/* ad2:0, Distance btw far end of plate & upright (ft)  17*/}
+                    {/* ad2:0, Distance between far end of plate & upright (ft)  17*/}
                     <Grid
                       item
                       xs={6}
@@ -3520,7 +3550,8 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              d2 - Distance btw far end of plate & upright (ft)
+                              d2 - Distance between far end of plate & upright
+                              (ft)
                             </Typography>
                           </React.Fragment>
                         }>
@@ -3581,7 +3612,7 @@ const Tools = ({ intl }) => {
                                   ...params.inputProps,
                                   name: "ad2",
                                 }}
-                                label='d2 - Distance btw far end of plate & upright (ft)'
+                                label='d2 - Distance between far end of plate & upright (ft)'
                                 margin='normal'
                                 variant='outlined'
                               />
@@ -3590,7 +3621,7 @@ const Tools = ({ intl }) => {
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
-                    {/* awplate: 0, Weight of plate  19*/}
+                    {/* awplate: 0, Weight of steel plate  19*/}
                     <Grid
                       item
                       xs={6}
@@ -3606,7 +3637,7 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              Weight of plate (lbs)
+                              Weight of steel plate (lbs)
                             </Typography>
                           </React.Fragment>
                         }>
@@ -3657,7 +3688,7 @@ const Tools = ({ intl }) => {
                                   ...params.inputProps,
                                   name: "awplate",
                                 }}
-                                label='Weight of plate (lbs)'
+                                label='Weight of steel plate (lbs)'
                                 margin='normal'
                                 variant='outlined'
                               />
@@ -3670,7 +3701,7 @@ const Tools = ({ intl }) => {
                     {/* 
                 B SELECTION
                  */}
-                    {/* bd1: 0, d1 - Distance btw center of ballast & upright (ft)  20*/}
+                    {/* bd1: 0, d1 - Distance between center of ballast & upright (ft)  20*/}
 
                     <Grid
                       item
@@ -3687,7 +3718,8 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              d1 - Distance btw center of ballast & upright (ft)
+                              d1 - Distance between center of ballast & upright
+                              (ft)
                             </Typography>
                           </React.Fragment>
                         }>
@@ -3748,7 +3780,7 @@ const Tools = ({ intl }) => {
                                   ...params.inputProps,
                                   name: "bd1",
                                 }}
-                                label='d1 - Distance btw center of ballast & upright (ft)'
+                                label='d1 - Distance between center of ballast & upright (ft)'
                                 margin='normal'
                                 variant='outlined'
                               />
@@ -3758,7 +3790,7 @@ const Tools = ({ intl }) => {
                       </HtmlTooltip>
                     </Grid>
 
-                    {/* bd2:0,Distance btw far end of plate & upright (ft) 21*/}
+                    {/* bd2:0,Distance between far end of plate & upright (ft) 21*/}
 
                     <Grid
                       item
@@ -3775,7 +3807,8 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              d2 - Distance btw far end of plate & upright (ft)
+                              d2 - Distance between far end of plate & upright
+                              (ft)
                             </Typography>
                           </React.Fragment>
                         }>
@@ -3836,7 +3869,7 @@ const Tools = ({ intl }) => {
                                   ...params.inputProps,
                                   name: "bd2",
                                 }}
-                                label='d2 - Distance btw far end of plate & upright (ft)'
+                                label='d2 - Distance between far end of plate & upright (ft)'
                                 margin='normal'
                                 variant='outlined'
                               />
@@ -3934,7 +3967,7 @@ const Tools = ({ intl }) => {
                       </HtmlTooltip>
                     </Grid>
 
-                    {/* bd4: 0,Horizontal distance btw guy attachment point and upright (ft)  23*/}
+                    {/* bd4: 0,Horizontal Distance between guy attachment point and upright (ft)  23*/}
                     <Grid
                       item
                       xs={6}
@@ -3950,8 +3983,8 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              d4 - Horizontal distance btw guy attachment point
-                              and upright (ft)
+                              d4 - Horizontal Distance between guy attachment
+                              point and upright (ft)
                             </Typography>
                           </React.Fragment>
                         }>
@@ -4012,7 +4045,7 @@ const Tools = ({ intl }) => {
                                   ...params.inputProps,
                                   name: "bd4",
                                 }}
-                                label='d4 - Horizontal distance btw guy attachment point
+                                label='d4 - Horizontal Distance between guy attachment point
                               and upright (ft)'
                                 margin='normal'
                                 variant='outlined'
@@ -4023,7 +4056,7 @@ const Tools = ({ intl }) => {
                       </HtmlTooltip>
                     </Grid>
 
-                    {/* bh4 - Vertical distance btw plate & guy attachment point (ft) 24*/}
+                    {/* bh4 - Vertical Distance between plate & guy attachment point (ft) 24*/}
                     <Grid
                       item
                       xs={6}
@@ -4039,8 +4072,8 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              h4 - Vertical distance btw plate & guy attachment
-                              point (ft)
+                              h4 - Vertical Distance between plate & guy
+                              attachment point (ft)
                             </Typography>
                           </React.Fragment>
                         }>
@@ -4101,7 +4134,7 @@ const Tools = ({ intl }) => {
                                   ...params.inputProps,
                                   name: "bh4",
                                 }}
-                                label='h4 - Vertical distance btw plate & guy attachment point (ft)'
+                                label='h4 - Vertical Distance between plate & guy attachment point (ft)'
                                 margin='normal'
                                 variant='outlined'
                               />
@@ -4111,7 +4144,7 @@ const Tools = ({ intl }) => {
                       </HtmlTooltip>
                     </Grid>
 
-                    {/* bwplate: 0,Weight of plate  27*/}
+                    {/* bwplate: 0,Weight of steel plate  27*/}
                     <Grid
                       item
                       xs={6}
@@ -4127,7 +4160,7 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              Weight of plate (lbs)
+                              Weight of steel plate (lbs)
                             </Typography>
                           </React.Fragment>
                         }>
@@ -4191,7 +4224,7 @@ const Tools = ({ intl }) => {
                                   ...params.inputProps,
                                   name: "bwplate",
                                 }}
-                                label='Weight of plate (lbs)'
+                                label='Weight of steel plate (lbs)'
                                 margin='normal'
                                 variant='outlined'
                               />
@@ -4203,7 +4236,7 @@ const Tools = ({ intl }) => {
                     {/* 
                 C SELECTION
                  */}
-                    {/* cd1: 0,d1 - Distance btw center of ballast & upright (ft) 28*/}
+                    {/* cd1: 0,d1 - Distance between center of ballast & upright (ft) 28*/}
                     <Grid
                       item
                       xs={6}
@@ -4219,7 +4252,8 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              d1 - Distance btw center of ballast & upright (ft)
+                              d1 - Distance between center of ballast & upright
+                              (ft)
                             </Typography>
                           </React.Fragment>
                         }>
@@ -4280,7 +4314,7 @@ const Tools = ({ intl }) => {
                                   ...params.inputProps,
                                   name: "cd1",
                                 }}
-                                label='d1 - Distance btw center of ballast & upright (ft)'
+                                label='d1 - Distance between  center of ballast & upright (ft)'
                                 margin='normal'
                                 variant='outlined'
                               />
@@ -4375,7 +4409,7 @@ const Tools = ({ intl }) => {
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
-                    {/* cd4: 0,Horizontal distance btw guy attachment point and upright (ft) 30*/}
+                    {/* cd4: 0,Horizontal Distance between guy attachment point and upright (ft) 30*/}
                     <Grid
                       item
                       xs={6}
@@ -4391,8 +4425,8 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              d4 - Horizontal distance btw guy attachment point
-                              and upright (ft)
+                              d4 - Horizontal Distance between guy attachment
+                              point and upright (ft)
                             </Typography>
                           </React.Fragment>
                         }>
@@ -4453,7 +4487,7 @@ const Tools = ({ intl }) => {
                                   ...params.inputProps,
                                   name: "cd4",
                                 }}
-                                label='d4 - Horizontal distance btw guy attachment point
+                                label='d4 - Horizontal Distance between guy attachment point
                               and upright (ft)'
                                 margin='normal'
                                 variant='outlined'
@@ -4463,7 +4497,7 @@ const Tools = ({ intl }) => {
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
-                    {/* ch4:Vertical distance btw plate & guy attachment point
+                    {/* ch4:Vertical Distance between plate & guy attachment point
                 (ft) 31*/}
                     <Grid
                       item
@@ -4480,8 +4514,8 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              h4 - Vertical distance btw plate & guy attachment
-                              point (ft)
+                              h4 - Vertical Distance between plate & guy
+                              attachment point (ft)
                             </Typography>
                           </React.Fragment>
                         }>
@@ -4542,7 +4576,7 @@ const Tools = ({ intl }) => {
                                   ...params.inputProps,
                                   name: "ch4",
                                 }}
-                                label='h4 - Vertical distance btw plate & guy attachment point (ft)'
+                                label='h4 - Vertical Distance between plate & guy attachment point (ft)'
                                 margin='normal'
                                 variant='outlined'
                               />
@@ -4555,7 +4589,7 @@ const Tools = ({ intl }) => {
                     {/* 
                 D SELECTION
                  */}
-                    {/* dd2: 0,Distance btw far end of plate & upright (ft) 33*/}
+                    {/* dd2: 0,Distance between far end of plate & upright (ft) 33*/}
 
                     <Grid
                       item
@@ -4572,7 +4606,8 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              d2 - Distance btw far end of plate & upright (ft)
+                              d2 - Distance between far end of plate & upright
+                              (ft)
                             </Typography>
                           </React.Fragment>
                         }>
@@ -4633,7 +4668,7 @@ const Tools = ({ intl }) => {
                                   ...params.inputProps,
                                   name: "dd2",
                                 }}
-                                label='d2 - Distance btw far end of plate & upright (ft)'
+                                label='d2 - Distance between far end of plate & upright (ft)'
                                 margin='normal'
                                 variant='outlined'
                               />
@@ -4642,7 +4677,7 @@ const Tools = ({ intl }) => {
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
-                    {/* dd4: 0,Horizontal distance btw guy attachment point and upright (ft) 34 */}
+                    {/* dd4: 0,Horizontal Distance between guy attachment point and upright (ft) 34 */}
                     <Grid
                       item
                       xs={6}
@@ -4658,8 +4693,8 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              d4 - Horizontal distance btw guy attachment point
-                              and upright (ft)
+                              d4 - Horizontal Distance between guy attachment
+                              point and upright (ft)
                             </Typography>
                           </React.Fragment>
                         }>
@@ -4720,7 +4755,7 @@ const Tools = ({ intl }) => {
                                   ...params.inputProps,
                                   name: "dd4",
                                 }}
-                                label='d4 - Horizontal distance btw guy attachment point
+                                label='d4 - Horizontal Distance between guy attachment point
                               and upright (ft)'
                                 margin='normal'
                                 variant='outlined'
@@ -4730,7 +4765,7 @@ const Tools = ({ intl }) => {
                         </FormControl>
                       </HtmlTooltip>
                     </Grid>
-                    {/* dd5: 0,Horizontal distance btw ballast center & guy attachment point (ft) (ft)Horizontal distance btw guy attachment point and upright (ft)  35*/}
+                    {/* dd5: 0,Horizontal Distance between ballast center & guy attachment point (ft) (ft)Horizontal Distance between guy attachment point and upright (ft)  35*/}
                     <Grid
                       item
                       xs={6}
@@ -4746,8 +4781,8 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              d5 - Horizontal distance btw ballast center & guy
-                              attachment point (ft)
+                              d5 - Horizontal Distance between ballast center &
+                              guy attachment point (ft)
                             </Typography>
                           </React.Fragment>
                         }>
@@ -4808,7 +4843,7 @@ const Tools = ({ intl }) => {
                                   ...params.inputProps,
                                   name: "dd5",
                                 }}
-                                label='d5 - Horizontal distance btw ballast center & guy attachment point (ft)'
+                                label='d5 - Horizontal Distance between ballast center & guy attachment point (ft)'
                                 margin='normal'
                                 variant='outlined'
                               />
@@ -4818,7 +4853,7 @@ const Tools = ({ intl }) => {
                       </HtmlTooltip>
                     </Grid>
 
-                    {/* dwplate: 0,Weight of plate  37*/}
+                    {/* dwplate: 0,Weight of steel plate  37*/}
                     <Grid
                       item
                       xs={6}
@@ -4834,7 +4869,7 @@ const Tools = ({ intl }) => {
                         title={
                           <React.Fragment>
                             <Typography color='inherit'>
-                              Weight of plate (lbs)
+                              Weight of steel plate (lbs)
                             </Typography>
                           </React.Fragment>
                         }>
@@ -4898,7 +4933,7 @@ const Tools = ({ intl }) => {
                                   ...params.inputProps,
                                   name: "dwplate",
                                 }}
-                                label='Weight of plate (lbs)'
+                                label='Weight of steel plate (lbs)'
                                 margin='normal'
                                 variant='outlined'
                               />

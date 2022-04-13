@@ -66,7 +66,7 @@ export default functions
       return;
     }
 
-    const file = admin.storage().bucket().file("storage/main40.6.xlsx");
+    const file = admin.storage().bucket().file("storage/main42.1.xlsx");
     return file.download().then((data) => {
       // import your calc functions lib
       XLSX_CALC.import_functions(formulajs);
@@ -140,6 +140,7 @@ export default functions
       worksheet["D22"] = {
         t: "n",
         v: toNumber(payload.ballastsPerCornerPost),
+        // the
       };
 
       var groundSurface = toNumber(payload.groundSurface);
@@ -475,7 +476,7 @@ export default functions
         dopen: Math.ceil(toNumber(dopen)),
         advanced: payload.advanced,
         denclosed: Math.ceil(toNumber(denclosed)),
-        ballastType: toNumber(payload.ballastType),
+        ballastType: ballastType,
         ballastMaterial: payload.ballastMaterial,
         groundSurface: payload.groundSurface,
       };

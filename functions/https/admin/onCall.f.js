@@ -16,8 +16,8 @@ export default functions.https.onCall(async (data, context) => {
   console.log("auth", auth);
 
   try {
-    await admin.database().ref(`admins/${uid}`).set(true);
-    return { message: "OK" };
+    //await admin.database().ref(`admins/${uid}`).set(true);
+    return { message: "TURNED OFF ADMIN AUTHENTICATION FOR PRODUCtION MODE" };
   } catch (error) {
     return error;
   }
