@@ -370,17 +370,17 @@ const Tools = ({ intl }) => {
     },
     {
       id: 9,
-      title: "# intermediate Posts in length",
+      title: "Number of Intermediate Posts in Length",
       content: "postsPerLength",
     },
     {
       id: 10,
-      title: "# intermediate Posts in width",
+      title: "Number of Intermediate Posts in Width",
       content: "postsPerWidth",
     },
     {
       id: 11,
-      title: "# Ballasts Per Corner Post",
+      title: "Number of ballast points per corner post",
       content: "ballastsPerCornerPost",
     },
     {
@@ -537,7 +537,7 @@ const Tools = ({ intl }) => {
   const [values, setValues] = useState({
     companyName: "",
     project:
-      "Data_" +
+      "Tent_Data_" +
       todaysDate.toISOString().substr(0, 10) +
       "_" +
       todaysDate.toTimeString().split(" ")[0],
@@ -792,44 +792,73 @@ const Tools = ({ intl }) => {
 
     var ballastName = "Fixed-to-plate";
 
+    var totalWeightOpenWithoutPlates = 0;
+    var totalWeightClosedWithoutPlates = 0;
+
+    totalWeightOpenWithoutPlates =
+      vals.totalBallasts * (vals.openBallastWeight - vals.bwplate);
+    totalWeightClosedWithoutPlates =
+      vals.totalBallasts * (vals.encBallastWeight - vals.bwplate);
+
+    console.log(totalWeightOpenWithoutPlates);
+    console.log(totalWeightClosedWithoutPlates);
+
     if (vals.ballastType === 2) {
       ballastName = "Fixed-to-pole";
+
+      // Change
+
+      totalWeightOpenWithoutPlates =
+        vals.totalBallasts * vals.openBallastWeight;
+      totalWeightClosedWithoutPlates =
+        vals.totalBallasts * vals.encBallastWeight;
+
+      // Change
     } else if (vals.ballastType === 3) {
       ballastName = "A";
     } else if (vals.ballastType === 4) {
       ballastName = "B";
     } else if (vals.ballastType === 5) {
       ballastName = "C";
+      //Change
+
+      totalWeightOpenWithoutPlates =
+        vals.totalBallasts * vals.openBallastWeight;
+      totalWeightClosedWithoutPlates =
+        vals.totalBallasts * vals.closedBallastWeight;
     } else if (vals.ballastType === 6) {
       ballastName = "D";
     } else {
       ballastName = "Fixed-to-plate";
     }
 
+    console.log(totalWeightOpenWithoutPlates);
+    console.log(totalWeightClosedWithoutPlates);
+
     var ballastMaterial = "Concrete Block";
 
-    if (vals.ballastMaterial === 1) {
+    if (vals.ballastMaterial === "1") {
       ballastMaterial = "Plastic Barrel";
-    } else if (vals.ballastMaterial === 2) {
+    } else if (vals.ballastMaterial === "2") {
       ballastMaterial = "Steel Drum";
-    } else if (vals.ballastMaterial === 3) {
+    } else if (vals.ballastMaterial === "3") {
       ballastMaterial = "Concrete Block";
     }
 
     var groundSurface = "Asphalt";
 
-    if (vals.groundSurface === 1) {
+    if (values.groundSurface === "1") {
       groundSurface = "Smooth Concrete";
-    } else if (vals.groundSurface === 2) {
+    } else if (values.groundSurface === "2") {
       groundSurface = "Rough Concrete";
-    } else if (vals.groundSurface === 3) {
+    } else if (values.groundSurface === "3") {
       groundSurface = "Asphalt";
-    } else if (vals.groundSurface === 4) {
+    } else if (values.groundSurface === "4") {
       groundSurface = "Gravel";
-    } else if (vals.groundSurface === 5) {
-      groundSurface = "Grass";
-    } else if (vals.groundSurface === 6) {
+    } else if (values.groundSurface === "5") {
       groundSurface = "Dirt";
+    } else if (values.groundSurface === "6") {
+      groundSurface = "Grass";
     }
 
     var tentType = "Frame Tent";
@@ -888,13 +917,13 @@ const Tools = ({ intl }) => {
               { field: "id", hide: true },
               {
                 field: "description",
-                headerName: "Description",
+                headerName: " ",
                 type: "string",
-                width: 300,
+                width: 350,
               },
               {
                 field: "input",
-                headerName: "Input Value",
+                headerName: " ",
                 type: "string",
                 width: 200,
               },
@@ -977,11 +1006,11 @@ const Tools = ({ intl }) => {
 
             // Valence height
 
-            // # intermediate posts in length
+            // Number of Intermediate Posts in Length
 
-            // # intermediate posts in width
+            // Number of Intermediate Posts in Width
 
-            // # ballasts per corner post
+            // Number of ballast points per corner post
 
             // Wind speed
 
@@ -1024,19 +1053,36 @@ const Tools = ({ intl }) => {
               //   FY: vals.encFY,
               //   FZ: vals.encFZ,
               // },
+
               {
-                id: 29,
+                id: 27,
                 description: "Total number of ballasts",
                 input: "",
                 outputOpen: vals.totalBallasts,
                 outputClosed: vals.totalBallasts,
               },
               {
-                id: 30,
+                id: 28,
                 description: "Weight of each ballast (& plate if any) (lbs)",
                 input: "",
                 outputOpen: vals.openBallastWeight,
                 outputClosed: vals.encBallastWeight,
+              },
+              {
+                id: 29,
+                description:
+                  "Total weight of all ballasts (& plates if any) (lbs)",
+                input: "",
+                outputOpen: vals.totalBallasts * vals.openBallastWeight,
+                outputClosed: vals.totalBallasts * vals.encBallastWeight,
+              },
+              {
+                id: 30,
+                description:
+                  "Total weight of all ballasts (without plate) (lbs)",
+                input: "",
+                outputOpen: totalWeightOpenWithoutPlates,
+                outputClosed: totalWeightClosedWithoutPlates,
               },
               {
                 id: 31,
@@ -1092,7 +1138,7 @@ const Tools = ({ intl }) => {
               {
                 id: 1,
                 description: "Company",
-                input: vals.companyName,
+                input: values.companyName,
                 outputOpen: "",
                 outputClosed: "",
               },
@@ -1106,7 +1152,7 @@ const Tools = ({ intl }) => {
               {
                 id: 3,
                 description: "Location",
-                input: vals.location,
+                input: values.location,
                 outputOpen: "",
                 outputClosed: "",
               },
@@ -1177,7 +1223,7 @@ const Tools = ({ intl }) => {
               },
               {
                 id: 13,
-                description: "# Intermediate Posts in Length",
+                description: "Number of Intermediate Posts in Length",
                 input: values.postsPerLength,
                 outputOpen: "",
                 outputClosed: "",
@@ -1185,14 +1231,14 @@ const Tools = ({ intl }) => {
 
               {
                 id: 14,
-                description: "# Intermediate Posts In Width",
+                description: "Number of Intermediate Posts in Width",
                 input: values.postsPerWidth,
                 outputOpen: "",
                 outputClosed: "",
               },
               {
                 id: 15,
-                description: "# Ballasts Per Corner Post",
+                description: "Number of ballast points per corner post",
                 input: values.ballastsPerCornerPost,
                 outputOpen: "",
                 outputClosed: "",
@@ -1232,57 +1278,6 @@ const Tools = ({ intl }) => {
                 outputOpen: "",
                 outputClosed: "",
               },
-
-              // {
-              //   id: 21,
-              //   description: "D1",
-              //   input: "",
-              //   outputOpen: "",
-              //   outputClosed: "",
-              // },
-              // {
-              //   id: 22,
-              //   description: "D2",
-              //   input: "",
-              //   outputOpen: "",
-              //   outputClosed: "",
-              // },
-              // {
-              //   id: 23,
-              //   description: "D3",
-              //   input: "",
-              //   outputOpen: "",
-              //   outputClosed: "",
-              // },
-              // {
-              //   id: 24,
-              //   description: "D4",
-              //   input: "",
-              //   outputOpen: "",
-              //   outputClosed: "",
-              // },
-
-              // {
-              //   id: 25,
-              //   description: "H4",
-              //   input: "",
-              //   outputOpen: "",
-              //   outputClosed: "",
-              // },
-              // {
-              //   id: 26,
-              //   description: "D5",
-              //   input: "",
-              //   outputOpen: "",
-              //   outputClosed: "",
-              // },
-              // {
-              //   id: 27,
-              //   description: "Weight of Steel Plate (lbs)",
-              //   input: "",
-              //   outputOpen: "",
-              //   outputClosed: "",
-              // },
             ]}
             components={{
               Toolbar: CustomToolbar,
@@ -1299,6 +1294,25 @@ const Tools = ({ intl }) => {
       </Container>,
       document.getElementById("calculationDataTable")
     );
+
+    // if (result.data.windFlow === 1) {
+    //   setResults({
+    //     overturnMoment: result.data.openOM,
+    //     verticalUpliftForce: result.data.openFZ,
+    //   });
+    // } else if (result.data.windFlow === 2) {
+    //   setResults({
+    //     overturnMoment: result.data.partOM,
+    //     verticalUpliftForce: result.data.partFZ,
+    //   });
+    // } else {
+    //   setResults({
+    //     overturnMoment: result.data.encOM,
+    //     verticalUpliftForce: result.data.encFZ,
+    //   });
+    // }
+
+    //handleClickOpen();
   };
 
   const [value, setValue] = React.useState(10);
@@ -1844,6 +1858,21 @@ const Tools = ({ intl }) => {
           <Grid item sm={12} md={12}>
             {/* FORM */}
             <Container className={classes.cardGrid}>
+              <h1 style={{ textAlign: "left", position: "relative" }}>
+                Calculate the ballast weight of frame tents
+                <Button
+                  variant='contained'
+                  color='primary'
+                  style={{
+                    textAlign: "left",
+                    marginTop: "0",
+                    marginLeft: "20px",
+                  }}
+                  href='/about'>
+                  Click here for more information
+                </Button>
+              </h1>
+
               <form className={classes.root}>
                 {/* Project */}
                 <Grid item xs={6}>
@@ -2008,7 +2037,7 @@ const Tools = ({ intl }) => {
                 </Grid>
 
                 {/*Tent Type - 6*/}
-                <Grid item xs={6}>
+                {/* <Grid item xs={6}>
                   <HtmlTooltip
                     enterDelay={200}
                     leaveDelay={150}
@@ -2050,12 +2079,12 @@ const Tools = ({ intl }) => {
                           id: "outlined-age-native-simple",
                         }}>
                         <option value={1}>Frame Tent</option>
-                        {/* <option value={2}>Hybrid Tent</option> */}
+                        <option value={2}>Hybrid Tent</option>
                         <option value={3}>Pole Tent</option>
                       </Select>
                     </FormControl>
                   </HtmlTooltip>
-                </Grid>
+                </Grid> */}
 
                 {/* Tent Width - 3*/}
                 <Grid item xs={6}>
@@ -2120,7 +2149,10 @@ const Tools = ({ intl }) => {
                             tentWidth: newValue,
                           });
                         }}
-                        options={[10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]}
+                        options={[
+                          10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70,
+                          75, 80, 85, 90, 95, 100, 105, 110, 115, 120,
+                        ]}
                         renderInput={(params) => (
                           <TextField
                             onKeyPress={(e) => {
@@ -2203,7 +2235,10 @@ const Tools = ({ intl }) => {
                             tentLength: newValue,
                           });
                         }}
-                        options={[10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]}
+                        options={[
+                          10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70,
+                          75, 80, 85, 90, 95, 100, 105, 110, 115, 120,
+                        ]}
                         renderInput={(params) => (
                           <TextField
                             onKeyPress={(e) => {
@@ -2694,7 +2729,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Number of intermediate posts in length (excluding
+                          Number of Intermediate Posts in Length (excluding
                           corner posts)
                         </Typography>
                       </React.Fragment>
@@ -2758,7 +2793,7 @@ const Tools = ({ intl }) => {
                               ...params.inputProps,
                               name: "postsPerLength",
                             }}
-                            label='# Intermediate Posts in Length'
+                            label='Number of Intermediate Posts in Length'
                             margin='normal'
                             variant='outlined'
                           />
@@ -2778,7 +2813,7 @@ const Tools = ({ intl }) => {
                     title={
                       <React.Fragment>
                         <Typography color='inherit'>
-                          Number of intermediate posts in width (excluding
+                          Number of Intermediate Posts in Width (excluding
                           corner posts)
                         </Typography>
                       </React.Fragment>
@@ -2842,7 +2877,7 @@ const Tools = ({ intl }) => {
                               ...params.inputProps,
                               name: "postsPerWidth",
                             }}
-                            label='# Intermediate Posts in Width'
+                            label='Number of Intermediate Posts in Width'
                             margin='normal'
                             variant='outlined'
                           />
@@ -2872,12 +2907,12 @@ const Tools = ({ intl }) => {
                       className={clsx(classes.textField)}
                       variant='outlined'>
                       <InputLabel htmlFor='outlined-age-native-simple'>
-                        # Ballasts Per Corner Post
+                        Number of ballast points per corner post
                       </InputLabel>
                       <Select
                         native
                         //defaultValue={1}
-                        label='# ballasts per corner post'
+                        label='Number of ballast points per corner post'
                         value={values.ballastsPerCornerPost}
                         onChange={handleSelectChange}
                         // endAdornment={
