@@ -1299,25 +1299,6 @@ const Tools = ({ intl }) => {
       </Container>,
       document.getElementById("calculationDataTable")
     );
-
-    // if (result.data.windFlow === 1) {
-    //   setResults({
-    //     overturnMoment: result.data.openOM,
-    //     verticalUpliftForce: result.data.openFZ,
-    //   });
-    // } else if (result.data.windFlow === 2) {
-    //   setResults({
-    //     overturnMoment: result.data.partOM,
-    //     verticalUpliftForce: result.data.partFZ,
-    //   });
-    // } else {
-    //   setResults({
-    //     overturnMoment: result.data.encOM,
-    //     verticalUpliftForce: result.data.encFZ,
-    //   });
-    // }
-
-    //handleClickOpen();
   };
 
   const [value, setValue] = React.useState(10);

@@ -66,6 +66,7 @@ export default functions
       return;
     }
 
+    // Updated main to 42.1.xlsx
     const file = admin.storage().bucket().file("storage/main42.1.xlsx");
     return file.download().then((data) => {
       // import your calc functions lib
