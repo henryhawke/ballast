@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "clemson-ifai",
+    "master": "clemson-ifai",
+    "prod": "clemson-ifai"
+  }
+}
