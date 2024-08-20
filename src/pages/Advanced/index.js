@@ -5029,7 +5029,7 @@ function GoogleMaps() {
   if (typeof window !== "undefined" && !loaded.current) {
     if (!document.querySelector("#google-maps")) {
       loadScript(
-        "https://maps.googleapis.com/maps/api/js?key=AIzaSyBEHfOrxt6np-feXWg3VzZ3GQGhz_wYoDM&libraries=places",
+        "https://maps.googleapis.com/maps/api/js?key=&libraries=places",
         document.querySelector("head"),
         "google-maps"
       );
